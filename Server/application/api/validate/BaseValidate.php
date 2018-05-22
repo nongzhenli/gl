@@ -2,9 +2,9 @@
 
 namespace app\api\validate;
 
+use app\lib\exception\ParameterException;
 use think\Request;
 use think\Validate;
-use app\lib\exception\ParameterException;
 
 class BaseValidate extends Validate
 {
@@ -20,7 +20,7 @@ class BaseValidate extends Validate
         if (!$result) {
             // 参数异常返回函数，并做 _construct构造函数变更返回信息（传参可选）
             $e = new ParameterException([
-                'msg' => $this->error
+                'msg' => $this->error,
             ]);
             // $e->msg = $this->error;  // 可直接对信息进行变更赋值，但是推荐使用构造函数进行变更
             throw $e;
@@ -29,6 +29,16 @@ class BaseValidate extends Validate
             // $error = $this->error;
             // tp5内置的异常抛出
             // throw new Exception($error);
+        } else {
+            return true;
+        }
+    }
+
+    // 验证是否为空
+    public function isNotEmpty($value, $rule = '', $data = '', $field = '')
+    {
+        if (empty($value)) {
+            return false;
         } else {
             return true;
         }
