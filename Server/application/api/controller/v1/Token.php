@@ -8,7 +8,7 @@ use app\api\validate\TokenGet;
  * @Author: big黑钦
  * @Date: 2018-05-22 11:17:31
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-22 17:59:30
+ * @Last Modified time: 2018-05-23 11:34:45
  */
 class Token
 {
@@ -21,6 +21,11 @@ class Token
     public function getToken($code='')
     {
         (new TokenGet())->goCheck();
+
+        var_dump($code);
+
+        exit();
+
         $wx = new UserToken($code);
         $token = $wx->get();
         return [

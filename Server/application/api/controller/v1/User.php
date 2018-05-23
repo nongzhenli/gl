@@ -1,7 +1,15 @@
 <?php
+/*
+ * @Author: big黑钦
+ * @Date: 2018-05-23 09:16:28
+ * @Last Modified by: big黑钦
+ * @Last Modified time: 2018-05-23 11:54:22
+ */
 namespace app\api\controller\v1;
 
 use app\api\model\User as UserModel;
+use app\api\validate\TokenGet;
+use think\Request;
 
 class User
 {
@@ -36,5 +44,29 @@ class User
         $upassword = input('post.upassword');
 
         var_dump($uname, $upassword);
+    }
+
+    // 获取code
+    public function wxCode()
+    {
+        $request = Request::instance();
+        $redirect_uri = $request->path();
+
+        var_dump($request->module(), $request->controller(), $request->action());
+        exit();
+        $this->wxAppID = config('wx.app_id');
+        $this->wxRedirectUri = urlencode("http://www.glagbn.com/api/v1/user/wxuinfo");
+        $this->wxState = 'test';
+        $this->wxCodeUrl = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
+
+        // 获取code码，用于和微信服务器申请token。 注：依据OAuth2.0要求，此处授权登录需要用户端操作
+        header('location:' . $this->wxCodeUrl);
+    }
+
+    // 获取微信用户信息
+    public function wxUInfo($code = '')
+    {
+        (new TokenGet())->goCheck();
+
     }
 }

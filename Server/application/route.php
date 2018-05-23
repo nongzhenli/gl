@@ -13,9 +13,13 @@
 use think\Route;
 // Route::rule('路由表达式', '路由地址', '请求类型|类型2', '路由参数（数组）', '变量规则（数组）');
 
-Route::get('api/v1/banner/:id', 'api/v1.Banner/getBanner');
+// Banner
+Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
 
-Route::post('api/v1/user/:type', 'api/v1.User/login');
+// Login
+Route::post('api/:version/user/:type', 'api/:version.User/login');
+Route::get('api/:version/user/wxcode', 'api/:version.User/wxCode');
+Route::get('api/:version/user/wxuinfo', 'api/:version.User/wxUInfo');
 
 //Token
 Route::post('api/:version/token/user', 'api/:version.Token/getToken');
