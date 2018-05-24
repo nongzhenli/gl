@@ -24,4 +24,5 @@ return [
     // 3、依据申请到的access_token和openid，申请Userinfo信息。
     'wx_userinfo_url' => "https://api.weixin.qq.com/sns/userinfo?" .
     "access_token=%s&openid=%s&lang=zh_CN",
+    
 ];
