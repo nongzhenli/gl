@@ -12,9 +12,9 @@ return [
     //  +---------------------------------
 
     // 公众号app_id
-    'app_id' => 'wx9efb306a3dd641c0',
+    'app_id' => 'your AppID',
     // 公众号app_secret
-    'app_secret' => '76bfec3dd94b2c47b6e03115d010dc57',
+    'app_secret' => 'you AppSecret',
     // 验证code码【微信获取code回调地址】
     'verifyCode' => "api/v1/verifyCode",
 

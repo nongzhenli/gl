@@ -17,7 +17,7 @@ use think\Route;
 Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
 
 // Login
-Route::post('api/:version/user/:type', 'api/:version.User/login');
+Route::post('api/:version/user/login', 'api/:version.User/login');
 Route::get('api/:version/user/wxcode', 'api/:version.User/wxCode');
 Route::get('api/:version/user/wxuinfo', 'api/:version.User/wxUInfo');
 

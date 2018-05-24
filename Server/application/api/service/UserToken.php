@@ -70,7 +70,7 @@ class UserToken
         // 此处生成令牌使用的是TP5自带的令牌
         // 如果想要更加安全可以考虑自己生成更复杂的令牌
         // 比如使用JWT并加入盐，如果不加入盐有一定的几率伪造令牌
-        //        $token = Request::instance()->token('token', 'md5');
+        // $token = Request::instance()->token('token', 'md5');
         $openid = $wxResult['openid'];
         $user = User::getByOpenID($openid);
         if (!$user)
