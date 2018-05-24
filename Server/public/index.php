@@ -20,13 +20,6 @@ define('LOG_PATH', __DIR__ . '/../log/');
 // 定义第三方类库引入目标路径
 define('EXTEND_PATH', __DIR__ . '/../extend/');
 
-//站点路径
-// define('API_URL', 'https://www.gxqqbaby.cn/glagbn/Server/public');
-define('API_URL', 'https://www.gxqqbaby.cn/glagbn/Server/public/api');
-
-
-
-
 // 加载框架引导文件
 require __DIR__ . '/../thinkphp/start.php';
 
