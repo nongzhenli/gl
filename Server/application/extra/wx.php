@@ -15,7 +15,6 @@ return [
     'app_id' => 'your app_id',
     // 公众号app_secret
     'app_secret' => 'your app_secret',
-
     // 1、微信获取code授权地址
     'wx_code_url' => "https://open.weixin.qq.com/connect/oauth2/authorize?" .
     "appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect",
