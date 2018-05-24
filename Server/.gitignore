@@ -1,4 +1,6 @@
+.gitignore
 .idea
 composer.lock
 *.log
+/application/extra/wx.php
 
