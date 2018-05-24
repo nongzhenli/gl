@@ -49,18 +49,21 @@ class User
     // 获取code
     public function wxCode()
     {
-        $request = Request::instance();
-        $redirect_uri = $request->path();
+        // $request = Request::instance();
+        // $redirect_uri = $request->path();
+        // var_dump($request->module(), $request->controller(), $request->action());
+        // exit();
 
-        var_dump($request->module(), $request->controller(), $request->action());
-        exit();
         $this->wxAppID = config('wx.app_id');
-        $this->wxRedirectUri = urlencode("http://www.glagbn.com/api/v1/user/wxuinfo");
+        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxUInfo");
         $this->wxState = 'test';
         $this->wxCodeUrl = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
 
+        var_dump($this->wxCodeUrl);
+        exit();
+
         // 获取code码，用于和微信服务器申请token。 注：依据OAuth2.0要求，此处授权登录需要用户端操作
-        header('location:' . $this->wxCodeUrl);
+        header('location:'.$this->wxCodeUrl);
     }
 
     // 获取微信用户信息

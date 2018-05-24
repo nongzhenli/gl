@@ -2,7 +2,7 @@
 namespace app\api\controller\v1;
 
 use app\api\model\Banner as BannerModel;
-use app\api\Validate\IDMustBePostiveINT;
+use app\api\validate\IDMustBePostiveINT;
 use app\lib\exception\BannerMissException;
 
 class Banner
