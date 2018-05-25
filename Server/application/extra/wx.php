@@ -12,12 +12,9 @@ return [
     //  +---------------------------------
 
     // 公众号app_id
-    'app_id' => 'your AppID',
+    'app_id' => 'your app_id',
     // 公众号app_secret
-    'app_secret' => 'you AppSecret',
-    // 验证code码【微信获取code回调地址】
-    'verifyCode' => "api/v1/verifyCode",
-
+    'app_secret' => 'your app_secret',
     // 1、微信获取code授权地址
     'wx_code_url' => "https://open.weixin.qq.com/connect/oauth2/authorize?" .
     "appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=%s#wechat_redirect",
@@ -27,5 +24,5 @@ return [
     // 3、依据申请到的access_token和openid，申请Userinfo信息。
     'wx_userinfo_url' => "https://api.weixin.qq.com/sns/userinfo?" .
     "access_token=%s&openid=%s&lang=zh_CN",
-
+    
 ];
