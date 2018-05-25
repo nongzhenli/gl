@@ -72,13 +72,8 @@ class User extends Controller
         // 验证code参数
         $validatCode = (new TokenGet())->goCheck();
         if(!$validatCode){
-<<<<<<< HEAD
             $this->redirect($this->wxCodeUrl, 302);
             exit();
-=======
-            // $this->redirect($this->wxCodeUrl, 302);
-            // exit();
->>>>>>> e8bc92c6b4949927f5456c834e468cc9a98f6c9a
         }
         
         var_dump($code);
