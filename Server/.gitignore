@@ -1,5 +1,5 @@
 .idea
 composer.lock
 *.log
-application/extra/wx.php
+/application/extra/wx.php
 

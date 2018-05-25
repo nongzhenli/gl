@@ -7,11 +7,12 @@
  */
 namespace app\api\controller\v1;
 
+use think\Controller;
 use app\api\model\User as UserModel;
 use app\api\validate\TokenGet;
 use think\Request;
 
-class User
+class User extends Controller
 {
     public function login()
     {
@@ -55,21 +56,26 @@ class User
         // exit();
 
         $this->wxAppID = config('wx.app_id');
-        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxUInfo");
+        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxuinfo");
         $this->wxState = 'test';
         $this->wxCodeUrl = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
 
-        var_dump($this->wxCodeUrl);
-        exit();
-
         // 获取code码，用于和微信服务器申请token。 注：依据OAuth2.0要求，此处授权登录需要用户端操作
-        header('location:'.$this->wxCodeUrl);
+        // header('location:'.$this->wxCodeUrl);
+        // exit;   // tp5此处跳转要执行exit退出
+        $this->redirect($this->wxCodeUrl, 302);
     }
 
     // 获取微信用户信息
     public function wxUInfo($code = '')
-    {
-        (new TokenGet())->goCheck();
-
+    {   
+        // 验证code参数
+        $validatCode = (new TokenGet())->goCheck();
+        if(!$validatCode){
+            $this->redirect($this->wxCodeUrl, 302);
+            exit();
+        }
+        
+        var_dump($code);
     }
 }
