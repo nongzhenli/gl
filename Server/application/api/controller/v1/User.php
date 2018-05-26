@@ -8,9 +8,10 @@
 namespace app\api\controller\v1;
 
 use think\Controller;
+use think\Request;
 use app\api\model\User as UserModel;
 use app\api\validate\TokenGet;
-use think\Request;
+use app\api\service\UserToken;
 
 class User extends Controller
 {
@@ -71,11 +72,14 @@ class User extends Controller
     {   
         // 验证code参数
         $validatCode = (new TokenGet())->goCheck();
-        if(!$validatCode){
-            $this->redirect($this->wxCodeUrl, 302);
+        if(!$validatCode){ // 此处不生效，待处理
+            // $this->redirect($this->wxCodeUrl, 302);
             exit();
         }
-        
-        var_dump($code);
+        $wx = new UserToken($code);
+        $token = $wx->get();
+        return [
+            'token' => $token
+        ];
     }
 }

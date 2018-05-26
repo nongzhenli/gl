@@ -1,15 +1,16 @@
 <?php
-namespace app\api\controller\v1;
-
-use app\api\service\UserToken;
-use app\api\validate\TokenGet;
-
 /*
  * @Author: big黑钦
  * @Date: 2018-05-22 11:17:31
  * @Last Modified by: big黑钦
  * @Last Modified time: 2018-05-23 11:34:45
  */
+namespace app\api\controller\v1;
+
+use app\api\service\UserToken;
+use app\api\validate\TokenGet;
+use app\api\service\Token as TokenService;
+
 class Token
 {
     /**
@@ -18,18 +19,27 @@ class Token
      * @POST code
      * @note 虽然查询应该使用get，但为了稍微增强安全性，所以使用POST
      */
-    public function getToken($code='')
+    public function getToken($code = '')
     {
         (new TokenGet())->goCheck();
-
-        var_dump($code);
-
-        exit();
-
         $wx = new UserToken($code);
         $token = $wx->get();
         return [
-            'token' => $token
+            'token' => $token,
+        ];
+    }
+
+    // 验证Token令牌
+    public function verifyToken($token='')
+    {
+        if(!$token){
+            throw new ParameterException([
+                'token不允许为空'
+            ]);
+        }
+        $valid = TokenService::verifyToken($token);
+        return [
+            'isValid' => $valid
         ];
     }
 }

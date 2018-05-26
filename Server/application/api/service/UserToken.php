@@ -1,18 +1,24 @@
 <?php
-namespace app\api\service;
-
-use think\Exception;
-
 /* UserToken 集中处理复杂业务逻辑的模块
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-22 17:50:10
+ * @Last Modified time: 2018-05-25 10:48:58
  */
+namespace app\api\service;
+use think\Exception;
+use think\Model;
+
+use app\api\model\User;
+use app\lib\enum\ScopeEnum;
+use app\lib\exception\TokenException;
+use app\lib\exception\WeChatException;
+
+
 class UserToken
 {
     protected $code;
-    protected $wxLoginUrl;
+    protected $wxAccessTokenUrl;
     protected $wxAppID;
     protected $wxAppSecret;
 
@@ -22,7 +28,7 @@ class UserToken
         $this->code = $code;
         $this->wxAppID = config('wx.app_id');
         $this->wxAppSecret = config('wx.app_secret');
-        $this->wxLoginUrl = sprintf(config('wx.login_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
+        $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
     }
 
     /**
@@ -33,7 +39,7 @@ class UserToken
      */
     public function get()
     {
-        $result = curl_get($this->wxLoginUrl);
+        $result = curl_get($this->wxAccessTokenUrl);
 
         // 注意json_decode的第一个参数true
         // 这将使字符串被转化为数组而非对象

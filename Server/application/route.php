@@ -21,5 +21,7 @@ Route::post('api/:version/user/login', 'api/:version.User/login');
 Route::get('api/:version/user/wxcode', 'api/:version.User/wxCode');
 Route::get('api/:version/user/wxuinfo', 'api/:version.User/wxUInfo');
 
+
 //Token
 Route::post('api/:version/token/user', 'api/:version.Token/getToken');
+Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
