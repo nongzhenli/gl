@@ -1,18 +1,23 @@
 <?php
-namespace app\api\service;
-
-use think\Exception;
-
 /* UserToken 集中处理复杂业务逻辑的模块
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-22 17:50:10
+ * @Last Modified time: 2018-05-26 15:33:41
  */
-class UserToken
+namespace app\api\service;
+
+use app\api\model\User;
+use app\api\service\Token;
+use app\lib\enum\ScopeEnum;
+use app\lib\exception\TokenException;
+use app\lib\exception\WeChatException;
+use think\Exception;
+
+class UserToken extends Token
 {
     protected $code;
-    protected $wxLoginUrl;
+    protected $wxAccessTokenUrl;
     protected $wxAppID;
     protected $wxAppSecret;
 
@@ -22,7 +27,7 @@ class UserToken
         $this->code = $code;
         $this->wxAppID = config('wx.app_id');
         $this->wxAppSecret = config('wx.app_secret');
-        $this->wxLoginUrl = sprintf(config('wx.login_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
+        $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
     }
 
     /**
@@ -33,7 +38,7 @@ class UserToken
      */
     public function get()
     {
-        $result = curl_get($this->wxLoginUrl);
+        $result = curl_get($this->wxAccessTokenUrl);
 
         // 注意json_decode的第一个参数true
         // 这将使字符串被转化为数组而非对象
@@ -54,6 +59,42 @@ class UserToken
                 return $this->grantToken($wxResult);
             }
         }
+    }
+
+    // 判断是否重复获取
+    private function duplicateFetch()
+    {
+        //TODO:目前无法简单的判断是否重复获取，还是需要去微信服务器去openid
+        //TODO: 这有可能导致失效行为
+    }
+
+    // 处理微信登陆异常
+    // 那些异常应该返回客户端，那些异常不应该返回客户端
+    // 需要认真思考
+    private function processLoginError($wxResult)
+    {
+        throw new WeChatException(
+            [
+                'msg' => $wxResult['errmsg'],
+                'errorCode' => $wxResult['errcode'],
+            ]);
+    }
+
+    // 写入缓存
+    private function saveToCache($wxResult)
+    {
+        $key = self::generateToken();
+        $value = json_encode($wxResult);
+        $expire_in = config('setting.token_expire_in');
+        $result = cache($key, $value, $expire_in);
+
+        if (!$result) {
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005,
+            ]);
+        }
+        return $key;
     }
 
     // 颁发令牌
@@ -86,15 +127,26 @@ class UserToken
         return $token;
     }
 
-    // 处理微信登陆异常
-    // 那些异常应该返回客户端，那些异常不应该返回客户端
-    // 需要认真思考
-    private function processLoginError($wxResult)
+    private function prepareCachedValue($wxResult, $uid)
     {
-        throw new WeChatException(
+        $cachedValue = $wxResult;
+        $cachedValue['uid'] = $uid;
+        $cachedValue['scope'] = ScopeEnum::User;
+        return $cachedValue;
+    }
+
+    // 创建新用户
+    private function newUser($openid)
+    {
+        // 有可能会有异常，如果没有特别处理
+        // 这里不需要try——catch
+        // 全局异常处理会记录日志
+        // 并且这样的异常属于服务器异常
+        // 也不应该定义BaseException返回到客户端
+        $user = User::create(
             [
-                'msg' => $wxResult['errmsg'],
-                'errorCode' => $wxResult['errcode'],
+                'openid' => $openid,
             ]);
+        return $user->id;
     }
 }

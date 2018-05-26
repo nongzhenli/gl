@@ -3,14 +3,15 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-23 11:54:22
+ * @Last Modified time: 2018-05-26 15:06:43
  */
 namespace app\api\controller\v1;
 
 use think\Controller;
+use think\Request;
 use app\api\model\User as UserModel;
 use app\api\validate\TokenGet;
-use think\Request;
+use app\api\service\UserToken;
 
 class User extends Controller
 {
@@ -52,11 +53,13 @@ class User extends Controller
     {
         // $request = Request::instance();
         // $redirect_uri = $request->path();
-        // var_dump($request->module(), $request->controller(), $request->action());
+        // var_dump($redirect_uri);
+        // var_dump($request->dispatch());
         // exit();
 
         $this->wxAppID = config('wx.app_id');
         $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxuinfo");
+        // $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/token/user");
         $this->wxState = 'test';
         $this->wxCodeUrl = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
 
@@ -70,12 +73,11 @@ class User extends Controller
     public function wxUInfo($code = '')
     {   
         // 验证code参数
-        $validatCode = (new TokenGet())->goCheck();
-        if(!$validatCode){
-            // $this->redirect($this->wxCodeUrl, 302);
-            // exit();
-        }
-        
-        var_dump($code);
+        (new TokenGet())->goCheck();
+        $wx = new UserToken($code);
+        $token = $wx->get();
+        return [
+            'token' => $token
+        ];
     }
 }
