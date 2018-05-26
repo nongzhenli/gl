@@ -93,5 +93,3 @@ function fromArrayToModel($m , $array)
     }
     return $m;
 }
-
-

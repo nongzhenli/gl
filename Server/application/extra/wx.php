@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:50:26
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-22 17:45:44
+ * @Last Modified time: 2018-05-26 14:47:37
  */
 
 return [
@@ -24,5 +24,6 @@ return [
     // 3、依据申请到的access_token和openid，申请Userinfo信息。
     'wx_userinfo_url' => "https://api.weixin.qq.com/sns/userinfo?" .
     "access_token=%s&openid=%s&lang=zh_CN",
-    
+
+    'website_url' => ''
 ];

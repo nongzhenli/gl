@@ -22,18 +22,5 @@ export default {
     }
 };
 </script>
-
-<style>
-html {
-    background: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        from(#337cf6),
-        to(#49a6f8)
-    );
-    background: linear-gradient(#337cf6, #49a6f8);
-}
-</style>
 <style lang="less" scoped>
 </style>

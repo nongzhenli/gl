@@ -3,19 +3,18 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-25 10:48:58
+ * @Last Modified time: 2018-05-26 15:33:41
  */
 namespace app\api\service;
-use think\Exception;
-use think\Model;
 
 use app\api\model\User;
+use app\api\service\Token;
 use app\lib\enum\ScopeEnum;
 use app\lib\exception\TokenException;
 use app\lib\exception\WeChatException;
+use think\Exception;
 
-
-class UserToken
+class UserToken extends Token
 {
     protected $code;
     protected $wxAccessTokenUrl;
@@ -62,6 +61,42 @@ class UserToken
         }
     }
 
+    // 判断是否重复获取
+    private function duplicateFetch()
+    {
+        //TODO:目前无法简单的判断是否重复获取，还是需要去微信服务器去openid
+        //TODO: 这有可能导致失效行为
+    }
+
+    // 处理微信登陆异常
+    // 那些异常应该返回客户端，那些异常不应该返回客户端
+    // 需要认真思考
+    private function processLoginError($wxResult)
+    {
+        throw new WeChatException(
+            [
+                'msg' => $wxResult['errmsg'],
+                'errorCode' => $wxResult['errcode'],
+            ]);
+    }
+
+    // 写入缓存
+    private function saveToCache($wxResult)
+    {
+        $key = self::generateToken();
+        $value = json_encode($wxResult);
+        $expire_in = config('setting.token_expire_in');
+        $result = cache($key, $value, $expire_in);
+
+        if (!$result) {
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005,
+            ]);
+        }
+        return $key;
+    }
+
     // 颁发令牌
     // 只要调用登陆就颁发新令牌
     // 但旧的令牌依然可以使用
@@ -92,15 +127,26 @@ class UserToken
         return $token;
     }
 
-    // 处理微信登陆异常
-    // 那些异常应该返回客户端，那些异常不应该返回客户端
-    // 需要认真思考
-    private function processLoginError($wxResult)
+    private function prepareCachedValue($wxResult, $uid)
     {
-        throw new WeChatException(
+        $cachedValue = $wxResult;
+        $cachedValue['uid'] = $uid;
+        $cachedValue['scope'] = ScopeEnum::User;
+        return $cachedValue;
+    }
+
+    // 创建新用户
+    private function newUser($openid)
+    {
+        // 有可能会有异常，如果没有特别处理
+        // 这里不需要try——catch
+        // 全局异常处理会记录日志
+        // 并且这样的异常属于服务器异常
+        // 也不应该定义BaseException返回到客户端
+        $user = User::create(
             [
-                'msg' => $wxResult['errmsg'],
-                'errorCode' => $wxResult['errcode'],
+                'openid' => $openid,
             ]);
+        return $user->id;
     }
 }
