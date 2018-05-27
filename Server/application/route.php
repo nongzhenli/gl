@@ -18,9 +18,7 @@ Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
 
 // Login
 Route::post('api/:version/user/login', 'api/:version.User/login');
-Route::get('api/:version/user/wxcode', 'api/:version.User/wxCode');
-Route::get('api/:version/user/wxuinfo', 'api/:version.User/wxUInfo');
-
+Route::get('api/:version/user/author', 'api/:version.User/author');
 
 //Token
 Route::rule('api/:version/token/user', 'api/:version.Token/getToken', 'GET|POST');

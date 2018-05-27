@@ -13,6 +13,7 @@ import * as utils from './utils/utils.js'
 
 // 全局使用 vue-router
 Vue.use(vueRouter)
+
 Vue.config.productionTip = false;
 Vue.prototype.utils = utils
 
@@ -22,7 +23,9 @@ router.beforeEach((to, from, next) => {
     // utils.VueCookie.set("loginToken", "7de769bc0ff5df35ef56fe5dc47e8aa3");
     if (!utils.VueCookie.get("loginToken") && to.path != '/author') {
         // 第一次访问
-        console.log("授权登录");
+        utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
+        next('/author');
+        return false;
         // 跳转到微信授权页面，微信授权地址通过服务端获得
         // axios.post("https://www.mqxpyy.com/wxsq/index.php/Api/Lottery/login").then(res => {
         //     console.log(res);
@@ -33,7 +36,7 @@ router.beforeEach((to, from, next) => {
         //         next();
         //     }
         // });
-        window.location.href = "http://gl.gxqqbaby.cn/api/v1/user/wxcode";
+        // window.location.href = "http://gl.gxqqbaby.cn/api/v1/user/wxcode";
     } else if (utils.VueCookie.get("loginToken")) {
         console.log(utils.VueCookie.get("loginToken"));
 

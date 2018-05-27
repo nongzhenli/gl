@@ -20,19 +20,20 @@ class Token
      * @POST code
      * @note 虽然查询应该使用get，但为了稍微增强安全性，所以使用POST
      */
-    public function getToken($code = '')
+    public function getToken($code = '', $state= '')
     {
         (new TokenGet())->goCheck();
-        $wx = new UserToken();
-        $token = $wx->get($code);
+        $wx = new UserToken($code, $state);
+        $token = $wx->get();
         
         $result_ar = array(
             'token' => $token, 
+            'redirect_uri' => $state, 
         );
 
-        var_dump($result_ar);
+        echo json_encode($result_ar, true);
         exit();
-        return json_decode($result_ar, true);
+        return $result_ar;
     }
 
     // 验证Token令牌

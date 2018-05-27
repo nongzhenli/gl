@@ -21,14 +21,14 @@ class UserToken extends Token
     protected $wxAppSecret;
     protected $wxAccessTokenUrl;
 
-    // // 初始化函数
-    // public function __construct($code)
-    // {
-    //     $this->code = $code;
-    //     $this->wxAppID = config('wx.app_id');
-    //     $this->wxAppSecret = config('wx.app_secret');
-    //     $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
-    // }
+    // 初始化函数
+    public function __construct($code, $state)
+    {
+        $this->code = $code;
+        $this->wxAppID = config('wx.app_id');
+        $this->wxAppSecret = config('wx.app_secret');
+        $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
+    }
 
     /**
      * 登陆
@@ -36,12 +36,8 @@ class UserToken extends Token
      * 思路2：检查Token有没有过期，没有过期则直接返回当前Token
      * 思路3：重新去微信刷新session_key并删除当前Token，返回新的Token
      */
-    public function get($code = '')
+    public function get()
     {
-        $this->code = $code;
-        $this->wxAppID = config('wx.app_id');
-        $this->wxAppSecret = config('wx.app_secret');
-        $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
         
         $result = curl_get($this->wxAccessTokenUrl);
 
@@ -116,9 +112,7 @@ class UserToken extends Token
         $cachedValue = $this->prepareCachedValue($wxResult, $uid);
         $token = $this->saveToCache($cachedValue);
 
-        echo $token;
-        exit();
-        // return $token;
+        return $token;
     }
 
     private function prepareCachedValue($wxResult, $uid)

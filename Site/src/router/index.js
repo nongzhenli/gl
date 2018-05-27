@@ -3,6 +3,8 @@ import Router from 'vue-router'
 
 import LoginWx from '@/components/LoginWx'
 import Lottery from '@/components/Lottery'
+import Author from '@/components/Author'
+
 
 Vue.use(Router)
 
@@ -21,9 +23,9 @@ export default new Router({
             }
         },
         {
-            path: '/loginwx',
-            name: 'loginwx',
-            component: LoginWx
+            path: '/author',
+            name: 'author',
+            component: Author
         },
     ]
 })
