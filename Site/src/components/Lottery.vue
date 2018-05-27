@@ -52,15 +52,6 @@ export default {
     methods: {
         // 获取用户信息
         getUserInfo() {
-
-            // 异步获取 奖品数据
-            // axios({
-            //     url: "https://www.mqxpyy.com/wxsq/index.php/Api/Common/getUserDetail",
-            //     method: "POST"
-            // }).then(response => {
-            //     console.log("response", response);
-            // }).catch(error => {});
-
             // 异步获取 奖品数据
             axios({
                 url: "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/user",

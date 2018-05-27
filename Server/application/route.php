@@ -23,5 +23,5 @@ Route::get('api/:version/user/wxuinfo', 'api/:version.User/wxUInfo');
 
 
 //Token
-Route::post('api/:version/token/user', 'api/:version.Token/getToken');
+Route::rule('api/:version/token/user', 'api/:version.Token/getToken', 'GET|POST');
 Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');

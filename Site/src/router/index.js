@@ -15,7 +15,10 @@ export default new Router({
         {
             path: '/lottery',
             name: 'lottery',
-            component: Lottery
+            component: Lottery,
+            meta: {
+                "auth": true
+            }
         },
         {
             path: '/loginwx',

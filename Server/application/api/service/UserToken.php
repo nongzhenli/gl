@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-26 15:33:41
+ * @Last Modified time: 2018-05-27 20:48:02
  */
 namespace app\api\service;
 
@@ -17,18 +17,18 @@ use think\Exception;
 class UserToken extends Token
 {
     protected $code;
-    protected $wxAccessTokenUrl;
     protected $wxAppID;
     protected $wxAppSecret;
+    protected $wxAccessTokenUrl;
 
-    // 初始化函数
-    public function __construct($code)
-    {
-        $this->code = $code;
-        $this->wxAppID = config('wx.app_id');
-        $this->wxAppSecret = config('wx.app_secret');
-        $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
-    }
+    // // 初始化函数
+    // public function __construct($code)
+    // {
+    //     $this->code = $code;
+    //     $this->wxAppID = config('wx.app_id');
+    //     $this->wxAppSecret = config('wx.app_secret');
+    //     $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
+    // }
 
     /**
      * 登陆
@@ -36,8 +36,13 @@ class UserToken extends Token
      * 思路2：检查Token有没有过期，没有过期则直接返回当前Token
      * 思路3：重新去微信刷新session_key并删除当前Token，返回新的Token
      */
-    public function get()
+    public function get($code = '')
     {
+        $this->code = $code;
+        $this->wxAppID = config('wx.app_id');
+        $this->wxAppSecret = config('wx.app_secret');
+        $this->wxAccessTokenUrl = sprintf(config('wx.access_token_url'), $this->wxAppID, $this->wxAppSecret, $this->code);
+        
         $result = curl_get($this->wxAccessTokenUrl);
 
         // 注意json_decode的第一个参数true
@@ -52,8 +57,10 @@ class UserToken extends Token
             // 建议用明确的变量来表示是否成功
             // 微信服务器并不会将错误标记为400，无论成功还是失败都标记成200
             // 这样非常不好判断，只能使用errcode是否存在来判断
+
             $loginFail = array_key_exists('errcode', $wxResult);
             if ($loginFail) {
+                // $this->processLoginError($wxResult);
                 $this->processLoginError($wxResult);
             } else {
                 return $this->grantToken($wxResult);
@@ -79,24 +86,7 @@ class UserToken extends Token
                 'errorCode' => $wxResult['errcode'],
             ]);
     }
-
-    // 写入缓存
-    private function saveToCache($wxResult)
-    {
-        $key = self::generateToken();
-        $value = json_encode($wxResult);
-        $expire_in = config('setting.token_expire_in');
-        $result = cache($key, $value, $expire_in);
-
-        if (!$result) {
-            throw new TokenException([
-                'msg' => '服务器缓存异常',
-                'errorCode' => 10005,
-            ]);
-        }
-        return $key;
-    }
-
+    
     // 颁发令牌
     // 只要调用登陆就颁发新令牌
     // 但旧的令牌依然可以使用
@@ -122,9 +112,13 @@ class UserToken extends Token
         } else {
             $uid = $user->id;
         }
+
         $cachedValue = $this->prepareCachedValue($wxResult, $uid);
         $token = $this->saveToCache($cachedValue);
-        return $token;
+
+        echo $token;
+        exit();
+        // return $token;
     }
 
     private function prepareCachedValue($wxResult, $uid)
@@ -133,6 +127,23 @@ class UserToken extends Token
         $cachedValue['uid'] = $uid;
         $cachedValue['scope'] = ScopeEnum::User;
         return $cachedValue;
+    }
+    
+    // 写入缓存
+    private function saveToCache($wxResult)
+    {
+        $key = self::generateToken();
+        $value = json_encode($wxResult);
+        $expire_in = config('setting.token_expire_in');
+        $result = cache($key, $value, $expire_in);
+
+        if (!$result) {
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005,
+            ]);
+        }
+        return $key;
     }
 
     // 创建新用户
