@@ -15,7 +15,7 @@ return [
     // +----------------------------------------------------------------------
 
     // 应用调试模式
-    'app_debug'              => true,
+    'app_debug'              => false,
     // 应用Trace
     'app_trace'              => false,
     // 应用模式状态
@@ -156,8 +156,14 @@ return [
     'error_message'          => '页面错误！请稍后再试～',
     // 显示错误信息
     'show_error_msg'         => false,
-    // 异常处理handle类 留空使用 \think\exception\Handle
-    'exception_handle'       => 'app\lib\exception\ExceptionHandle',
+    // 异常处理handle类 默认
+    'exception_handle'       => '\think\exception\Handle',
+    // 自定义异常处理
+    // 'exception_handle'       => 'app\lib\exception\ExceptionHandle',
+    'http_exception_template'    =>  [
+        // 定义404错误的重定向页面地址
+        404 =>  "../public/index.html",
+    ],
 
     // +----------------------------------------------------------------------
     // | 日志设置

@@ -1,15 +1,18 @@
 <template>
     <div class="com-author">
-        <img :src="lodingImg" alt="loding.." width="100%">
+        <img :src="lodingImg"
+            alt="loding.."
+            width="100%">
     </div>
 </template>
 
 <script>
+import axios from "axios";
 import { VueCookie } from "../utils/utils";
 export default {
     data() {
         return {
-            lodingImg: require('../assets/img/lottery/loading.jpg')
+            lodingImg: require("../assets/img/lottery/loading.jpg")
         };
     },
     created() {
@@ -17,18 +20,66 @@ export default {
         if (!this.utils.VueCookie.get("loginToken")) {
             let ua = window.navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger") {
-                // 跳转到微信授权页面
-                window.location.href = "http://gl.gxqqbaby.cn/api/v1/user/author";
+                if (this.getUrlParam("code")) {
+                    axios.post("http://gl.gxqqbaby.cn/api/v1/token/user",{
+                        "code": this.getUrlParam("code")
+                    }).then(response => {
+                        // 客户端存储token
+                        this.utils.VueCookie.set("loginToken", response.data.token);
+
+                        // 跳转回到登录前路由页面
+                        let beforeLoginUrl = this.utils.VueCookie.get("beforeLoginUrl")? this.utils.VueCookie.get("beforeLoginUrl") : "/index";
+                        this.$router.push({
+                            path: beforeLoginUrl
+                        });
+                       
+                    }).catch(error => {
+                        console.log(error);
+                    });
+                } else {
+                    // 跳转到微信授权页面
+                    window.onload = function(){
+                        // window.location.href ="http://gl.gxqqbaby.cn/api/v1/user/author";
+                    }
+                }
+            } else {
+                alert("请使用微信客户端打开");
+                return false;
             }
         } else {
-            // 如果有token 但是vuex中没有用户登录信息则做登录操作
+            // 如果有token 则去验证token是否有效
             this.login();
         }
     },
     mounted() {},
     methods: {
+        // 获取url参数
+        getUrlParam: function(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]);
+            return null;
+        },
+        // getUrlParam: function(name) {
+        //     var value,
+        //         str = window.location.href, //取得整个地址栏
+        //         num = str.indexOf("?"),
+        //         arr = str.split("&"); //各个参数放到数组里
+        //     str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
+        //     for (var i = 0; i < arr.length; i++) {
+        //         num = arr[i].indexOf("=");
+        //         if (num > 0) {
+        //             name = arr[i].substring(0, num);
+        //             value = arr[i].substr(num + 1);
+        //             this[name] = value;
+        //             return this[name];
+        //         }
+        //     }
+        // },
+
+        // 验证token
         login() {
-            console.log('进入.login')
+            console.log("进入.login");
             // let url = this.webUrl + "/Wap/User/info";
             // 通过cookie中保存的token 获取用户信息
             // this.$http.get(url).then(response => {

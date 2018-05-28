@@ -20,6 +20,7 @@ Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
 Route::post('api/:version/user/login', 'api/:version.User/login');
 Route::get('api/:version/user/author', 'api/:version.User/author');
 
+
 //Token
 Route::rule('api/:version/token/user', 'api/:version.Token/getToken', 'GET|POST');
 Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');

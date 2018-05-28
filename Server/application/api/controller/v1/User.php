@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-27 16:47:42
+ * @Last Modified time: 2018-05-28 11:48:29
  */
 namespace app\api\controller\v1;
 
@@ -49,7 +49,7 @@ class User extends Controller
     }
 
     // 获取code
-    public function author()
+    public function author($cdoe = '')
     {
         // $request = Request::instance();
         // $redirect_uri = $request->path();
@@ -59,8 +59,8 @@ class User extends Controller
 
         $this->wxAppID = config('wx.app_id');
         // $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxuinfo");
-        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/token/user");
-        $this->wxState = "api/v1/user/author";
+        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/#/author");
+        $this->wxState = "123";
         $this->wxAuthor = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
 
         // 获取code码，用于和微信服务器申请token。 注：依据OAuth2.0要求，此处授权登录需要用户端操作
