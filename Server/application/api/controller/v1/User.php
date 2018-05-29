@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-28 11:48:29
+ * @Last Modified time: 2018-05-29 17:15:57
  */
 namespace app\api\controller\v1;
 
@@ -59,7 +59,7 @@ class User extends Controller
 
         $this->wxAppID = config('wx.app_id');
         // $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxuinfo");
-        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/#/author");
+        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/author");
         $this->wxState = "123";
         $this->wxAuthor = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
 

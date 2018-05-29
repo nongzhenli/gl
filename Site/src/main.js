@@ -14,7 +14,7 @@ import * as utils from './utils/utils.js'
 // 全局使用 vue-router
 Vue.use(vueRouter)
 const router =new vueRouter({
-    mode: 'history',
+    mode: 'hash',
     routes: routers
 })
 
@@ -26,7 +26,6 @@ router.beforeEach((to, from, next) => {
         // 第一次访问
         utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
         next('/author');
-        return false;
     } else if (utils.VueCookie.get("loginToken")) {
         next();
     } else {

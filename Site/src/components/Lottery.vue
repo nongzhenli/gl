@@ -46,7 +46,7 @@ export default {
     },
     created() {
         this.getUserInfo();
-        console.log(this.$route.params)
+        // console.log(this.$route.params)
     },
     components: { LotteryRotate},
     methods: {

@@ -155,15 +155,15 @@ return [
     // 错误显示信息,非调试模式有效
     'error_message'          => '页面错误！请稍后再试～',
     // 显示错误信息
-    'show_error_msg'         => false,
+    'show_error_msg'         => true,
     // 异常处理handle类 默认
-    'exception_handle'       => '\think\exception\Handle',
+    // 'exception_handle'       => '\think\exception\Handle',
     // 自定义异常处理
-    // 'exception_handle'       => 'app\lib\exception\ExceptionHandle',
-    'http_exception_template'    =>  [
-        // 定义404错误的重定向页面地址
-        404 =>  "../public/index.html",
-    ],
+    'exception_handle'       => 'app\lib\exception\ExceptionHandle',
+    // 'http_exception_template'    =>  [
+    //     // 定义404错误的重定向页面地址
+    //     // 404 =>  "../public/index.html",
+    // ],
 
     // +----------------------------------------------------------------------
     // | 日志设置

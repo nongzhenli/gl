@@ -20,7 +20,40 @@ export default {
         if (!this.utils.VueCookie.get("loginToken")) {
             let ua = window.navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger") {
+
+            //    // 添加响应拦截器
+            //     axios.interceptors.response.use(function (response) {
+            //         // 对响应数据做点什么
+            //         return response;
+            //     }, function (error) {
+            //         // 对响应错误做点什么
+            //         return Promise.reject(error);
+            //     });
+
+
                 if (this.getUrlParam("code")) {
+
+                    axios.interceptors.request.use(function (config) {
+                        // Do something before request is sent
+                        console.log('开始请求')
+                        console.log(`请求地址: ${config.url}`)
+                        return config
+                    }, function (error) {
+                        // Do something with request error
+                        console.log('请求失败')
+                        return Promise.reject(error)
+                    })
+                    axios.interceptors.response.use(function (config) {
+                        // Do something before request is sent
+                        console.log('接收响应')
+                        console.log(config)
+                        return config
+                    }, function (error) {
+                        // Do something with request error
+                        console.log('响应出错')
+                        return Promise.reject(error)
+                    })
+
                     axios.post("http://gl.gxqqbaby.cn/api/v1/token/user",{
                         "code": this.getUrlParam("code")
                     }).then(response => {
@@ -29,17 +62,18 @@ export default {
 
                         // 跳转回到登录前路由页面
                         let beforeLoginUrl = this.utils.VueCookie.get("beforeLoginUrl")? this.utils.VueCookie.get("beforeLoginUrl") : "/index";
-                        this.$router.push({
-                            path: beforeLoginUrl
-                        });
+                        // this.$router.push({
+                        //     path: beforeLoginUrl
+                        // });
                        
                     }).catch(error => {
                         console.log(error);
                     });
+
                 } else {
                     // 跳转到微信授权页面
                     window.onload = function(){
-                        // window.location.href ="http://gl.gxqqbaby.cn/api/v1/user/author";
+                        window.location.href ="http://gl.gxqqbaby.cn/api/v1/user/author";
                     }
                 }
             } else {
@@ -79,6 +113,11 @@ export default {
 
         // 验证token
         login() {
+            // 跳转回到登录前路由页面
+            let beforeLoginUrl = this.utils.VueCookie.get("beforeLoginUrl")? this.utils.VueCookie.get("beforeLoginUrl") : "/index";
+            this.$router.push({
+                path: beforeLoginUrl
+            });
             console.log("进入.login");
             // let url = this.webUrl + "/Wap/User/info";
             // 通过cookie中保存的token 获取用户信息

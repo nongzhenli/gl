@@ -19,5 +19,8 @@ export default [{
     path: '/author',
     name: 'author',
     component: Author
+},{
+    path: '*',
+    redirect: '/',
 }]
 
