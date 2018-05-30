@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 11:17:31
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-27 20:48:24
+ * @Last Modified time: 2018-05-30 11:43:17
  */
 namespace app\api\controller\v1;
 use think\Controller;
@@ -24,8 +24,6 @@ class Token extends Controller
      */
     public function getToken($code = '', $state= '')
     {
-        
-
         (new TokenGet())->goCheck();
         $wx = new UserToken($code, $state);
         $token = $wx->get();

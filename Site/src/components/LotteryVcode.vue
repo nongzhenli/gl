@@ -1,50 +1,67 @@
 <template>
     <div class="lottery-vcode">
         <div class="lottert-vcode-parent-layer">
-            <div class="lottert-vcode-layer"
-                v-show="is_show">
+            <div
+                class="lottert-vcode-layer"
+                v-show="is_show"
+            >
                 <p class="title">填写个人信息马上参与抽奖吧！</p>
                 <div class="row-input input-name">
                     <div class="item-input">
-                        <input type="text"
+                        <input
+                            type="text"
                             v-model="name"
                             placeholder="填写姓名"
-                            required/>
+                            required
+                        />
                     </div>
 
                 </div>
                 <div class="row-input input-mobile">
                     <div class="item-input">
-                        <input type="tel"
+                        <input
+                            type="tel"
                             v-model="mobile"
                             placeholder="填写11位手机号码"
                             required
-                            maxlength="11" />
+                            maxlength="11"
+                        />
                     </div>
                 </div>
+                <!-- 短信验证码  -->
                 <div class="row-input input-vcode">
                     <div class="item-input">
-                        <input type="tel"
+                        <input
+                            type="tel"
                             v-model="vcode"
                             placeholder="短信验证码"
                             required
-                            maxlength="4" />
+                            maxlength="4"
+                        />
                     </div>
-                    <button class="post-vcode"
+                    <button
+                        class="post-vcode"
                         v-text="vcodeText"
-                        @click="postVcode"></button>
+                        @click="postVcode"
+                    ></button>
                 </div>
+                <!-- 短信验证码 end -->
+
                 <div class="row-input ">
-                    <button type="button"
+                    <button
+                        type="button"
                         class="submit-btn"
-                        @click="submitLogin">确认报名</button>
+                        @click="submitLogin"
+                    >确认报名</button>
                 </div>
-            </div>
-            <transition name="fadeLeft">
-                <button class="colse-btn"
-                    @click="backIndex()">x</button>
-            </transition>
         </div>
+        <transition name="fadeLeft">
+            <button
+                class="colse-btn"
+                @click="backIndex()"
+            >x</button>
+        </transition>
+    </div>
 
     </div>
 </template>
@@ -67,13 +84,13 @@ export default {
             is_axios: true
         };
     },
-    created() {},
+    created() { },
     watch: {
         showVcode(newValue, oldValue) {
             this.is_show = newValue;
         }
     },
-    mounted() {},
+    mounted() { },
     methods: {
         // 报名
         submitLogin(event) {
@@ -96,18 +113,15 @@ export default {
             if (!this.is_axios) return;
             this.is_axios = !this.is_axios;
             axios({
-                url:
-                    "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/login",
+                url: "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/login",
                 method: "get"
-            })
-                .then(response => {
-                    // console.log(response.data.data.statu);
-                    this.is_axios = !this.is_axios;
-                    this.$emit("update:isLogin", false); // 改变登录状态
-                    this.$emit("update:showVcode", false); // 不显示报名窗口
-                    // this.$destroy(); // 销毁这个组件
-                })
-                .catch(error => {});
+            }).then(response => {
+                // console.log(response.data.data.statu);
+                this.is_axios = !this.is_axios;
+                this.$emit("update:isLogin", false); // 改变登录状态
+                this.$emit("update:showVcode", false); // 不显示报名窗口
+                // this.$destroy(); // 销毁这个组件
+            }).catch(error => { });
         },
         // 获取验证码
         postVcode() {
@@ -118,7 +132,7 @@ export default {
                 this.vcodeText = this.vcodeCount + "s重新获取";
                 // 倒计时
                 _this.vcodeCount--; // 初始化先执行一次，因为定时器 1000ms执行一次，点击的一刻存在时间间隔
-                this.vcodeTimer = setInterval(function() {
+                this.vcodeTimer = setInterval(function () {
                     _this.vcodeText = _this.vcodeCount + "s重新获取";
                     if (
                         _this.vcodeCount > 0 &&
@@ -172,7 +186,7 @@ export default {
             width: 8rem;
             // height: 6rem;
             margin: auto;
-           
+
             border-radius: 0.2rem;
             overflow: hidden;
             background-color: #00bcd4;

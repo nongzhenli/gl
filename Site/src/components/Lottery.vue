@@ -31,16 +31,33 @@
         </div>
         <!-- 九宫格抽奖 -->
         <lottery-rotate :login-layer="loginLayer"></lottery-rotate>
+
+        
     </div>
 </template>
 
 <script>
 import axios from "axios";
+import { VueCookie } from "../utils/utils";
 import LotteryRotate from "@/components/LotteryRotate";
 export default {
     data() {
         return {
-            userInfo: {}, // 用户信息
+            userInfo: {
+                // "user": {
+                //     "id": 1,
+                //     "name": "李妈妈",
+                //     "mobile": 13132777334
+                // },
+                // "status": 0,  // 0 未参与报名 1 已报名
+                // "prizeInfo": {
+                //     "id": 1,
+                //     "name": "iphone 6s",
+                //     "des": "这是一台iphone6s。使用日期",
+                //     "statu": 0 // 0待领取 1已领取
+                // },
+                // "time": 1526263478
+            },
             loginLayer: false // 验证码弹层
         };
     },
@@ -48,22 +65,24 @@ export default {
         this.getUserInfo();
         // console.log(this.$route.params)
     },
-    components: { LotteryRotate},
+    components: { LotteryRotate },
     methods: {
         // 获取用户信息
         getUserInfo() {
-            // 异步获取 奖品数据
             axios({
-                url: "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/user",
-                method: "get"
+                url: "http://gl.gxqqbaby.cn/api/v1/user/1",
+                method: "get",
+                headers: { 'token': this.utils.VueCookie.get("loginToken") }
             }).then(response => {
                 this.userInfo = response.data.data;
-                if(this.userInfo.status.sign == 0){
+                console.log(response);
+
+                if (this.userInfo.status == 0) {
                     this.loginLayer = true;
-                }else if(this.userInfo.status.sign == 1){
+                } else if (this.userInfo.status == 1) {
                     this.loginLayer = false;
                 }
-            }).catch(error => {});
+            }).catch(error => { });
         }
     }
 };
@@ -79,6 +98,7 @@ export default {
         .bannerImg {
             width: 100%;
             height: 4.4rem;
+            pointer-events: none;
         }
         .prizeInfoBtn {
             width: 2rem;
@@ -115,6 +135,8 @@ export default {
                 width: 100%;
                 height: 100%;
                 display: block;
+                // pointer-events 禁止了微信点击图片被打开、分享、保存
+                pointer-events: none;
             }
         }
         .whiteBar1 {

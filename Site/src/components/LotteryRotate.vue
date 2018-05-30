@@ -10,12 +10,31 @@
         </div>
         <!-- 中奖Toast -->
         <lottery-toast :lottery-prize="prizeObj"
-            v-show="showToast"></lottery-toast>
+            v-show="showToast">
+        </lottery-toast>
 
         <!-- 验证码Toast -->
         <lottery-vcode v-if="showVcode"
             :show-vcode.sync="showVcode"
-            :is-login.sync="isLogin"></lottery-vcode>
+            :is-login.sync="isLogin">
+        </lottery-vcode>
+
+        <!-- Toast -->
+        <div class="van-toast van-toast--default van-toast--middle"
+            style="z-index: 2036;">
+            <div class="van-loading van-loading--circular van-loading--white">
+                <span class="van-loading__spinner van-loading__spinner--circular">
+                    <svg viewBox="25 25 50 50"
+                        class="van-loading__circular">
+                        <circle cx="50"
+                            cy="50"
+                            r="20"
+                            fill="none"></circle>
+                    </svg>
+                </span>
+            </div>
+            <div class="van-toast__text">加载中...</div>
+        </div>
     </div>
 </template>
 
@@ -60,7 +79,7 @@ export default {
     watch: {
         loginLayer(newValue, oldValue) {
             // 父动态改变值，此处监听，保证子组件能动态获取
-            if(newValue == true){
+            if (newValue == true) {
                 this.isLogin = newValue;
             }
         }
@@ -73,28 +92,23 @@ export default {
         getPrizeJson() {
             // 异步获取 奖品数据
             axios({
-                url:
-                    "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/prize",
+                url: "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/prize",
                 method: "get"
-            })
-                .then(response => {
-                    this.prizeInfo = response.data.data.prizeInfo;
-                    this.arrNum = response.data.data.arrNum;
-                    // dom更新后调用，确保返回的数据渲染dom后执行
-                    this.$nextTick(function() {
-                        // console.log(this.$refs.pice);
-                        // console.log(this.arrNum);
-                    });
-                })
-                .catch(error => {});
+            }).then(response => {
+                this.prizeInfo = response.data.data.prizeInfo;
+                this.arrNum = response.data.data.arrNum;
+                // dom更新后调用，确保返回的数据渲染dom后执行
+                this.$nextTick(function () {
+                    // console.log(this.$refs.pice);
+                    // console.log(this.arrNum);
+                });
+            }).catch(error => { });
         },
         // 开始抽奖
         clickLotteryBnt(event) {
             // 触发按钮 rotate-img
             if (event.target.className != "rotate-img") return;
-            // let __url = window.location.href;
-            // window.location.href="https://www.mqxpyy.com/wxsq/index.php/Api/Common/getUserInfo?redirect_uri="+ __url;
-            // return false;
+
             // 是否报名
             if (this.isLogin == true) {
                 this.showVcode = true;
@@ -117,18 +131,23 @@ export default {
                 this.prize = -1;
                 this.times = 0;
                 this.click = false; // 只能抽奖一次，所有抽奖完成后，设置 falase
-                this.showToast = true;
+
+                // 延迟弹出
+                // *知识点：setTimeout函数中，this指向 setTimeout，反而使用箭头函数 this始终指向 源this
+                setTimeout(() => {
+                    this.showToast = true;
+                }, 500);
 
                 console.log("你已经中奖了");
             } else {
                 if (this.times < this.cycle) {
                     this.speed -= 10; // 加快转动速度
                 } else if (this.times === this.cycle) {
-                    // 数据模拟，实际点击时候，从接口获取数据
-
+                    // *******数据模拟，实际点击时候，从接口获取数据****
                     // 随机获得一个中奖位置
                     var index = parseInt(Math.random() * 7, 0) || 0;
                     if (index == 4) index = 0;
+                    // ********** 接口回调返回抽奖结果 end ************
 
                     this.prize = index;
                     this.prizeObj = this.prizeInfo[index];
@@ -228,6 +247,108 @@ export default {
             &.active {
                 background-image: url("../assets/img/lottery/borderSelect.png");
             }
+        }
+    }
+}
+.van-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.2;
+    border-radius: 5px;
+    word-break: break-all;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    box-sizing: border-box;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+    background-color: rgba(0, 0, 0, 0.7);
+    &.van-toast--default {
+        width: 120px;
+        min-height: 120px;
+        padding: 15px;
+        margin: 10px 0 5px;
+        .van-toast__text {
+            font-size: 14px;
+            padding-top: 10px;
+        }
+        .van-loading {
+            margin: 10px 0 5px;
+        }
+    }
+    .van-loading {
+        width: 30px;
+        height: 30px;
+        z-index: 0;
+        font-size: 0;
+        line-height: 0;
+        position: relative;
+        vertical-align: middle;
+        .van-loading__spinner {
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            position: relative;
+
+            display: inline-block;
+            box-sizing: border-box;
+            -webkit-animation: van-rotate 0.8s linear infinite;
+            animation: van-rotate 0.8s linear infinite;
+        }
+        .van-loading__spinner--circular {
+            -webkit-animation-duration: 2s;
+            animation-duration: 2s;
+            .van-loading__circular {
+                width: 100%;
+                height: 100%;
+                & > circle {
+                    stroke-width: 3;
+                    stroke-linecap: round;
+                    -webkit-animation: van-circular 1.5s ease-in-out infinite;
+                    animation: van-circular 1.5s ease-in-out infinite;
+                }
+            }
+        }
+        &.van-loading--white circle {
+            stroke: #fff;
+        }
+    }
+    @keyframes van-rotate {
+        0% {
+            -webkit-transform: rotate(0deg);
+
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+    @keyframes van-circular {
+        0% {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 90, 150;
+            stroke-dashoffset: -40;
+        }
+        100% {
+            stroke-dasharray: 90, 150;
+            stroke-dashoffset: -120;
         }
     }
 }

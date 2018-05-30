@@ -19,6 +19,7 @@ Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
 // Login
 Route::post('api/:version/user/login', 'api/:version.User/login');
 Route::get('api/:version/user/author', 'api/:version.User/author');
+Route::get('api/:version/user/:id', 'api/:version.User/uinfo');
 
 
 //Token

@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-29 17:15:57
+ * @Last Modified time: 2018-05-30 11:32:21
  */
 namespace app\api\controller\v1;
 
@@ -58,7 +58,6 @@ class User extends Controller
         // exit();
 
         $this->wxAppID = config('wx.app_id');
-        // $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxuinfo");
         $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/token/user");
         $this->wxState = "123";
         $this->wxTokenUrl = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
@@ -69,15 +68,14 @@ class User extends Controller
         $this->redirect($this->wxTokenUrl, 302);
     }
 
-    // 获取微信用户信息
-    public function wxUInfo($code = '')
-    {   
-        // 验证code参数
-        (new TokenGet())->goCheck();
-        $wx = new UserToken($code);
-        $token = $wx->get();
-        return [
-            'token' => $token
-        ];
+    // 获取用户信息
+    public function uinfo()
+    {
+        $userInfo = UserModel::getUserInfo();
+        if(!$userInfo){
+            throw new Exception('请求错误');
+        }else {
+            return $userInfo;
+        }
     }
 }

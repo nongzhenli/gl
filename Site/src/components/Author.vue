@@ -1,8 +1,10 @@
 <template>
     <div class="com-author">
-        <img :src="lodingImg"
+        <img
+            :src="lodingImg"
             alt="loding.."
-            width="100%">
+            width="100%"
+        >
     </div>
 </template>
 
@@ -32,7 +34,7 @@ export default {
                 //         // this.$router.push({
                 //         //     path: beforeLoginUrl
                 //         // });
-                       
+
                 //     }).catch(error => {
                 //         console.log(error);
                 //     });
@@ -44,8 +46,8 @@ export default {
                 //     }
                 // }
                 // 跳转到微信授权页面
-                window.onload = function(){
-                    window.location.href ="http://gl.gxqqbaby.cn/api/v1/user/author";
+                window.onload = function () {
+                    window.location.href = "http://gl.gxqqbaby.cn/api/v1/user/author";
                 }
 
             } else {
@@ -57,20 +59,20 @@ export default {
             this.login();
         }
     },
-    mounted() {},
+    mounted() { },
     methods: {
         // 获取url参数
-        getUrlParam: function(name) {
+        getUrlParam: function (name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return unescape(r[2]);
             return null;
         },
-        
+
         // 验证token
         login() {
             // 跳转回到登录前路由页面
-            let beforeLoginUrl = this.utils.VueCookie.get("beforeLoginUrl")? this.utils.VueCookie.get("beforeLoginUrl") : "/index";
+            let beforeLoginUrl = this.utils.VueCookie.get("beforeLoginUrl") ? this.utils.VueCookie.get("beforeLoginUrl") : "/index";
             this.$router.push({
                 path: beforeLoginUrl
             });

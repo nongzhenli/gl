@@ -63,6 +63,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: config.build.index,
       template: 'index.html',
+      hash: false, // 不给静态资源加 hash，但是貌似不起起作用。待解决
       inject: true,
       minify: {
         removeComments: true,

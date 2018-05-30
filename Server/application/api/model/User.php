@@ -4,7 +4,9 @@ namespace app\api\model;
 use Firebase\JWT;
 use think\Model;
 use think\Exception;
+use app\api\service\Token;
 // use app\api\model\BaseModel;
+
 
 // public 表示全局，类内部外部子类都可以访问；
 // private 表示私有的，只有本类内部可以使用；
@@ -12,6 +14,31 @@ use think\Exception;
 
 class User extends BaseModel
 {
+
+    /**
+     * 获取用户信息
+     * 存在返回uid，不存在返回0
+     */
+    public static function getUserInfo()
+    {
+        $uid = Token::getCurrentUid();
+        $user = User::where('id', '=', $uid)
+            ->find();
+        return $user;
+        exit();
+    }
+
+    /**
+     * 用户是否存在
+     * 存在返回uid，不存在返回0
+     */
+    public static function getByOpenID($openid)
+    {
+        $user = User::where('openid', '=', $openid)
+            ->find();
+        return $user;
+    }
+
     // 用户登录验证模块
     // public static function getToken()
     // {
@@ -56,17 +83,4 @@ class User extends BaseModel
     //     }
 
     // }
-
-
-    /**
-     * 用户是否存在
-     * 存在返回uid，不存在返回0
-     */
-    public static function getByOpenID($openid)
-    {
-        $user = User::where('openid', '=', $openid)
-            ->find();
-        return $user;
-    }
-    
 }
