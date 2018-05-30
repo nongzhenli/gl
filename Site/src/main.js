@@ -13,7 +13,7 @@ import * as utils from './utils/utils.js'
 
 // 全局使用 vue-router
 Vue.use(vueRouter)
-const router =new vueRouter({
+const router = new vueRouter({
     mode: 'hash',
     routes: routers
 })
@@ -22,10 +22,13 @@ Vue.config.productionTip = false;
 Vue.prototype.utils = utils
 
 router.beforeEach((to, from, next) => {
+    console.log("目标", to);
+    console.log("来源", from);
     if (!utils.VueCookie.get("loginToken") && to.path != '/author') {
         // 第一次访问
         utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
         next('/author');
+        return false;
     } else if (utils.VueCookie.get("loginToken")) {
         next();
     } else {

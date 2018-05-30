@@ -165,6 +165,8 @@ class Token
         return false;
     }
 
+
+    // 验证 token
     public static function verifyToken($token)
     {
         $exist = Cache::get($token);

@@ -6,13 +6,15 @@
  * @Last Modified time: 2018-05-27 20:48:24
  */
 namespace app\api\controller\v1;
+use think\Controller;
+use think\Cookie;
 
 use app\api\service\UserToken;
 use app\api\validate\TokenGet;
 use app\lib\exception\ParameterException;
 use app\api\service\Token as TokenService;
 
-class Token
+class Token extends Controller
 {
     /**
      * 用户获取令牌（登陆）
@@ -22,6 +24,8 @@ class Token
      */
     public function getToken($code = '', $state= '')
     {
+        
+
         (new TokenGet())->goCheck();
         $wx = new UserToken($code, $state);
         $token = $wx->get();
@@ -30,10 +34,15 @@ class Token
             'token' => $token, 
             'redirect_uri' => $state, 
         );
-
-        echo json_encode($result_ar, true);
-        exit();
-        return $result_ar;
+        $setCookie = Cookie::set('loginToken', $token, 7200);
+        $redirect_uri = Cookie::has('beforeLoginUrl');
+        
+        $this->redirect('http://gl.gxqqbaby.cn/#'.$redirect_uri, 200);
+        exit;
+            
+        // echo json_encode($result_ar, true);
+        // eixt();
+        // return $result_ar;
     }
 
     // 验证Token令牌

@@ -59,14 +59,14 @@ class User extends Controller
 
         $this->wxAppID = config('wx.app_id');
         // $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/user/wxuinfo");
-        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/author");
+        $this->wxRedirectUri = urlencode("http://gl.gxqqbaby.cn/api/v1/token/user");
         $this->wxState = "123";
-        $this->wxAuthor = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
+        $this->wxTokenUrl = sprintf(config('wx.wx_code_url'), $this->wxAppID, $this->wxRedirectUri, $this->wxState);
 
         // 获取code码，用于和微信服务器申请token。 注：依据OAuth2.0要求，此处授权登录需要用户端操作
-        // header('location:'.$this->wxAuthor);
+        // header('location:'.$this->wxTokenUrl);
         // exit;   // tp5此处跳转要执行exit退出
-        $this->redirect($this->wxAuthor, 302);
+        $this->redirect($this->wxTokenUrl, 302);
     }
 
     // 获取微信用户信息
