@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-02 17:29:23
+ * @Last Modified time: 2018-06-02 17:32:19
  */
 namespace app\api\service;
 
@@ -149,14 +149,15 @@ class UserToken extends Token
         // 全局异常处理会记录日志
         // 并且这样的异常属于服务器异常
         // 也不应该定义BaseException返回到客户端
-        $wxUserInfo = WxUser::getWxUserInfo($wxResult['access_token'], $wxResult['openid']);
+        $wxUserInfo_str = WxUser::getWxUserInfo($wxResult['access_token'], $wxResult['openid']);
         // 转成数组
-        $wxUserInfo = json_decode($wxUserInfo, true);
+        $wxUserInfo = json_decode($wxUserInfo_str, true);
+        var_dump($wxUserInfo);
 
         $wx_user = WxUser::create([
             'openid' => $wxUserInfo['openid'],
             'nickname' => $wxUserInfo['nickname'],
-            'wx_info' => $wxUserInfo,
+            'wx_info' => $wxUserInfo_str,
             'last_update_time' => time(),
             'create_time' => time(),
         ]);
