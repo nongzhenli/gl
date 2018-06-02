@@ -58,7 +58,7 @@ export default {
                 // },
                 // "time": 1526263478
             },
-            loginLayer: false // 验证码弹层
+            loginLayer: false // 验证码弹层，默认false不弹出，关联报名状态
         };
     },
     created() {
@@ -77,10 +77,9 @@ export default {
                 this.userInfo = response.data.data;
                 console.log(response);
 
+                // 0标识未登陆，则弹出层true
                 if (this.userInfo.status == 0) {
                     this.loginLayer = true;
-                } else if (this.userInfo.status == 1) {
-                    this.loginLayer = false;
                 }
             }).catch(error => { });
         }

@@ -21,6 +21,7 @@
 
         <!-- Toast -->
         <div class="van-toast van-toast--default van-toast--middle"
+            v-show="loading"
             style="z-index: 2036;">
             <div class="van-loading van-loading--circular van-loading--white">
                 <span class="van-loading__spinner van-loading__spinner--circular">
@@ -60,6 +61,7 @@ export default {
             showToast: false, // 中奖弹层
             showVcode: false, // 验证码弹层
             isLogin: this.loginLayer, // 登录状态
+            loading: false,
 
             prizeInfo: {}, // 奖品数据
             arrNum: [], // 滚动顺序
@@ -109,9 +111,15 @@ export default {
             // 触发按钮 rotate-img
             if (event.target.className != "rotate-img") return;
 
+            // 点击则弹出...
+            // this.loading = true;
+
             // 是否报名
             if (this.isLogin == true) {
                 this.showVcode = true;
+                // 如果点击时，已经报名了，则关闭loading
+                this.loading = false;
+                
                 return false;
             }
             if (!this.click) return;
@@ -144,9 +152,11 @@ export default {
                     this.speed -= 10; // 加快转动速度
                 } else if (this.times === this.cycle) {
                     // *******数据模拟，实际点击时候，从接口获取数据****
-                    // 随机获得一个中奖位置
+                        // 随机获得一个中奖位置
                     var index = parseInt(Math.random() * 7, 0) || 0;
                     if (index == 4) index = 0;
+                        // 此处得知道抽奖结果，则关闭loading加载层
+                    this.loading = false;
                     // ********** 接口回调返回抽奖结果 end ************
 
                     this.prize = index;

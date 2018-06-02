@@ -3,11 +3,13 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-27 20:48:02
+ * @Last Modified time: 2018-06-02 17:29:23
  */
 namespace app\api\service;
 
 use app\api\model\User;
+use app\api\model\WxUser;
+
 use app\api\service\Token;
 use app\lib\enum\ScopeEnum;
 use app\lib\exception\TokenException;
@@ -38,7 +40,7 @@ class UserToken extends Token
      */
     public function get()
     {
-        
+
         $result = curl_get($this->wxAccessTokenUrl);
 
         // 注意json_decode的第一个参数true
@@ -82,7 +84,7 @@ class UserToken extends Token
                 'errorCode' => $wxResult['errcode'],
             ]);
     }
-    
+
     // 颁发令牌
     // 只要调用登陆就颁发新令牌
     // 但旧的令牌依然可以使用
@@ -100,11 +102,10 @@ class UserToken extends Token
         // $token = Request::instance()->token('token', 'md5');
         $openid = $wxResult['openid'];
         $user = User::getByOpenID($openid);
-        if (!$user)
-        // 借助微信的openid作为用户标识
-        // 但在系统中的相关查询还是使用自己的uid
-        {
-            $uid = $this->newUser($openid);
+        if (!$user) {
+            // 借助微信的openid作为用户标识
+            // 但在系统中的相关查询还是使用自己的uid
+            $uid = $this->newUser($wxResult);
         } else {
             $uid = $user->id;
         }
@@ -122,7 +123,7 @@ class UserToken extends Token
         $cachedValue['scope'] = ScopeEnum::User;
         return $cachedValue;
     }
-    
+
     // 写入缓存
     private function saveToCache($wxResult)
     {
@@ -141,17 +142,38 @@ class UserToken extends Token
     }
 
     // 创建新用户
-    private function newUser($openid)
+    private function newUser($wxResult)
     {
         // 有可能会有异常，如果没有特别处理
         // 这里不需要try——catch
         // 全局异常处理会记录日志
         // 并且这样的异常属于服务器异常
         // 也不应该定义BaseException返回到客户端
-        $user = User::create(
-            [
-                'openid' => $openid,
+        $wxUserInfo = WxUser::getWxUserInfo($wxResult['access_token'], $wxResult['openid']);
+        // 转成数组
+        $wxUserInfo = json_decode($wxUserInfo, true);
+
+        $wx_user = WxUser::create([
+            'openid' => $wxUserInfo['openid'],
+            'nickname' => $wxUserInfo['nickname'],
+            'wx_info' => $wxUserInfo,
+            'last_update_time' => time(),
+            'create_time' => time(),
+        ]);
+        
+        if (!$wx_user) {
+            throw new TokenException([
+                'msg' => '微信授权信息绑定异常',
+                'errorCode' => 10006,
             ]);
-        return $user->id;
+        } else {
+            $user = User::create([
+                'openid' => $wxUserInfo['openid'],
+                'nickname' => $wxUserInfo['nickname'],
+                'last_update_time' => time(),
+                'create_time' => time(),
+            ]);
+            return $user->id;
+        }
     }
 }
