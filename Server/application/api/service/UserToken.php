@@ -3,12 +3,14 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-02 17:32:19
+ * @Last Modified time: 2018-06-04 16:46:45
  */
 namespace app\api\service;
 
 use app\api\model\User;
 use app\api\model\WxUser;
+use app\api\model\LotteryRecord;
+
 
 use app\api\service\Token;
 use app\lib\enum\ScopeEnum;
@@ -152,8 +154,8 @@ class UserToken extends Token
         $wxUserInfo_str = WxUser::getWxUserInfo($wxResult['access_token'], $wxResult['openid']);
         // 转成数组
         $wxUserInfo = json_decode($wxUserInfo_str, true);
-        var_dump($wxUserInfo);
 
+        // 在微信信息表创建一个微信记录
         $wx_user = WxUser::create([
             'openid' => $wxUserInfo['openid'],
             'nickname' => $wxUserInfo['nickname'],
@@ -162,19 +164,38 @@ class UserToken extends Token
             'create_time' => time(),
         ]);
         
+        // 判断是否创建成功
         if (!$wx_user) {
             throw new TokenException([
                 'msg' => '微信授权信息绑定异常',
                 'errorCode' => 10006,
             ]);
         } else {
+            // 创建成功，对照生成会员信息
             $user = User::create([
                 'openid' => $wxUserInfo['openid'],
                 'nickname' => $wxUserInfo['nickname'],
                 'last_update_time' => time(),
                 'create_time' => time(),
             ]);
-            return $user->id;
+            // 会员id
+            $uid = $user->id;
+            
+            /**
+             * 此处应该封装一个通用函数用来判断会员参与活动进行入库
+             * 现在仅限对抽奖报名LotteryRecord进行入库
+             */
+            // 插入一条报名记录
+            $lottery_record = LotteryRecord::insertWxRecord($uid, $wxUserInfo['openid']);
+            if(!$lottery_record){
+                throw new TokenException([
+                    'msg' => '抽奖报名参与异常',
+                    'errorCode' => 10007,
+                ]);
+            }
+
+            // 并返回会员id
+            return $uid;
         }
     }
 }

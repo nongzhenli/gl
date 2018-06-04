@@ -21,11 +21,11 @@ class User extends BaseModel
      */
     public static function getUserInfo()
     {
+        // 从缓存获取uid
         $uid = Token::getCurrentUid();
         $user = User::where('id', '=', $uid)
             ->find();
         return $user;
-        exit();
     }
 
     /**

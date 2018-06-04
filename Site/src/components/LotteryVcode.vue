@@ -1,67 +1,37 @@
 <template>
     <div class="lottery-vcode">
         <div class="lottert-vcode-parent-layer">
-            <div
-                class="lottert-vcode-layer"
-                v-show="is_show"
-            >
+            <div class="lottert-vcode-layer" v-show="is_show">
                 <p class="title">填写个人信息马上参与抽奖吧！</p>
+                <!-- 姓名 -->
                 <div class="row-input input-name">
                     <div class="item-input">
-                        <input
-                            type="text"
-                            v-model="name"
-                            placeholder="填写姓名"
-                            required
-                        />
+                        <input type="text" v-model="name" placeholder="填写姓名" required />
                     </div>
-
                 </div>
+                <!-- 手机 -->
                 <div class="row-input input-mobile">
                     <div class="item-input">
-                        <input
-                            type="tel"
-                            v-model="mobile"
-                            placeholder="填写11位手机号码"
-                            required
-                            maxlength="11"
-                        />
+                        <input type="tel" v-model="mobile" placeholder="填写11位手机号码" required maxlength="11" />
                     </div>
                 </div>
                 <!-- 短信验证码  -->
                 <div class="row-input input-vcode">
                     <div class="item-input">
-                        <input
-                            type="tel"
-                            v-model="vcode"
-                            placeholder="短信验证码"
-                            required
-                            maxlength="4"
-                        />
+                        <input type="tel" v-model="vcode" placeholder="短信验证码" required maxlength="4" />
                     </div>
-                    <button
-                        class="post-vcode"
-                        v-text="vcodeText"
-                        @click="postVcode"
-                    ></button>
+                    <button class="post-vcode" v-text="vcodeText" @click="postVcode"></button>
                 </div>
                 <!-- 短信验证码 end -->
 
                 <div class="row-input ">
-                    <button
-                        type="button"
-                        class="submit-btn"
-                        @click="submitLogin"
-                    >确认报名</button>
+                    <button type="button" class="submit-btn" @click="submitLogin">确认报名</button>
                 </div>
+            </div>
+            <transition name="fadeLeft">
+                <button class="colse-btn" @click="backIndex()">x</button>
+            </transition>
         </div>
-        <transition name="fadeLeft">
-            <button
-                class="colse-btn"
-                @click="backIndex()"
-            >x</button>
-        </transition>
-    </div>
 
     </div>
 </template>
@@ -69,6 +39,7 @@
 <script>
 const TIME_COUNT = 60;
 import axios from "axios";
+import { VueCookie } from "../utils/utils";
 export default {
     props: ["showVcode", "isLogin"],
     data() {
@@ -110,22 +81,32 @@ export default {
             //     alert("验证码不正确");
             //     return false;
             // }
+
+            //  防止重复点击
             if (!this.is_axios) return;
             this.is_axios = !this.is_axios;
             axios({
-                url: "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/login",
-                method: "get"
+                url: "http://gl.gxqqbaby.cn/api/v1/lottery/user/sign",
+                headers: { 'token': this.utils.VueCookie.get("loginToken") },
+                method: "POST",
+                data: {
+                    "act_id": 1,
+                    "custname": this.name,
+                    "mobile": this.mobile
+                }
             }).then(response => {
-                // console.log(response.data.data.statu);
-                this.is_axios = !this.is_axios;
-                this.$emit("update:isLogin", false); // 改变登录状态
-                this.$emit("update:showVcode", false); // 不显示报名窗口
+                if(response.data.status = 1){
+                    this.is_axios = !this.is_axios;
+                    this.$emit("update:isLogin", false); // 改变登录状态
+                    this.$emit("update:showVcode", false); // 不显示报名窗口
+                }
+               
                 // this.$destroy(); // 销毁这个组件
             }).catch(error => { });
         },
         // 获取验证码
         postVcode() {
-            const _this = this;
+            let _this = this;
 
             if (!this.vcodeTimer) {
                 this.vcodeCount = TIME_COUNT;

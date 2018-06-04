@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-25 10:39:18
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-30 11:58:12
+ * @Last Modified time: 2018-06-04 16:01:00
  */
 namespace app\api\service;
 
@@ -131,7 +131,7 @@ class Token
         $uid = self::getCurrentTokenVar('uid');
         $scope = self::getCurrentTokenVar('scope');
         if ($scope == ScopeEnum::Super) {
-            // 只有Super权限才可以自己传入uid
+            // 只有Super权限才可以自己传入uid（其他用户uid，有权限可操作其他用户信息）
             // 且必须在get参数中，post不接受任何uid字段
             $userID = input('get.uid');
             if (!$userID) {

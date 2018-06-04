@@ -22,6 +22,11 @@ Route::get('api/:version/user/author', 'api/:version.User/author');
 Route::get('api/:version/user/:id', 'api/:version.User/uinfo');
 
 
-//Token
+// Token
 Route::rule('api/:version/token/user', 'api/:version.Token/getToken', 'GET|POST');
 Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
+
+
+// Lottery
+Route::rule('api/:version/lottery/user/sign', 'api/:version.Lottery/sign', 'POST');
+Route::rule('api/:version/lottery/user/get', 'api/:version.Lottery/get', 'POST');

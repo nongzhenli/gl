@@ -1,38 +1,29 @@
 <template>
     <div class="wap">
         <div class="banner">
-            <img class="bannerImg"
-                src="../assets/img/lottery/banner.png"
-                alt="">
+            <img class="bannerImg" src="../assets/img/lottery/banner.png" alt="">
             <div class="prizeInfoBtn">
-                <img class="prizeInfoBtnImg"
-                    src="../assets/img/lottery/prizeInfo.png"
-                    alt="">
+                <img class="prizeInfoBtnImg" src="../assets/img/lottery/prizeInfo.png" alt="">
             </div>
             <div class="priceChanceBtn">
                 您有1次抽奖机会
             </div>
             <div class="whiteBar1 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png"
-                    alt="">
+                <img src="../assets/img/lottery/whiteBar.png" alt="">
             </div>
             <div class="whiteBar2 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png"
-                    alt="">
+                <img src="../assets/img/lottery/whiteBar.png" alt="">
             </div>
             <div class="whiteBar3 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png"
-                    alt="">
+                <img src="../assets/img/lottery/whiteBar.png" alt="">
             </div>
             <div class="whiteBar4 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png"
-                    alt="">
+                <img src="../assets/img/lottery/whiteBar.png" alt="">
             </div>
         </div>
         <!-- 九宫格抽奖 -->
         <lottery-rotate :login-layer="loginLayer"></lottery-rotate>
 
-        
     </div>
 </template>
 
@@ -70,13 +61,11 @@ export default {
         // 获取用户信息
         getUserInfo() {
             axios({
-                url: "http://gl.gxqqbaby.cn/api/v1/user/1",
-                method: "get",
+                url: "http://gl.gxqqbaby.cn/api/v1/lottery/user/get",
+                method: "POST",
                 headers: { 'token': this.utils.VueCookie.get("loginToken") }
             }).then(response => {
-                this.userInfo = response.data.data;
-                console.log(response);
-
+                this.userInfo = response.data;
                 // 0标识未登陆，则弹出层true
                 if (this.userInfo.status == 0) {
                     this.loginLayer = true;

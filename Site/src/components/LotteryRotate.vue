@@ -1,36 +1,25 @@
 <template>
-    <div class="lottery-rotate"
-        @click="clickLotteryBnt">
-        <div v-for="(item, idx ) in prizeInfo"
-            :key="item.level"
-            ref="pice"
+    <div class="lottery-rotate" @click="clickLotteryBnt">
+        <div v-for="(item, idx ) in prizeInfo" 
+            :key="item.level" ref="pice" 
             :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
-            <img :src="item.picUrlDesc || imgUrl.notStartBtn || imgUrl.prizeBtn"
-                :class="{'rotate-img': idx == 4}" />
+            <img :src="item.picUrlDesc || imgUrl.notStartBtn || imgUrl.prizeBtn" 
+                 :class="{'rotate-img': idx == 4}" />
         </div>
         <!-- 中奖Toast -->
-        <lottery-toast :lottery-prize="prizeObj"
-            v-show="showToast">
+        <lottery-toast :lottery-prize="prizeObj" v-show="showToast">
         </lottery-toast>
 
         <!-- 验证码Toast -->
-        <lottery-vcode v-if="showVcode"
-            :show-vcode.sync="showVcode"
-            :is-login.sync="isLogin">
+        <lottery-vcode v-if="showVcode" :show-vcode.sync="showVcode" :is-login.sync="isLogin">
         </lottery-vcode>
 
         <!-- Toast -->
-        <div class="van-toast van-toast--default van-toast--middle"
-            v-show="loading"
-            style="z-index: 2036;">
+        <div class="van-toast van-toast--default van-toast--middle" v-show="loading" style="z-index: 2036;">
             <div class="van-loading van-loading--circular van-loading--white">
                 <span class="van-loading__spinner van-loading__spinner--circular">
-                    <svg viewBox="25 25 50 50"
-                        class="van-loading__circular">
-                        <circle cx="50"
-                            cy="50"
-                            r="20"
-                            fill="none"></circle>
+                    <svg viewBox="25 25 50 50" class="van-loading__circular">
+                        <circle cx="50" cy="50" r="20" fill="none"></circle>
                     </svg>
                 </span>
             </div>
@@ -119,7 +108,7 @@ export default {
                 this.showVcode = true;
                 // 如果点击时，已经报名了，则关闭loading
                 this.loading = false;
-                
+
                 return false;
             }
             if (!this.click) return;
@@ -152,10 +141,10 @@ export default {
                     this.speed -= 10; // 加快转动速度
                 } else if (this.times === this.cycle) {
                     // *******数据模拟，实际点击时候，从接口获取数据****
-                        // 随机获得一个中奖位置
+                    // 随机获得一个中奖位置
                     var index = parseInt(Math.random() * 7, 0) || 0;
                     if (index == 4) index = 0;
-                        // 此处得知道抽奖结果，则关闭loading加载层
+                    // 此处得知道抽奖结果，则关闭loading加载层
                     this.loading = false;
                     // ********** 接口回调返回抽奖结果 end ************
 
@@ -312,7 +301,6 @@ export default {
             width: 100%;
             height: 100%;
             position: relative;
-
             display: inline-block;
             box-sizing: border-box;
             -webkit-animation: van-rotate 0.8s linear infinite;
@@ -339,7 +327,6 @@ export default {
     @keyframes van-rotate {
         0% {
             -webkit-transform: rotate(0deg);
-
             transform: rotate(0deg);
         }
         100% {

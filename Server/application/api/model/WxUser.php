@@ -1,12 +1,9 @@
 <?php
 namespace app\api\model;
 
-use Firebase\JWT;
 use think\Model;
-use think\Exception;
-use app\api\service\Token;
-// use app\api\model\BaseModel;
 
+// use app\api\model\BaseModel;
 
 // public 表示全局，类内部外部子类都可以访问；
 // private 表示私有的，只有本类内部可以使用；
@@ -21,8 +18,8 @@ class WxUser extends BaseModel
      */
     public static function getWxUserInfo($access_token, $openid)
     {
-        $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token."&openid=".$openid."&lang=zh_CN";
-        $result= curl_get($url);
+        $url = sprintf(config('wx.wx_userinfo_url'), $access_token, $openid);
+        $result = curl_get($url);
         return $result;
     }
 

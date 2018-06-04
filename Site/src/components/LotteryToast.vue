@@ -159,6 +159,7 @@ export default {
         -webkit-animation: rotate 20s infinite linear;
         animation: rotate 20s infinite linear;
         transform-origin: 50% 50%;
+        pointer-events: none;
     }
     @-webkit-keyframes rotate {
         0% {
