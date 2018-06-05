@@ -19,7 +19,6 @@ Route::get('api/:version/banner/:id', 'api/:version.Banner/getBanner');
 // Login
 Route::post('api/:version/user/login', 'api/:version.User/login');
 Route::get('api/:version/user/author', 'api/:version.User/author');
-Route::get('api/:version/user/:id', 'api/:version.User/uinfo');
 
 
 // Token
@@ -28,5 +27,8 @@ Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
 
 
 // Lottery
-Route::rule('api/:version/lottery/user/sign', 'api/:version.Lottery/sign', 'POST');
-Route::rule('api/:version/lottery/user/get', 'api/:version.Lottery/get', 'POST');
+Route::get('api/:version/lottery/prize/info', 'api/:version.Lottery/getAllPrizeInfo');
+Route::post('api/:version/lottery/user/sign', 'api/:version.Lottery/sign');
+Route::post('api/:version/lottery/user/get', 'api/:version.Lottery/get');
+Route::post('api/:version/lottery/user/prize', 'api/:version.Lottery/getPrizeIndex');
+

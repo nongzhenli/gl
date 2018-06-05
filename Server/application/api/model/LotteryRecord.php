@@ -44,6 +44,7 @@ class LotteryRecord extends BaseModel
 
     /**
      * 活动报名，更新信息
+     * @$data|Array 更新数据
      */
     public static function signRecordInfo($data)
     {
@@ -53,6 +54,19 @@ class LotteryRecord extends BaseModel
         $record->save($data,['user_id' => $uid]);
 
         return $record;
+    }
+
+
+    /**
+     * 抽奖结果返回奖品位置索引
+     */
+    public static function getPrizeIndex()
+    {
+        // $uid = Token::getCurrentUid();
+        // $record = new LotteryRecord;
+        // $record->save($data,['user_id' => $uid]);
+
+        return 2;
     }
 
 }

@@ -3,13 +3,14 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-04 17:09:24
+ * @Last Modified time: 2018-06-05 17:30:14
  */
 namespace app\api\controller\v1;
 
 use app\api\model\LotteryRecord as LotteryModel;
+use app\api\model\LotteryPrize as PrizeModel;
+
 use think\Controller;
-use think\Request;
 
 class Lottery extends Controller
 {
@@ -42,6 +43,29 @@ class Lottery extends Controller
             throw new Exception('请求错误');
         } else {
             return $signInfo;
+        }
+    }
+
+    // 返回抽奖结果，index索引
+    public function getPrizeIndex()
+    {
+        $prizeIndex = LotteryModel::getPrizeIndex();
+        if (!$prizeIndex) {
+            throw new Exception('请求错误');
+        } else {
+            return $prizeIndex;
+        }
+    }
+
+    // 获取奖品数据
+    public function getAllPrizeInfo()
+    {
+        $prizeInfo = PrizeModel::getAllPrizeInfo();
+
+        if (!$prizeInfo) {
+            throw new Exception('请求错误');
+        } else {
+            return $prizeInfo;
         }
     }
 }

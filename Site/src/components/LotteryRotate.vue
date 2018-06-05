@@ -1,10 +1,7 @@
 <template>
     <div class="lottery-rotate" @click="clickLotteryBnt">
-        <div v-for="(item, idx ) in prizeInfo" 
-            :key="item.level" ref="pice" 
-            :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
-            <img :src="item.picUrlDesc || imgUrl.notStartBtn || imgUrl.prizeBtn" 
-                 :class="{'rotate-img': idx == 4}" />
+        <div v-for="(item, idx ) in prizeInfo" :key="item.level" ref="pice" :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
+            <img :src="item.picUrlDesc || imgUrl.notStartBtn || imgUrl.prizeBtn" :class="{'rotate-img': idx == 4}" />
         </div>
         <!-- 中奖Toast -->
         <lottery-toast :lottery-prize="prizeObj" v-show="showToast">
@@ -30,6 +27,7 @@
 
 <script>
 import axios from "axios";
+import { VueCookie } from "../utils/utils";
 import LotteryToast from "@/components/LotteryToast";
 import LotteryVcode from "@/components/LotteryVcode";
 export default {
@@ -81,10 +79,10 @@ export default {
     methods: {
         // 获取奖品列表数据
         getPrizeJson() {
-            // 异步获取 奖品数据
+            // 异步获取奖品数据
             axios({
-                url: "https://www.easy-mock.com/mock/5af3d62380d0207179ad7929/lottery/prize",
-                method: "get"
+                url: "http://gl.gxqqbaby.cn/api/v1/lottery/prize/info",
+                method: "GET"
             }).then(response => {
                 this.prizeInfo = response.data.data.prizeInfo;
                 this.arrNum = response.data.data.arrNum;
@@ -100,22 +98,15 @@ export default {
             // 触发按钮 rotate-img
             if (event.target.className != "rotate-img") return;
 
-            // 点击则弹出...
-            // this.loading = true;
-
             // 是否报名
             if (this.isLogin == true) {
                 this.showVcode = true;
-                // 如果点击时，已经报名了，则关闭loading
-                this.loading = false;
-
                 return false;
             }
             if (!this.click) return;
-            this.speed = 200;
-            this.click = false;
-            // 开始转动
-            this.startRoll();
+            
+            // 返回抽奖结果 【包含执行了 转动、防重复点击、】
+            this.resultPrize();
         },
         // 开始转动
         startRoll() {
@@ -133,7 +124,7 @@ export default {
                 // *知识点：setTimeout函数中，this指向 setTimeout，反而使用箭头函数 this始终指向 源this
                 setTimeout(() => {
                     this.showToast = true;
-                }, 500);
+                }, 600);
 
                 console.log("你已经中奖了");
             } else {
@@ -144,20 +135,17 @@ export default {
                     // 随机获得一个中奖位置
                     var index = parseInt(Math.random() * 7, 0) || 0;
                     if (index == 4) index = 0;
-                    // 此处得知道抽奖结果，则关闭loading加载层
-                    this.loading = false;
                     // ********** 接口回调返回抽奖结果 end ************
 
-                    this.prize = index;
-                    this.prizeObj = this.prizeInfo[index];
+                    // this.prize = index;
+                    this.prizeObj = this.prizeInfo[this.prize];
 
                     // console.log(this.prizeObj);
                     // console.log(`中奖位置${this.prize}`);
                 } else if (
-                    this.times > this.cycle + 10 &&
-                    ((this.prize === 0 && this.index === 7) ||
-                        this.prize === this.index + 1)
-                ) {
+                    this.times > this.cycle + 10
+                    && ((this.prize === 0 && this.index === 7)
+                        || this.prize === this.index + 1)) {
                     this.speed += 110;
                 } else {
                     this.speed += 20;
@@ -184,6 +172,23 @@ export default {
         // 关闭弹出框
         closeToast() {
             this.showToast = false;
+        },
+        // 返回抽奖结果
+        resultPrize() {
+            // 异步获取抽奖结果（位置）
+            axios({
+                url: "http://gl.gxqqbaby.cn/api/v1/lottery/user/prize",
+                method: "POST",
+                headers: { 'token': this.utils.VueCookie.get("loginToken") }
+            }).then(response => {
+                if(response.data){
+                    this.prize = response.data;
+                    this.speed = 200;
+                    this.click = false;
+                    // 开始转动
+                    this.startRoll();
+                }
+            }).catch(error => { });
         }
     }
 };

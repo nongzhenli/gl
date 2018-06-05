@@ -64,7 +64,7 @@ export default {
     mounted() { },
     methods: {
         // 报名
-        submitLogin(event) {
+        submitLogin() {
             let reg = /(?:^1[3456789]|^9[28])\d{9}$/;
             let zh_name = /[\u4e00-\u9fa5]$/;
 

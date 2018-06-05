@@ -27,11 +27,7 @@ class Token extends Controller
         (new TokenGet())->goCheck();
         $wx = new UserToken($code, $state);
         $token = $wx->get();
-        
-        $result_ar = array(
-            'token' => $token, 
-            'redirect_uri' => $state, 
-        );
+
         $setCookie = Cookie::set('loginToken', $token, 7200);
         $redirect_uri = Cookie::has('beforeLoginUrl');
         
