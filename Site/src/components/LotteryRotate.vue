@@ -1,7 +1,12 @@
 <template>
     <div class="lottery-rotate" @click="clickLotteryBnt">
-        <div v-for="(item, idx ) in prizeInfo" :key="item.level" ref="pice" :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
-            <img :src="item.picUrlDesc || imgUrl.notStartBtn || imgUrl.prizeBtn" :class="{'rotate-img': idx == 4}" />
+        <div v-if="prizeInfo" v-for="(item, idx ) of prizeInfo" :key="idx" ref="pice" :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
+            <template v-if="item!==null">
+                <img :src="item.img_url" :title="item.name" :alt="item.name" />
+            </template>
+            <template v-else >
+                <img :src="imgUrl.prizeBtn" class="rotate-img" />
+            </template>
         </div>
         <!-- 中奖Toast -->
         <lottery-toast :lottery-prize="prizeObj" v-show="showToast">
@@ -50,8 +55,8 @@ export default {
             isLogin: this.loginLayer, // 登录状态
             loading: false,
 
-            prizeInfo: {}, // 奖品数据
-            arrNum: [], // 滚动顺序
+            prizeInfo: [], // 奖品数据
+            rollSort: [], // 滚动顺序
             imgUrl: {
                 // notStartBtn: require("../assets/img/lottery/noStart.png"),
                 prizeBtn: require("../assets/img/lottery/prizeBtn.png")
@@ -63,7 +68,7 @@ export default {
         LotteryVcode
     },
     created() {
-        this.getPrizeJson();
+        
     },
     watch: {
         loginLayer(newValue, oldValue) {
@@ -75,6 +80,7 @@ export default {
     },
     mounted() {
         // console.log("mounted：" + this.isLogin);
+        this.getPrizeJson();
     },
     methods: {
         // 获取奖品列表数据
@@ -84,13 +90,9 @@ export default {
                 url: "http://gl.gxqqbaby.cn/api/v1/lottery/prize/info",
                 method: "GET"
             }).then(response => {
-                this.prizeInfo = response.data.data.prizeInfo;
-                this.arrNum = response.data.data.arrNum;
-                // dom更新后调用，确保返回的数据渲染dom后执行
-                this.$nextTick(function () {
-                    // console.log(this.$refs.pice);
-                    // console.log(this.arrNum);
-                });
+                this.prizeInfo = response.data.prizeInfo
+                this.rollSort = response.data.roll;
+               
             }).catch(error => { });
         },
         // 开始抽奖
@@ -162,12 +164,12 @@ export default {
         // 每一次转动
         oneRoll() {
             let index_ = this.index; // 当前转到的位置
-            let indexOf = this.arrNum.indexOf(index_) + 1; // 获取下个转动的顺序索引
+            let indexOf = this.rollSort.indexOf(index_) + 1; // 获取下个转动的顺序索引
             if (indexOf >= this.count) {
                 // 假如下次转动顺序索引大于数组本身，则从0开始
                 indexOf = 0;
             }
-            this.index = this.arrNum[indexOf];
+            this.index = this.rollSort[indexOf];
         },
         // 关闭弹出框
         closeToast() {

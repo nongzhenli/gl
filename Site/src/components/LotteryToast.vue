@@ -1,18 +1,15 @@
 <template>
-    <div class="lottery-toast" >
-        <img src="../assets/img/lottery/circleLight.png"
-            class="circleLight"
-            alt="">
+    <div class="lottery-toast">
+        <img src="../assets/img/lottery/circleLight.png" class="circleLight" alt="">
 
         <!-- 恭喜抽中 -->
         <div class="havePrize">
             <div class="oneBar">
                 <img src="../assets/img/lottery/yellowCycle.png" />
             </div>
-            <p>恭喜您抽中 {{prizeObj.commodityName}}</p>
+            <p>恭喜您抽中 {{prizeObj.name}}</p>
             <div class="proImg">
-                <img :src="prizeObj.picUrlDesc"
-                    :alt="prizeObj.commodityName">
+                <img :src="prizeObj.img_url" :alt="prizeObj.name">
             </div>
             <div class="btn">
                 <a>点击查看</a>
