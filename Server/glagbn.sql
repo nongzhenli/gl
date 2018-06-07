@@ -132,6 +132,23 @@ CREATE TABLE IF NOT EXISTS `wx_user` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='微信用户信息' AUTO_INCREMENT=1 ;
 
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `lottery_condition`
+--
+
+CREATE TABLE IF NOT EXISTS `lottery_condition` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `num` char(255) NOT NULL COMMENT '量',
+  `type` int(10) NOT NULL COMMENT '0人数，1概率',
+  `label` varchar(50) NULL COMMENT '标签',
+  `act_id` int(10) NOT NULL COMMENT '活动id',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='奖品条件表' AUTO_INCREMENT=1 ;
+
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

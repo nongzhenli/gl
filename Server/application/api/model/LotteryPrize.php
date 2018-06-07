@@ -39,9 +39,10 @@ class LotteryPrize extends BaseModel
         /**
          * 重构排序 [id,...]
          * [1, 2, 3, 7, btn, 4, 6, 1, 5]
-         * db_prizeInfo    源奖品数据
-         * prizeInfo       重新构造的数组数据
-         * sortArr         排序规则
+         * @param  $db_prizeInfo    源奖品数据
+         * @param  $prizeInfo       重新构造的数组数据
+         * @param  $sortArr         排序规则
+         * @return $result
          */
         $sortArr = [1, 2, 3, 7, null, 4, 6, 1, 5];
         $prizeInfo = array();
@@ -49,12 +50,10 @@ class LotteryPrize extends BaseModel
         // 循环重构
         foreach ($sortArr as $key => $value) {
             $data = $value ? $db_prizeInfo[$value] : null;
-            // array_push($prizeInfo, $data);
             $prizeInfo[$key] = $data;
         }
 
         $result = array(
-            "db_prizeInfo" => $db_prizeInfo,
             "prizeInfo" => $prizeInfo,
             "sort" => $sortArr,
             "roll" => [0, 1, 2, 5, 8, 7, 6, 3],

@@ -183,8 +183,9 @@ export default {
                 method: "POST",
                 headers: { 'token': this.utils.VueCookie.get("loginToken") }
             }).then(response => {
-                if(response.data){
-                    this.prize = response.data;
+                console.log(response)
+                if(response.data.statu == 1){
+                    this.prize = response.data.prizeIndex;
                     this.speed = 200;
                     this.click = false;
                     // 开始转动

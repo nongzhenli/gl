@@ -7,17 +7,17 @@
  */
 namespace app\api\controller\v1;
 
-use app\api\model\LotteryRecord as LotteryModel;
 use app\api\model\LotteryPrize as PrizeModel;
-
+use app\api\model\LotteryRecord as RecordModel;
 use think\Controller;
+use think\Exception;
 
 class Lottery extends Controller
 {
     // 获取报名结果
     public function get()
     {
-        $recordInfo = LotteryModel::getRecordInfo();
+        $recordInfo = RecordModel::getRecordInfo();
         if (!$recordInfo) {
             throw new Exception('请求错误');
         } else {
@@ -38,7 +38,7 @@ class Lottery extends Controller
         $data['sign_time'] = time();
         $data['status'] = 1; // 已报名
 
-        $signInfo = LotteryModel::signRecordInfo($data);
+        $signInfo = RecordModel::signRecordInfo($data);
         if (!$signInfo) {
             throw new Exception('请求错误');
         } else {
@@ -49,7 +49,7 @@ class Lottery extends Controller
     // 返回抽奖结果，index索引
     public function getPrizeIndex()
     {
-        $prizeIndex = LotteryModel::getPrizeIndex();
+        $prizeIndex = RecordModel::getPrizeIndex();
         if (!$prizeIndex) {
             throw new Exception('请求错误');
         } else {
