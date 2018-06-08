@@ -69,22 +69,28 @@ class LotteryRecord extends BaseModel
         $data['prize_id'] = 2;
         $data['draw_time'] = time();
 
-        $result = (new LotteryRecord())->save($data, [
-            'user_id' => $uid,
-            'prize_id' => NULL,
-        ]);
+        // $result = (new LotteryRecord())->save($data, [
+        //     'user_id' => $uid,
+        //     'prize_id' => NULL,
+        // ]);
 
-        if (!$result) {
-            throw new Exception('数据更新失败');
-        } else {
-            $result = array(
-                "statu" => $result,
-                "prizeIndex" => 2,
-                "totalPeople" => $totalPeople
-            );
-        }
+        // if (!$result) {
+        //     throw new Exception('数据更新失败');
+        // } else {
+        //     $result = array(
+        //         "statu" => $result,
+        //         "prizeIndex" => 2,
+        //         "totalPeople" => $totalPeople
+        //     );
+        // }
+
+        $result = array(
+            "statu" => 1,
+            "prizeIndex" => 2,
+            "totalPeople" => $totalPeople
+        );
 
         return $result;
-    }
+    }    
 
 }

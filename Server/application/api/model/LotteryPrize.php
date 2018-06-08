@@ -60,4 +60,5 @@ class LotteryPrize extends BaseModel
         );
         return $result;
     }
+
 }

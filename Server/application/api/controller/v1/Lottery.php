@@ -9,6 +9,8 @@ namespace app\api\controller\v1;
 
 use app\api\model\LotteryPrize as PrizeModel;
 use app\api\model\LotteryRecord as RecordModel;
+use app\api\service\Lottery as LotteryService;
+
 use think\Controller;
 use think\Exception;
 
@@ -61,6 +63,19 @@ class Lottery extends Controller
     public function getAllPrizeInfo()
     {
         $prizeInfo = PrizeModel::getAllPrizeInfo();
+
+        if (!$prizeInfo) {
+            throw new Exception('请求错误');
+        } else {
+            return $prizeInfo;
+        }
+    }
+
+
+    // 测试抽奖结果
+    public function test()
+    {
+        $prizeInfo = LotteryService::test();
 
         if (!$prizeInfo) {
             throw new Exception('请求错误');

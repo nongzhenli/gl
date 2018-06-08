@@ -7,6 +7,7 @@
  */
 namespace app\api\service;
 
+use app\api\model\LotteryPrize as PrizeModel;
 use app\api\model\LotteryRecord as RecordModel;
 
 class Lottery
@@ -14,17 +15,15 @@ class Lottery
     // 依据算法返回中奖奖品索引
     public static function getIndex()
     {
-        $arr = array(   
-            array('id'=>1,'name'=>'特等奖','v'=>1),
-            array('id'=>2,'name'=>'一等奖','v'=>5),
-            array('id'=>3,'name'=>'二等奖','v'=>10),
-            array('id'=>4,'name'=>'三等奖','v'=>12),
-            array('id'=>5,'name'=>'四等奖','v'=>22),
-            array('id'=>6,'name'=>'没中奖','v'=>40)
-        ); 
-        return self::get_rand($arr);
+        $where = array(
+            "act_id" => ["=", 1],
+            "weight" => [">", 0]
+        );
+        $arr = PrizeModel::where($where)
+                ->order('weight desc')
+                ->select();
 
-        // return self::totalPeople();
+        return self::get_rand($arr);
     }
 
     // 抽奖人数
@@ -39,7 +38,7 @@ class Lottery
     {
         $result = array();
         foreach ($proArr as $key => $val) {
-            $arr[$key] = $val['v'];
+            $arr[$key] = $val['weight'];
         }
         $proSum = array_sum($arr); // 计算总权重
         $randNum = mt_rand(1, $proSum);
@@ -57,6 +56,36 @@ class Lottery
             }
         }
         unset($arr);
+        return $result;
+    }
+
+    // 测试抽奖结果
+    public static function test()
+    {
+        // 基数
+        $num = 2000;
+        $where = array(
+            "act_id" => ["=", 1],
+            "weight" => [">", 0]
+        );
+        $arr = PrizeModel::where($where)
+                ->order('weight desc')
+                ->select();
+
+        $result = array();
+
+        for ($i = 0; $i < $num; $i++) {
+            $prize = self::get_rand($arr);
+            if (array_key_exists($prize['name'], $result)) {
+                $result[$prize['name']]['num'] = $result[$prize['name']]['num'] + 1;
+            } else {
+                $result[$prize['name']] = array(
+                    "id" => $prize['id'],
+                    "num" => 1,
+                );
+            }
+            unset($prize);
+        }
         return $result;
     }
 }
