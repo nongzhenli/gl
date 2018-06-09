@@ -4,16 +4,13 @@
 
         <!-- 恭喜抽中 -->
         <div class="havePrize">
-            <div class="oneBar">
-                <img src="../assets/img/lottery/yellowCycle.png" />
-            </div>
             <p>恭喜您抽中 {{prizeObj.name}}</p>
             <div class="proImg">
                 <img :src="prizeObj.img_url" :alt="prizeObj.name">
             </div>
-            <div class="btn">
-                <a>点击查看</a>
-            </div>
+            <div class="des-text">工作人员将会在新店开业之后与您联系到店领取 请您保持手机通话顺畅哦</div>
+
+            <button class="colse-btn" @click="colseLayer()">x</button>
         </div>
     </div>
 </template>
@@ -35,7 +32,13 @@ export default {
     },
     mounted() {
         // console.log("初始化值：", this.prizeObj);
-    }
+    },
+    methods: {
+        // 关闭弹层
+        colseLayer() {
+            this.$emit("update:showToast", false);
+        }
+    },
 };
 </script>
 
@@ -176,7 +179,6 @@ export default {
     }
     .havePrize {
         width: 7rem;
-        // height: 6.1rem;
         padding-bottom: 0.5rem;
         border-radius: 0.4rem;
         position: absolute;
@@ -184,7 +186,7 @@ export default {
         left: 0;
         right: 0;
         margin: auto;
-        background: #fff url("../assets/img/lottery/prizinig.png") no-repeat;
+        background: #fff url("../assets/img/lottery/prizinig.jpg") no-repeat;
         background-position: top center;
         background-size: 7.4rem 2.22rem;
         .oneBar {
@@ -200,9 +202,9 @@ export default {
         }
         p {
             padding: 0 0.3rem;
-            font-size: 0.4rem;
+            font-size: 0.45rem;
             color: #707070;
-            font-weight: 600;
+            font-weight: 700;
             margin: 2.72rem auto 0.3rem;
             text-align: center;
         }
@@ -233,6 +235,32 @@ export default {
                 letter-spacing: 0.1em;
                 text-decoration: none;
             }
+        }
+        .des-text {
+            font-size: 0.34rem;
+            padding: 0 0.5rem;
+            line-height: 2;
+        }
+        .colse-btn {
+            position: absolute;
+            left: 50%;
+            bottom: -20%;
+            width: 1rem;
+            height: 0.95rem;
+            line-height: 0.9rem;
+            margin: auto;
+            padding: 0;
+            text-align: center;
+            font-size: 0;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            outline: 0;
+            border: 0;
+
+            background-image: url("../assets/img/lottery/close.png");
+            background-size: cover;
+            background-position: center;
+            background-color: rgba(255, 255, 255, 0.55);
         }
     }
 }

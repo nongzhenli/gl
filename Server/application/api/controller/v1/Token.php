@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 11:17:31
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-30 11:43:17
+ * @Last Modified time: 2018-06-09 15:15:27
  */
 namespace app\api\controller\v1;
 use think\Controller;
@@ -29,7 +29,13 @@ class Token extends Controller
         $token = $wx->get();
 
         $setCookie = Cookie::set('loginToken', $token, 7200);
-        $redirect_uri = Cookie::has('beforeLoginUrl');
+        $isRouteCookie = Cookie::has('beforeLoginUrl');
+        // 判断跳转路由是否存在
+        if($isRouteCookie == 1){
+            $redirect_uri = Cookie::get('beforeLoginUrl');
+        }else { // 不存在则跳转回去授权页面
+            $redirect_uri = "/author";
+        }
         
         $this->redirect('http://gl.gxqqbaby.cn/#'.$redirect_uri, 200);
         exit;

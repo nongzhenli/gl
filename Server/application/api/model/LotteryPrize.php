@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-04 13:44:19
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-05 17:32:56
+ * @Last Modified time: 2018-06-09 16:24:43
  */
 namespace app\api\model;
 
@@ -31,20 +31,22 @@ class LotteryPrize extends BaseModel
         return $result;
     }
 
-    public static function getAllPrizeInfo()
+    /**
+     * 获取奖品数据，并进行重构排序
+     * 重构排序 [id,...]
+     * @param  $db_prizeInfo    源奖品数据，抽离id键值数组
+     * @param  $prizeInfo       重新构造的数组数据
+     * @param  $sortArr         奖品摆放顺序
+     * @param  $roll            抽奖滚动顺序
+     * @return $result
+     */
+    public static function getAllPrizeInfo($sortArr)
     {
+        // 查询数据，并返回指定键名值[id]
         $db_prizeInfo = self::where('act_id', '=', 1)->select();
         $db_prizeInfo = self::convert_arr_key($db_prizeInfo, 'id');
 
-        /**
-         * 重构排序 [id,...]
-         * [1, 2, 3, 7, btn, 4, 6, 1, 5]
-         * @param  $db_prizeInfo    源奖品数据
-         * @param  $prizeInfo       重新构造的数组数据
-         * @param  $sortArr         排序规则
-         * @return $result
-         */
-        $sortArr = [1, 2, 3, 7, null, 4, 6, 1, 5];
+        $roll = [0, 1, 2, 5, 8, 7, 6, 3];
         $prizeInfo = array();
 
         // 循环重构
@@ -56,7 +58,7 @@ class LotteryPrize extends BaseModel
         $result = array(
             "prizeInfo" => $prizeInfo,
             "sort" => $sortArr,
-            "roll" => [0, 1, 2, 5, 8, 7, 6, 3],
+            "roll" => $roll,
         );
         return $result;
     }

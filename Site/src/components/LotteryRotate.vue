@@ -1,14 +1,17 @@
 <template>
-    
-    <div class="lottery-rotate" @click="clickLotteryBnt" >
-        <div v-if="prizeInfo" v-for="(item, idx ) of prizeInfo" :key="idx" ref="pice" :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
-            <template v-if="item!==null">
-                <img :src="item.img_url" :title="item.name" :alt="item.name" />
-            </template>
-            <template v-else >
-                <img :src="imgUrl.prizeBtn" class="rotate-img" />
-            </template>
+
+    <div class="lottery-rotate" @click="clickLotteryBnt">
+        <div class="inside">
+            <div v-if="prizeInfo" v-for="(item, idx ) of prizeInfo" :key="idx" ref="pice" :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
+                <template v-if="item!==null">
+                    <img :src="item.img_url" :title="item.name" :alt="item.name" />
+                </template>
+                <template v-else>
+                    <img :src="imgUrl.prizeBtn" class="rotate-img" />
+                </template>
+            </div>
         </div>
+
         <!-- 中奖Toast -->
         <lottery-toast :lottery-prize="prizeObj" v-show="showToast">
         </lottery-toast>
@@ -69,7 +72,7 @@ export default {
         LotteryVcode
     },
     created() {
-        
+
     },
     watch: {
         loginLayer(newValue, oldValue) {
@@ -93,7 +96,7 @@ export default {
             }).then(response => {
                 this.prizeInfo = response.data.prizeInfo
                 this.rollSort = response.data.roll;
-               
+
             }).catch(error => { });
         },
         // 开始抽奖
@@ -107,7 +110,7 @@ export default {
                 return false;
             }
             if (!this.click) return;
-            
+
             // 返回抽奖结果 【包含执行了 转动、防重复点击、】
             this.resultPrize();
         },
@@ -185,12 +188,14 @@ export default {
                 headers: { 'token': this.utils.VueCookie.get("loginToken") }
             }).then(response => {
                 console.log(response)
-                if(response.data.statu == 1){
+                if (response.data.statu == 1) {
                     this.prize = response.data.prizeIndex;
                     this.speed = 200;
                     this.click = false;
                     // 开始转动
                     this.startRoll();
+                }else {
+                    
                 }
             }).catch(error => { });
         }
@@ -200,50 +205,51 @@ export default {
 
 <style lang="less" scoped>
 .lottery-rotate {
-    margin: 1.5rem auto;
-    width: 9rem;
-    height: 9rem;
-    padding: 0.45rem;
-    background-color: red;
-    border: 0.15rem solid transparent;
+    position: relative;
+    width: 10rem;
+    height: 11.5rem;
+    padding-top: 27%;
     border-radius: 0.2rem;
     box-sizing: border-box;
-    position: relative;
-    // background: linear-gradient(white, white) padding-box,
-    //     repeating-linear-gradient(
-    //             45deg,
-    //             #ffde00 0%,
-    //             #ffde00 4.6%,
-    //             #3eaaff 0,
-    //             #3eaaff 10%
-    //         )
-    //         0 / 6.9rem 6.9rem;
-    
+    background-image: url("../assets/img/lottery/bgImg/LotteryRotateImg.png");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-top: 0.5rem;
+    .inside {
+        width: 67%;
+        margin-left: 15%;
+        margin-right: auto;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-content: center;
+        overflow: hidden;
+    }
     .border_,
     .rotate-btn {
-        // background: url('../assets/img/lottery/border.png') no-repeat;
-        background-size: 100%;
-        float: left;
-        width: 2.4rem;
-        height: 2.4rem;
-        margin-right: 0.25rem;
-        margin-bottom: 0.25rem;
+        display: inline-block;
         position: relative;
+        background-size: 100%;
+        width: 32%;
+        height: auto;
+        padding-top: 32%;
+        box-sizing: border-box;
+        margin-top: 2.4%;
+
         &:nth-child(3n) {
             margin-right: 0;
-        } // &:nth-child(5) {
-        //   background: url('../assets/img/lottery/prizeBtn.png') no-repeat!important;
-        //   background-size: 100%!important;
-        // }
+        }
         &:nth-child(7),
         &:nth-child(8),
         &:nth-child(9) {
             margin-bottom: 0;
-        } // padding:.29rem .33rem;
+        }
         box-sizing: border-box;
         img {
-            width: 2.4rem;
-            height: 2.4rem;
+            width: 100%;
+            height: 100%;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -251,9 +257,15 @@ export default {
         }
     }
     .border_ {
-        background-image: url("../assets/img/lottery/border.png");
-        &.active {
-            background-image: url("../assets/img/lottery/borderSelect.png");
+        font-size: 0;
+        border-radius: 0.2rem;
+        background-color: #fff;
+        // background-image: url("../assets/img/lottery/border.png");
+        &.active img {
+            border: 0.09rem solid #FF5722;
+            box-sizing: border-box;
+            border-radius: 0.2rem;
+            // background-image: url("../assets/img/lottery/borderSelect.png");
         }
     }
 }

@@ -1,14 +1,14 @@
 <?php
-/*
+/* LotteryRecord抽奖参与报名控制器
  * @Author: big黑钦
  * @Date: 2018-06-04 13:44:19
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-04 17:07:51
+ * @Last Modified time: 2018-06-09 16:28:40
  */
 namespace app\api\model;
 
-use app\api\service\Token;
 use app\api\service\Lottery;
+use app\api\service\Token;
 use think\Exception;
 use think\Model;
 
@@ -46,7 +46,7 @@ class LotteryRecord extends BaseModel
 
     /**
      * 活动报名，更新信息
-     * @param $data|Array 更新数据
+     * @param data|Array 更新数据
      */
     public static function signRecordInfo($data)
     {
@@ -60,37 +60,29 @@ class LotteryRecord extends BaseModel
 
     /**
      * 抽奖结果返回奖品位置索引
+     * @param sortArr   奖品摆放顺序，标识id
      */
-    public static function getPrizeIndex()
+    public static function getPrizeIndex($sortArr)
     {
         $uid = Token::getCurrentUid();
-        $totalPeople = Lottery::getIndex();
-
+        
         $data['prize_id'] = 2;
         $data['draw_time'] = time();
 
-        // $result = (new LotteryRecord())->save($data, [
-        //     'user_id' => $uid,
-        //     'prize_id' => NULL,
-        // ]);
+        $result = Lottery::userPrizeInser($uid, $data, $sortArr);
 
-        // if (!$result) {
-        //     throw new Exception('数据更新失败');
-        // } else {
-        //     $result = array(
-        //         "statu" => $result,
-        //         "prizeIndex" => 2,
-        //         "totalPeople" => $totalPeople
-        //     );
-        // }
-
-        $result = array(
-            "statu" => 1,
-            "prizeIndex" => 2,
-            "totalPeople" => $totalPeople
-        );
+        // $result = array(
+        //     "statu" => 1,
+        //     "prizeIndex" => 2,
+        //     "totalPeople" => $totalPeople,
+        // );
 
         return $result;
-    }    
+    }
+    
+    // 检验用户是否中奖或者是否
+    public static function isUserPrie(){
+        
+    }
 
 }

@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-05 17:30:14
+ * @Last Modified time: 2018-06-09 16:27:35
  */
 namespace app\api\controller\v1;
 
@@ -51,7 +51,9 @@ class Lottery extends Controller
     // 返回抽奖结果，index索引
     public function getPrizeIndex()
     {
-        $prizeIndex = RecordModel::getPrizeIndex();
+        // 奖品摆放顺序，id标识
+        $sortArr = [1, 2, 3, 7, null, 4, 6, 1, 5];
+        $prizeIndex = RecordModel::getPrizeIndex($sortArr);
         if (!$prizeIndex) {
             throw new Exception('请求错误');
         } else {
@@ -59,10 +61,12 @@ class Lottery extends Controller
         }
     }
 
-    // 获取奖品数据
+    // 获取全部奖品数据
     public function getAllPrizeInfo()
     {
-        $prizeInfo = PrizeModel::getAllPrizeInfo();
+        // 奖品摆放顺序，id标识
+        $sortArr = [1, 2, 3, 7, null, 4, 6, 1, 5];
+        $prizeInfo = PrizeModel::getAllPrizeInfo($sortArr);
 
         if (!$prizeInfo) {
             throw new Exception('请求错误');

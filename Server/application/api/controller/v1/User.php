@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-05-30 11:32:21
+ * @Last Modified time: 2018-06-09 15:04:15
  */
 namespace app\api\controller\v1;
 
@@ -65,6 +65,7 @@ class User extends Controller
         // 获取code码，用于和微信服务器申请token。 注：依据OAuth2.0要求，此处授权登录需要用户端操作
         // header('location:'.$this->wxTokenUrl);
         // exit;   // tp5此处跳转要执行exit退出
+        // var_dump($this->wxTokenUrl);
         $this->redirect($this->wxTokenUrl, 302);
     }
 

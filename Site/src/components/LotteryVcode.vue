@@ -2,7 +2,7 @@
     <div class="lottery-vcode">
         <div class="lottert-vcode-parent-layer">
             <div class="lottert-vcode-layer" v-show="is_show">
-                <p class="title">填写个人信息马上参与抽奖吧！</p>
+                <p class="title">信息确认</p>
                 <!-- 姓名 -->
                 <div class="row-input input-name">
                     <div class="item-input">
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <!-- 短信验证码  -->
-                <div class="row-input input-vcode">
+                <div class="row-input input-vcode" v-if="false">
                     <div class="item-input">
                         <input type="tel" v-model="vcode" placeholder="短信验证码" required maxlength="4" />
                     </div>
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <transition name="fadeLeft">
-                <button class="colse-btn" @click="backIndex()">x</button>
+                <button class="colse-btn" @click="colseLayer()">x</button>
             </transition>
         </div>
 
@@ -95,12 +95,12 @@ export default {
                     "mobile": this.mobile
                 }
             }).then(response => {
-                if(response.data.status = 1){
+                if (response.data.status = 1) {
                     this.is_axios = !this.is_axios;
                     this.$emit("update:isLogin", false); // 改变登录状态
                     this.$emit("update:showVcode", false); // 不显示报名窗口
                 }
-               
+
                 // this.$destroy(); // 销毁这个组件
             }).catch(error => { });
         },
@@ -130,8 +130,8 @@ export default {
                 return false;
             }
         },
-        // 返回活动首页
-        backIndex() {
+        // 关闭弹层
+        colseLayer() {
             this.$emit("update:showVcode", false);
             // 返回的时候，假如存在计时器，请先关闭
             if (this.vcodeTimer >= 0) {
@@ -170,13 +170,15 @@ export default {
 
             border-radius: 0.2rem;
             overflow: hidden;
-            background-color: #00bcd4;
-            box-shadow: 4px 4px 1px #3f4142;
+            background-color: #fee330;
+            box-shadow: 2px 2px 1px rgba(63, 65, 66, 0.44);
             box-sizing: border-box;
 
             .title {
-                font-size: 0.4rem;
+                font-size: 0.7rem;
                 margin: 0.5rem auto;
+                color: #000;
+                font-weight: 600;
             }
             .item-input {
                 padding-bottom: 0.35rem;
@@ -187,6 +189,7 @@ export default {
                     padding: 0.3rem;
                     font-size: 0.4rem;
                     box-sizing: border-box;
+                    border: 1px solid #333;
                 }
             }
             .input-vcode {
@@ -215,16 +218,18 @@ export default {
                 }
             }
             .submit-btn {
-                width: 100%;
-                padding: 0.2rem;
-                font-size: 0.44rem;
-                background-color: #ff7a00;
-                color: #fff;
+                width: 4.5rem;
+                height: 1.2rem;
+                font-size: 0;
+                color: rgba(255, 255, 255, 0);
                 outline: 0;
-                border: 1px solid #fb6a3d;
                 border-radius: 0.1rem;
+                background-image: url("../assets/img/lottery/lotteryBtn.png");
                 margin: 0.5rem auto 0.6rem;
-                box-shadow: 2px 2px 0px #ff5722;
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-color: transparent;
+                border: 0;
             }
         }
 

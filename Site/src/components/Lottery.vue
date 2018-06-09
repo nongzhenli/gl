@@ -63,7 +63,7 @@ export default {
         max-width: 100%;
         border: 0;
         outline: 0;
-        pointer-events: none;
+        // pointer-events: none;
     }
 }
 </style>
