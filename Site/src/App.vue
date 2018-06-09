@@ -17,14 +17,7 @@ export default {
 
 <style>
 html, body {
-    background-color: #49a6f8 !important;
-    background: -webkit-gradient(
-        linear,
-        left top,
-        left bottom,
-        from(#337cf6),
-        to(#49a6f8)
-    ) !important;
+    background-color: #fee330 !important;
 }
 #app {
     font-family: "Avenir", Helvetica, Arial, sans-serif;

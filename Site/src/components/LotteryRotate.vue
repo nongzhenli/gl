@@ -1,5 +1,6 @@
 <template>
-    <div class="lottery-rotate" @click="clickLotteryBnt">
+    
+    <div class="lottery-rotate" @click="clickLotteryBnt" >
         <div v-if="prizeInfo" v-for="(item, idx ) of prizeInfo" :key="idx" ref="pice" :class="{'border_': idx != 4, 'rotate-btn': idx == 4, 'active': index == idx}">
             <template v-if="item!==null">
                 <img :src="item.img_url" :title="item.name" :alt="item.name" />
@@ -60,7 +61,7 @@ export default {
             imgUrl: {
                 // notStartBtn: require("../assets/img/lottery/noStart.png"),
                 prizeBtn: require("../assets/img/lottery/prizeBtn.png")
-            }
+            },
         };
     },
     components: {
@@ -198,62 +199,61 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.wap {
-    .lottery-rotate {
-        margin: 1.5rem auto;
-        width: 9rem;
-        height: 9rem;
-        padding: 0.45rem;
-        background-color: red;
-        border: 0.15rem solid transparent;
-        border-radius: 0.2rem;
-        box-sizing: border-box;
+.lottery-rotate {
+    margin: 1.5rem auto;
+    width: 9rem;
+    height: 9rem;
+    padding: 0.45rem;
+    background-color: red;
+    border: 0.15rem solid transparent;
+    border-radius: 0.2rem;
+    box-sizing: border-box;
+    position: relative;
+    // background: linear-gradient(white, white) padding-box,
+    //     repeating-linear-gradient(
+    //             45deg,
+    //             #ffde00 0%,
+    //             #ffde00 4.6%,
+    //             #3eaaff 0,
+    //             #3eaaff 10%
+    //         )
+    //         0 / 6.9rem 6.9rem;
+    
+    .border_,
+    .rotate-btn {
+        // background: url('../assets/img/lottery/border.png') no-repeat;
+        background-size: 100%;
+        float: left;
+        width: 2.4rem;
+        height: 2.4rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
         position: relative;
-        background: linear-gradient(white, white) padding-box,
-            repeating-linear-gradient(
-                    45deg,
-                    #ffde00 0%,
-                    #ffde00 4.6%,
-                    #3eaaff 0,
-                    #3eaaff 10%
-                )
-                0 / 6.9rem 6.9rem;
-        .border_,
-        .rotate-btn {
-            // background: url('../assets/img/lottery/border.png') no-repeat;
-            background-size: 100%;
-            float: left;
+        &:nth-child(3n) {
+            margin-right: 0;
+        } // &:nth-child(5) {
+        //   background: url('../assets/img/lottery/prizeBtn.png') no-repeat!important;
+        //   background-size: 100%!important;
+        // }
+        &:nth-child(7),
+        &:nth-child(8),
+        &:nth-child(9) {
+            margin-bottom: 0;
+        } // padding:.29rem .33rem;
+        box-sizing: border-box;
+        img {
             width: 2.4rem;
             height: 2.4rem;
-            margin-right: 0.25rem;
-            margin-bottom: 0.25rem;
-            position: relative;
-            &:nth-child(3n) {
-                margin-right: 0;
-            } // &:nth-child(5) {
-            //   background: url('../assets/img/lottery/prizeBtn.png') no-repeat!important;
-            //   background-size: 100%!important;
-            // }
-            &:nth-child(7),
-            &:nth-child(8),
-            &:nth-child(9) {
-                margin-bottom: 0;
-            } // padding:.29rem .33rem;
-            box-sizing: border-box;
-            img {
-                width: 2.4rem;
-                height: 2.4rem;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
-        .border_ {
-            background-image: url("../assets/img/lottery/border.png");
-            &.active {
-                background-image: url("../assets/img/lottery/borderSelect.png");
-            }
+    }
+    .border_ {
+        background-image: url("../assets/img/lottery/border.png");
+        &.active {
+            background-image: url("../assets/img/lottery/borderSelect.png");
         }
     }
 }

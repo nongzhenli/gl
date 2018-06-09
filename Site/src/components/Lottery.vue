@@ -1,29 +1,18 @@
 <template>
-    <div class="wap">
-        <div class="banner">
-            <img class="bannerImg" src="../assets/img/lottery/banner.png" alt="">
-            <div class="prizeInfoBtn">
-                <img class="prizeInfoBtnImg" src="../assets/img/lottery/prizeInfo.png" alt="">
-            </div>
-            <div class="priceChanceBtn">
-                您有1次抽奖机会
-            </div>
-            <div class="whiteBar1 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png" alt="">
-            </div>
-            <div class="whiteBar2 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png" alt="">
-            </div>
-            <div class="whiteBar3 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png" alt="">
-            </div>
-            <div class="whiteBar4 whiteBar">
-                <img src="../assets/img/lottery/whiteBar.png" alt="">
-            </div>
-        </div>
+    <div class="container">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/01.jpg')" alt="01.jpg">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/02.jpg')" alt="02.jpg">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/03.jpg')" alt="03.jpg">
         <!-- 九宫格抽奖 -->
         <lottery-rotate :login-layer="loginLayer"></lottery-rotate>
-
+        <!-- 九宫格抽奖 end-->
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/06.jpg')" alt="06.jpg">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/07.jpg')" alt="07.jpg">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/08.jpg')" alt="08.jpg">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/09.jpg')" alt="09.jpg">
+        <img class="bg-img" :src="require('../assets/img/lottery/bgImg/10.jpg')" alt="10.jpg">
+        
+        
     </div>
 </template>
 
@@ -34,21 +23,7 @@ import LotteryRotate from "@/components/LotteryRotate";
 export default {
     data() {
         return {
-            userInfo: {
-                // "user": {
-                //     "id": 1,
-                //     "name": "李妈妈",
-                //     "mobile": 13132777334
-                // },
-                // "status": 0,  // 0 未参与报名 1 已报名
-                // "prizeInfo": {
-                //     "id": 1,
-                //     "name": "iphone 6s",
-                //     "des": "这是一台iphone6s。使用日期",
-                //     "statu": 0 // 0待领取 1已领取
-                // },
-                // "time": 1526263478
-            },
+            userInfo: {},
             loginLayer: false // 验证码弹层，默认false不弹出，关联报名状态
         };
     },
@@ -77,81 +52,18 @@ export default {
 
 </script>
 <style lang="less" scoped >
-.wap {
+.container {
     position: relative;
-    .banner {
-        width: 100%;
-        height: 4.4rem;
-        position: relative;
-        .bannerImg {
-            width: 100%;
-            height: 4.4rem;
-            pointer-events: none;
-        }
-        .prizeInfoBtn {
-            width: 2rem;
-            height: 1.27rem;
-            position: absolute;
-            top: 0;
-            right: 0;
-            .prizeInfoBtnImg {
-                width: 2rem;
-                height: 1.27rem;
-            }
-        }
-        .priceChanceBtn {
-            // width: 3.1rem;
-            height: 0.6rem;
-            border-radius: 0.6rem;
-            background-color: #ff7a00;
-            position: absolute;
-            bottom: -0.6rem;
-            left: 50%;
-            transform: translateX(-50%);
-            line-height: 0.66rem;
-            font-size: 0.46rem;
-            color: #fff;
-            font-weight: 500;
-            text-align: center;
-            padding: 0.14rem 0.6rem;
-        }
-        .whiteBar {
-            position: absolute;
-            z-index: 0;
-            transform: rotate(-30deg);
-            img {
-                width: 100%;
-                height: 100%;
-                display: block;
-                // pointer-events 禁止了微信点击图片被打开、分享、保存
-                pointer-events: none;
-            }
-        }
-        .whiteBar1 {
-            top: 6rem;
-            left: -3rem;
-            width: 9rem;
-            height: 2.5rem;
-        }
-        .whiteBar2 {
-            top: 6.2rem;
-            right: -2rem;
-            width: 9rem;
-            height: 2.5rem;
-        }
-        .whiteBar3 {
-            top: 11.5rem;
-            left: -1.8rem;
-            width: 9rem;
-            height: 2.5rem;
-        }
-        .whiteBar4 {
-            top: 12.2rem;
-            left: 2.5rem;
-            width: 9rem;
-            height: 2.5rem;
-        }
-    }
+    font-size: 0;
     overflow: hidden;
+
+    .bg-img {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        border: 0;
+        outline: 0;
+        pointer-events: none;
+    }
 }
 </style>
