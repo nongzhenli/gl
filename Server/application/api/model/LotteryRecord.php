@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-04 13:44:19
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-09 16:28:40
+ * @Last Modified time: 2018-06-11 15:19:18
  */
 namespace app\api\model;
 
@@ -38,9 +38,18 @@ class LotteryRecord extends BaseModel
      */
     public static function getRecordInfo()
     {
+        // 奖品摆放顺序，id标识
+        $sortArr = [1, 2, 3, 7, null, 4, 6, 1, 5];
+        
         $uid = Token::getCurrentUid();
-        $user = self::where('user_id', '=', $uid)
-            ->find();
+        $user = self::where('user_id', '=', $uid)->find();
+        
+        // 奖品索引位置
+        $user['prize_index'] = null;
+        if($user['prize_id']){
+            $user['prize_index'] = array_search($user['prize_id'], $sortArr);
+        }
+
         return $user;
     }
 
@@ -65,11 +74,7 @@ class LotteryRecord extends BaseModel
     public static function getPrizeIndex($sortArr)
     {
         $uid = Token::getCurrentUid();
-        
-        $data['prize_id'] = 2;
-        $data['draw_time'] = time();
-
-        $result = Lottery::userPrizeInser($uid, $data, $sortArr);
+        $result = Lottery::userPrizeInser($uid, $sortArr);
 
         // $result = array(
         //     "statu" => 1,
@@ -78,11 +83,6 @@ class LotteryRecord extends BaseModel
         // );
 
         return $result;
-    }
-    
-    // 检验用户是否中奖或者是否
-    public static function isUserPrie(){
-        
     }
 
 }

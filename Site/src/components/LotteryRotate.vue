@@ -13,11 +13,11 @@
         </div>
 
         <!-- 中奖Toast -->
-        <lottery-toast :lottery-prize="prizeObj" v-show="showToast">
+        <lottery-toast :lottery-prize="prizeObj" :show-toast.sync="showToast" v-show="showToast" :status.sync="status">
         </lottery-toast>
 
         <!-- 验证码Toast -->
-        <lottery-vcode v-if="showVcode" :show-vcode.sync="showVcode" :is-login.sync="isLogin">
+        <lottery-vcode v-if="showVcode" :show-vcode.sync="showVcode" :status.sync="status">
         </lottery-vcode>
 
         <!-- Toast -->
@@ -41,7 +41,7 @@ import LotteryToast from "@/components/LotteryToast";
 import LotteryVcode from "@/components/LotteryVcode";
 export default {
     // 组件传值 iSign 判断是否登录
-    props: ["loginLayer"],
+    props: ["loginStatu", "prizeIndex"],
     data() {
         return {
             title: "积分转盘",
@@ -56,7 +56,7 @@ export default {
             click: true, // 防止转盘未停止重复触发
             showToast: false, // 中奖弹层
             showVcode: false, // 验证码弹层
-            isLogin: this.loginLayer, // 登录状态
+            status: this.loginStatu, // 登录状态
             loading: false,
 
             prizeInfo: [], // 奖品数据
@@ -72,19 +72,19 @@ export default {
         LotteryVcode
     },
     created() {
+        this.getPrizeJson();
 
     },
     watch: {
-        loginLayer(newValue, oldValue) {
+        loginStatu(newValue, oldValue) {
             // 父动态改变值，此处监听，保证子组件能动态获取
-            if (newValue == true) {
-                this.isLogin = newValue;
+            if (newValue >= 0) {
+                this.status = newValue;
             }
         }
     },
     mounted() {
-        // console.log("mounted：" + this.isLogin);
-        this.getPrizeJson();
+        // console.log("mounted：" + this.status);
     },
     methods: {
         // 获取奖品列表数据
@@ -104,11 +104,32 @@ export default {
             // 触发按钮 rotate-img
             if (event.target.className != "rotate-img") return;
 
-            // 是否报名
-            if (this.isLogin == true) {
+            // 未报名
+            if (this.status == 0) {
                 this.showVcode = true;
                 return false;
+            } else if (this.status == 1) {
+                // 已经报名，待抽奖
+                this.showVcode = false;
+            } else if (this.status == 2) {
+                // 已抽奖，待领取
+                this.showToast = true;
+                this.prize = this.prizeIndex;
+                this.prizeObj = this.prizeInfo[this.prize];
+                this.showVcode = false;
+
+                return false;
+
+            } else if (this.status == 3) {
+                // 已领取
+                this.showToast = true;
+                this.prize = this.prizeIndex;
+                this.prizeObj = this.prizeInfo[this.prize];
+                this.showVcode = false;
+
+                return false;
             }
+
             if (!this.click) return;
 
             // 返回抽奖结果 【包含执行了 转动、防重复点击、】
@@ -175,10 +196,6 @@ export default {
             }
             this.index = this.rollSort[indexOf];
         },
-        // 关闭弹出框
-        closeToast() {
-            this.showToast = false;
-        },
         // 返回抽奖结果
         resultPrize() {
             // 异步获取抽奖结果（位置）
@@ -189,13 +206,17 @@ export default {
             }).then(response => {
                 console.log(response)
                 if (response.data.statu == 1) {
-                    this.prize = response.data.prizeIndex;
+                    // 首次抽奖返回
+                    this.prize = response.data.prize.index;
                     this.speed = 200;
                     this.click = false;
                     // 开始转动
                     this.startRoll();
-                }else {
-                    
+                } else if (response.data.statu == 2) {
+                    // 已经抽奖过了（防止前端状态被篡改，每次触发点击则请求验证）
+                    this.prize = response.data.prize.index;
+                    this.showToast = true;
+                    this.click = false;
                 }
             }).catch(error => { });
         }
@@ -248,7 +269,7 @@ export default {
         }
         box-sizing: border-box;
         img {
-            width: 100%;
+            max-width: 100%;
             height: 100%;
             position: absolute;
             top: 50%;
@@ -260,9 +281,14 @@ export default {
         font-size: 0;
         border-radius: 0.2rem;
         background-color: #fff;
+
+        img {
+            max-width: 80%;
+            height: 80%;
+        }
         // background-image: url("../assets/img/lottery/border.png");
         &.active img {
-            border: 0.09rem solid #FF5722;
+            border: 0.09rem solid #ff5722;
             box-sizing: border-box;
             border-radius: 0.2rem;
             // background-image: url("../assets/img/lottery/borderSelect.png");

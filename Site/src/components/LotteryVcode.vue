@@ -23,7 +23,6 @@
                     <button class="post-vcode" v-text="vcodeText" @click="postVcode"></button>
                 </div>
                 <!-- 短信验证码 end -->
-
                 <div class="row-input ">
                     <button type="button" class="submit-btn" @click="submitLogin">确认报名</button>
                 </div>
@@ -41,7 +40,7 @@ const TIME_COUNT = 60;
 import axios from "axios";
 import { VueCookie } from "../utils/utils";
 export default {
-    props: ["showVcode", "isLogin"],
+    props: ["showVcode", "status"],
     data() {
         return {
             name: "",
@@ -97,7 +96,7 @@ export default {
             }).then(response => {
                 if (response.data.status = 1) {
                     this.is_axios = !this.is_axios;
-                    this.$emit("update:isLogin", false); // 改变登录状态
+                    this.$emit("update:status", 1); // 改变登录状态
                     this.$emit("update:showVcode", false); // 不显示报名窗口
                 }
 

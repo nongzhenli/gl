@@ -22,12 +22,11 @@ export default {
             prizeObj: this.lotteryPrize, // 此时只能拿到初始值（空对象）
         };
     },
-    props: ['lotteryPrize'],
+    props: ['lotteryPrize', 'showToast', 'status'],
     watch: {
         lotteryPrize(newValue, oldValue) {
             // 因为动态传值，所以此处监听需要再次赋值
             this.prizeObj = newValue;
-            console.log("绑定的prizeObj：", this.prizeObj);
         }
     },
     mounted() {
@@ -37,6 +36,7 @@ export default {
         // 关闭弹层
         colseLayer() {
             this.$emit("update:showToast", false);
+            this.$emit("update:status", 2);
         }
     },
 };

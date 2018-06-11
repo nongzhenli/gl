@@ -4,14 +4,13 @@
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/02.jpg')" alt="02.jpg">
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/03.jpg')" alt="03.jpg">
         <!-- 九宫格抽奖 -->
-        <lottery-rotate :login-layer="loginLayer"></lottery-rotate>
+        <lottery-rotate :login-statu="loginStatu" :prize-index="prizeIndex"></lottery-rotate>
         <!-- 九宫格抽奖 end-->
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/06.jpg')" alt="06.jpg">
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/07.jpg')" alt="07.jpg">
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/08.jpg')" alt="08.jpg">
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/09.jpg')" alt="09.jpg">
         <img class="bg-img" :src="require('../assets/img/lottery/bgImg/10.jpg')" alt="10.jpg">
-        
         
     </div>
 </template>
@@ -24,7 +23,9 @@ export default {
     data() {
         return {
             userInfo: {},
-            loginLayer: false // 验证码弹层，默认false不弹出，关联报名状态
+            loginStatu: false,  // 验证码弹层，默认false不弹出，关联报名状态
+            prizeIndex: null,   // 奖品索引值
+            
         };
     },
     created() {
@@ -41,9 +42,9 @@ export default {
                 headers: { 'token': this.utils.VueCookie.get("loginToken") }
             }).then(response => {
                 this.userInfo = response.data;
-                // 0标识未登陆，则弹出层true
-                if (this.userInfo.status == 0) {
-                    this.loginLayer = true;
+                if(response.data){
+                    this.loginStatu = response.data.status;
+                    this.prizeIndex = response.data.prize_index;
                 }
             }).catch(error => { });
         }
