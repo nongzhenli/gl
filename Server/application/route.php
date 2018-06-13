@@ -34,3 +34,9 @@ Route::post('api/:version/lottery/user/prize', 'api/:version.Lottery/getPrizeInd
 Route::get('api/:version/lottery/prize/test', 'api/:version.Lottery/test');
 
 
+
+// Wxcaht
+Route::rule('api/:version/wechat/wx', 'api/:version.Wechat/wx', 'GET|POST');
+
+
+
