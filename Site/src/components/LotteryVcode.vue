@@ -31,7 +31,6 @@
                 <button class="colse-btn" @click="colseLayer()">x</button>
             </transition>
         </div>
-
     </div>
 </template>
 
@@ -94,10 +93,12 @@ export default {
                     "mobile": this.mobile
                 }
             }).then(response => {
+                console.log(response);
                 if (response.data.status = 1) {
                     this.is_axios = !this.is_axios;
                     this.$emit("update:status", 1); // 改变登录状态
                     this.$emit("update:showVcode", false); // 不显示报名窗口
+                    this.$emit("update:texToast", true);  // 文字Toast提示
                 }
 
                 // this.$destroy(); // 销毁这个组件

@@ -1,5 +1,5 @@
 <?php
-/* Lottery抽奖核心业务处理控制器
+/* Lottery 抽奖核心业务处理
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦

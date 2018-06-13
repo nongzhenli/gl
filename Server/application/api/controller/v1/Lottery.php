@@ -36,7 +36,8 @@ class Lottery extends Controller
         // var_dump($params);
         // exit();
 
-        $data['act_id'] = input('post.act_id');
+        $data['custname'] = input('post.custname');
+        $data['mobile'] = input('post.mobile');
         $data['sign_time'] = time();
         $data['status'] = 1; // 已报名
 

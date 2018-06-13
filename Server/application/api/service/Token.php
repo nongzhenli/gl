@@ -1,5 +1,5 @@
 <?php
-/* Token令牌控制器
+/* Token 令牌
  * @Author: big黑钦
  * @Date: 2018-05-25 10:39:18
  * @Last Modified by: big黑钦

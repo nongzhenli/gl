@@ -22,12 +22,12 @@ class LotteryRecord extends BaseModel
     /**
      * 微信授权后uid报名入库
      */
-    public static function insertWxRecord($user_id, $open_id)
+    public static function insertWxRecord($user_id, $open_id, $act_id)
     {
         $result_record = self::create([
             'user_id' => $user_id,
             'open_id' => $open_id,
-            'act_id' => 1,
+            'act_id' => $act_id,
             'create_time' => time(),
         ]);
         return $result_record;
@@ -42,15 +42,19 @@ class LotteryRecord extends BaseModel
         $sortArr = [1, 2, 3, 7, null, 4, 6, 1, 5];
         
         $uid = Token::getCurrentUid();
-        $user = self::where('user_id', '=', $uid)->find();
-        
-        // 奖品索引位置
-        $user['prize_index'] = null;
-        if($user['prize_id']){
-            $user['prize_index'] = array_search($user['prize_id'], $sortArr);
-        }
+        $user = self::where('user_id', '=', $uid)->field('open_id', true)->find();
 
-        return $user;
+        if(!$user){
+            throw new Exception('会员不存在');
+        }else {
+            // 奖品索引位置
+            $user['prize_index'] = null;
+            if($user['prize_id']){
+                $user['prize_index'] = array_search($user['prize_id'], $sortArr);
+            }
+            return $user;
+        }
+        
     }
 
     /**
@@ -60,9 +64,12 @@ class LotteryRecord extends BaseModel
     public static function signRecordInfo($data)
     {
         $uid = Token::getCurrentUid();
-
+        // 额外定义 $record 好处是可以返回被更新的数据，否则仅返回1或 0
         $record = new LotteryRecord;
-        $record->save($data, ['user_id' => $uid]);
+        $record->save($data, [
+            'user_id' => $uid,
+            'act_id' => 1
+        ]);
 
         return $record;
     }
@@ -75,13 +82,6 @@ class LotteryRecord extends BaseModel
     {
         $uid = Token::getCurrentUid();
         $result = Lottery::userPrizeInser($uid, $sortArr);
-
-        // $result = array(
-        //     "statu" => 1,
-        //     "prizeIndex" => 2,
-        //     "totalPeople" => $totalPeople,
-        // );
-
         return $result;
     }
 

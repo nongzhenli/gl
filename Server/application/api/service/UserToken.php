@@ -1,5 +1,5 @@
 <?php
-/* UserToken 集中处理复杂业务逻辑的模块
+/* UserToken 会员授权令牌处理
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
@@ -185,8 +185,9 @@ class UserToken extends Token
              * 此处应该封装一个通用函数用来判断会员参与活动进行入库
              * 现在仅限对抽奖报名LotteryRecord进行入库
              */
-            // 插入一条报名记录
-            $lottery_record = LotteryRecord::insertWxRecord($uid, $wxUserInfo['openid']);
+            // 插入一条报名记录 
+            $act_id = 1;  // 写死活动id，实际上应该从Url参数获取
+            $lottery_record = LotteryRecord::insertWxRecord($uid, $wxUserInfo['openid'], $act_id);
             if(!$lottery_record){
                 throw new TokenException([
                     'msg' => '抽奖报名参与异常',

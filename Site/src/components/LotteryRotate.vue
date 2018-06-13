@@ -17,7 +17,7 @@
         </lottery-toast>
 
         <!-- 验证码Toast -->
-        <lottery-vcode v-if="showVcode" :show-vcode.sync="showVcode" :status.sync="status">
+        <lottery-vcode v-if="showVcode" :show-vcode.sync="showVcode" :tex-Toast.sync="texToast" :status.sync="status">
         </lottery-vcode>
 
         <!-- Toast -->
@@ -31,6 +31,14 @@
             </div>
             <div class="van-toast__text">加载中...</div>
         </div>
+
+        <!-- 文字Toast -->
+        <transition name="fade">
+            <div class="van-toast van-toast--text van-toast--middle" style="z-index: 2005;" v-show="texToast">
+                <div>报名成功，点击抽奖吧~</div>
+            </div>
+        </transition>
+
     </div>
 </template>
 
@@ -58,6 +66,7 @@ export default {
             showVcode: false, // 验证码弹层
             status: this.loginStatu, // 登录状态
             loading: false,
+            texToast: false, // 文本Toast
 
             prizeInfo: [], // 奖品数据
             rollSort: [], // 滚动顺序
@@ -80,6 +89,13 @@ export default {
             // 父动态改变值，此处监听，保证子组件能动态获取
             if (newValue >= 0) {
                 this.status = newValue;
+            }
+        },
+        texToast(val) {
+            if (val == true) {
+                setTimeout(() => {
+                    this.texToast = false;
+                }, 1500)
             }
         }
     },
@@ -370,6 +386,11 @@ export default {
             stroke: #fff;
         }
     }
+    &.van-toast--text {
+        padding: 12px;
+        min-width: 160px;
+    }
+
     @keyframes van-rotate {
         0% {
             -webkit-transform: rotate(0deg);
@@ -394,5 +415,12 @@ export default {
             stroke-dashoffset: -120;
         }
     }
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>
