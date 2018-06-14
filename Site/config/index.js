@@ -6,10 +6,9 @@ const path = require('path')
 
 module.exports = {
     dev: {
-
         // Paths
         assetsSubDirectory: 'static',
-        assetsPublicPath: './',
+        assetsPublicPath: '/',  //千万不要设置成 ./ 否则报错 cannot GET /
         proxyTable: {},
 
         // Various Dev Server settings

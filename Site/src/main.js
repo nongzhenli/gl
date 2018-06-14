@@ -6,7 +6,6 @@ import vueRouter from 'vue-router'
 import axios from "axios";
 import App from './App'
 import routers from './router'
-
 import * as utils from './utils/utils.js'
 
 // 全局使用 vue-router
