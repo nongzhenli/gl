@@ -358,11 +358,15 @@ class Wechat
      * @param mixed $log 输入日志
      * @return mixed
      */
-    protected function log($log){
-    		if ($this->debug && function_exists($this->logcallback)) {
-    			if (is_array($log)) $log = print_r($log,true);
-    			return call_user_func($this->logcallback,$log);
-    		}
+    protected function log($log =''){
+    		// if ($this->debug && function_exists($this->logcallback)) {
+    		// 	if (is_array($log)) $log = print_r($log,true);
+    		// 	return call_user_func($this->logcallback,$log);
+			// }
+
+			// 暂时先如此吧
+			$file = LOG_PATH."log.txt";
+			file_put_contents($file, $log."\n", FILE_APPEND);
     }
 
     /**

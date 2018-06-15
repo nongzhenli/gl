@@ -25,6 +25,8 @@ class Wechat
             // 'encodingaeskey'=>'encodingaeskey', //填写加密用的EncodingAESKey
             'appid' => 'wx0032b65859a2fe53', //填写高级调用功能的app id
             'appsecret' => '952fa7f0b7e740c0bb458562fdeee27f', //填写高级调用功能的密钥
+            'debug' => true,
+            'logcallback' => 'logdebug',
         );
         $this->wechatSDK = new WechatSdk($this->options);
         // token检验
@@ -53,8 +55,6 @@ class Wechat
     // 处理文本消息
     public function handleTextMessage()
     {
-        $this->wechatSDK->getUserInfo();
-
         $this->wechatSDK->text("hello, I'm wechat")->reply();
     }
 
@@ -68,6 +68,6 @@ class Wechat
     // 处理图片消息
     public function handleImageMessage()
     {
-        
+
     }
 }

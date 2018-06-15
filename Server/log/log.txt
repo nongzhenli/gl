@@ -1,0 +1,16 @@
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529077763</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[unsubscribe]]></Event>
+<EventKey><![CDATA[]]></EventKey>
+</xml>
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[{"ToUserName":"gh_6358eb2bc39f","FromUserName":"oMGUmwBCoSJ--lzk3N4I-faG0Tdc","CreateTime":"1529077763","MsgType":"event","Event":"unsubscribe","EventKey":{}}]]></Content><CreateTime><![CDATA[1529077763]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529077785</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[subscribe]]></Event>
+<EventKey><![CDATA[]]></EventKey>
+</xml>
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[{"ToUserName":"gh_6358eb2bc39f","FromUserName":"oMGUmwBCoSJ--lzk3N4I-faG0Tdc","CreateTime":"1529077785","MsgType":"event","Event":"subscribe","EventKey":{}}]]></Content><CreateTime><![CDATA[1529077785]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
