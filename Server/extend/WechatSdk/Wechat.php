@@ -1089,11 +1089,11 @@ class Wechat
 	{
 	    //格式化加密信息
 	    $format = "<xml>
-<Encrypt><![CDATA[%s]]></Encrypt>
-<MsgSignature><![CDATA[%s]]></MsgSignature>
-<TimeStamp>%s</TimeStamp>
-<Nonce><![CDATA[%s]]></Nonce>
-</xml>";
+		<Encrypt><![CDATA[%s]]></Encrypt>
+		<MsgSignature><![CDATA[%s]]></MsgSignature>
+		<TimeStamp>%s</TimeStamp>
+		<Nonce><![CDATA[%s]]></Nonce>
+		</xml>";
 	    return sprintf($format, $encrypt, $signature, $timestamp, $nonce);
 	}
 
