@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-11 16:53:42
+ * @Last Modified time: 2018-06-15 20:57:22
  */
 namespace app\api\service;
 
@@ -29,27 +29,45 @@ class Wechat
         $this->wechatSDK = new WechatSdk($this->options);
         // token检验
         $this->wechatSDK->valid();
+
         // 获取微信服务器返回类型
         $type = $this->wechatSDK->getRev()->getRevType();
 
         switch ($type) {
             case WechatSdk::MSGTYPE_TEXT:
-                $this->msgtypeText();
+                $this->handleTextMessage();
                 break;
             case WechatSdk::MSGTYPE_EVENT:
-                $event = $this->wechatSDK->getRev()->getRevEvent();
-                $this->wechatSDK->text($event['event'])->reply();
+                $event = $this->wechatSDK->getRev()->getRevData();
+                // $this->wechatSDK->text($event['event'])->reply();
+                $this->handleEventMessage($event);
                 break;
             case WechatSdk::MSGTYPE_IMAGE:
+                $this->handleImageMessage();
                 break;
             default:
                 $this->wechatSDK->text("help info")->reply();
         }
     }
 
-    // 文字消息回复控制器
-    public function msgtypeText()
+    // 处理文本消息
+    public function handleTextMessage()
     {
+        $this->wechatSDK->getUserInfo();
+
         $this->wechatSDK->text("hello, I'm wechat")->reply();
+    }
+
+    // 处理事件消息
+    public function handleEventMessage($event)
+    {
+        $event = json_encode($event);
+        $this->wechatSDK->text($event)->reply();
+    }
+
+    // 处理图片消息
+    public function handleImageMessage()
+    {
+        
     }
 }

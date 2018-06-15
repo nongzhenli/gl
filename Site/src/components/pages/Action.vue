@@ -11,4 +11,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.page-action {
+    background-color: #fee330;
+}
 </style>

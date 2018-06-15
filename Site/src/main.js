@@ -18,34 +18,34 @@ const router = new vueRouter({
 Vue.config.productionTip = false;
 Vue.prototype.utils = utils
 
-router.beforeEach((to, from, next) => {
-    console.log("目标", to);
-    console.log("来源", from);
-    if (!utils.VueCookie.get("loginToken") && to.path != '/author') {  // 情形1、 当 不存在token且不在author页面
-        // 第一次访问
-        utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
-        next('/author');
-        return false;
-    } else if (utils.VueCookie.get("loginToken")) {  // 情形2、当存在tokne且直接进入授权页面author或刷新时
-        // 验证 token
-        axios.post("http://gl.gxqqbaby.cn/api/v1/token/verify", {
-            "token": utils.VueCookie.get("loginToken")
-        }).then(response => {
-            if(response.data.isValid == true){
-                next();
-            }else {
-                utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
-                next('/author');
-                return false;
-            }
+// router.beforeEach((to, from, next) => {
+//     console.log("目标", to);
+//     console.log("来源", from);
+//     if (!utils.VueCookie.get("loginToken") && to.path != '/author') {  // 情形1、 当 不存在token且不在author页面
+//         // 第一次访问
+//         utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
+//         next('/author');
+//         return false;
+//     } else if (utils.VueCookie.get("loginToken")) {  // 情形2、当存在tokne且直接进入授权页面author或刷新时
+//         // 验证 token
+//         axios.post("http://gl.gxqqbaby.cn/api/v1/token/verify", {
+//             "token": utils.VueCookie.get("loginToken")
+//         }).then(response => {
+//             if(response.data.isValid == true){
+//                 next();
+//             }else {
+//                 utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
+//                 next('/author');
+//                 return false;
+//             }
 
-        }).catch(error => {
-            console.log(error);
-        });
-    } else {
-        next();
-    }
-});
+//         }).catch(error => {
+//             console.log(error);
+//         });
+//     } else {
+//         next();
+//     }
+// });
 
 
 /* eslint-disable no-new */
