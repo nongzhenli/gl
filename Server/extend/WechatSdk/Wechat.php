@@ -366,7 +366,8 @@ class Wechat
 
 			// 暂时先如此吧
 			$file = LOG_PATH."log.txt";
-			file_put_contents($file, $log."\n", FILE_APPEND);
+			$log = "\n-------------------\n".date("Y-m-d H:i:s",time())."\n-------------------\n".$log."\n";
+			file_put_contents($file, $log, FILE_APPEND);
     }
 
     /**
