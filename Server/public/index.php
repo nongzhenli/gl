@@ -17,6 +17,10 @@ define('APP_PATH', __DIR__ . '/../application/');
 // 定义log日志目录
 define('LOG_PATH', __DIR__ . '/../log/');
 
+// 站点访问根目录
+define('PUBLIC_PATH', __DIR__ . '/');
+
+
 // 定义第三方类库引入目标路径
 define('EXTEND_PATH', __DIR__ . '/../extend/');
 

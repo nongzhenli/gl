@@ -14,7 +14,6 @@ class WxUser extends BaseModel
 
     /**
      * 拉取用户微信信息
-     * 存在返回uid，不存在返回0
      */
     public static function getWxUserInfo($access_token, $openid)
     {
@@ -32,6 +31,14 @@ class WxUser extends BaseModel
         $user = User::where('openid', '=', $openid)
             ->find();
         return $user;
+    }
+
+    /**
+     * 公众号关注入库
+     * 此处不经过自定义的Token身份入库
+     */
+    public static function wechatInsert(){
+
     }
 
 }

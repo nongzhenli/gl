@@ -1,23 +1,112 @@
 
 -------------------
-2018-06-16 00:57:58
+2018-06-16 13:52:02
 -------------------
 <xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
 <FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
-<CreateTime>1529081878</CreateTime>
-<MsgType><![CDATA[voice]]></MsgType>
-<MediaId><![CDATA[EC6-6Bim1A8O6q5YkxidN68rKXTRUyh2gR3PywhpTgDc4NEFTMCEg4auCzW2Nbg3]]></MediaId>
-<Format><![CDATA[amr]]></Format>
-<MsgId>6567356659358704747</MsgId>
-<Recognition><![CDATA[]]></Recognition>
+<CreateTime>1529128321</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[2]]></Content>
+<MsgId>6567556130524838391</MsgId>
 </xml>
 
 -------------------
-2018-06-16 00:57:58
+2018-06-16 13:52:02
 -------------------
-<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName>
-<FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName>
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi]]></MediaId></Image><CreateTime><![CDATA[1529128322]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-16 14:24:20
+-------------------
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529130260</CreateTime>
 <MsgType><![CDATA[text]]></MsgType>
-<Content><![CDATA[help info]]></Content>
-<CreateTime><![CDATA[1529081878]]></CreateTime>
-<FuncFlag><![CDATA[0]]></FuncFlag></xml>
+<Content><![CDATA[2]]></Content>
+<MsgId>6567564458466425638</MsgId>
+</xml>
+
+-------------------
+2018-06-16 14:24:20
+-------------------
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi]]></MediaId></Image><CreateTime><![CDATA[1529130260]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-16 14:25:40
+-------------------
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529130339</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[222]]></Content>
+<MsgId>6567564797768842034</MsgId>
+</xml>
+
+-------------------
+2018-06-16 14:25:40
+-------------------
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi]]></MediaId></Image><CreateTime><![CDATA[1529130340]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-16 14:42:12
+-------------------
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529131332</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[3]]></Content>
+<MsgId>6567569062671367118</MsgId>
+</xml>
+
+-------------------
+2018-06-16 14:42:12
+-------------------
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi]]></MediaId></Image><CreateTime><![CDATA[1529131332]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-16 14:45:23
+-------------------
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529131523</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[2]]></Content>
+<MsgId>6567569883010120686</MsgId>
+</xml>
+
+-------------------
+2018-06-16 14:45:24
+-------------------
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[]]></MediaId></Image><CreateTime><![CDATA[1529131524]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-16 14:46:30
+-------------------
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529131590</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[2]]></Content>
+<MsgId>6567570170772929529</MsgId>
+</xml>
+
+-------------------
+2018-06-16 14:46:31
+-------------------
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[]]></MediaId></Image><CreateTime><![CDATA[1529131591]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-16 14:49:27
+-------------------
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1529131767</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[2]]></Content>
+<MsgId>6567570930982140951</MsgId>
+</xml>
+
+-------------------
+2018-06-16 14:49:27
+-------------------
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[]]></Content><CreateTime><![CDATA[1529131767]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
