@@ -7,9 +7,9 @@
  */
 namespace app\api\service;
 
+use app\api\model\FansRecord as FansRecordModel;
 use app\api\model\User as UserModel;
 use app\api\model\WxUser as WxUserModel;
-use app\api\model\FansRecord as FansRecordModel;
 use WechatSdk\Wechat as WechatSdk;
 
 class Wechat
@@ -55,19 +55,24 @@ class Wechat
     public function handleTextMessage()
     {
         // $mediaid= "FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi";
-
         // 上传临时素材
-        $data['media'] = '@'.PUBLIC_PATH.'src/img/2/poster_bg.jpg';
-        $result = $this->wechatSDK->uploadMedia($data, "image");
-        $result = json_encode($result);
-        $this->wechatSDK->text($result)->reply();
+        // $data['media'] = '@'.PUBLIC_PATH.'src/img/2/poster_bg.jpg';
+        // $result = $this->wechatSDK->uploadMedia($data, "image");
+        // $result = json_encode($result);
+        // $this->wechatSDK->text($result)->reply();
         // $this->wechatSDK->image($result)->reply();
+
+        $scene_id = 1;
+        $type = 0;
+        $expire = 2592000;
+        $str = json_encode($this->getQRcodeInfo($scene_id, $type, $expire));
+        $this->wechatSDK->text($str)->reply();
     }
 
     // 处理事件消息
     public function handleEventMessage()
     {
-        
+
         /** getRevEvent() 返回事件类型
          * @param event         类型
          * @param key           key
@@ -76,14 +81,12 @@ class Wechat
         $getRevEvent = $this->wechatSDK->getRev()->getRevEvent();
         $event = $getRevEvent['event'];
         $key = $getRevEvent['key'];
-
         // 获取用户openid
         $openid = $this->wechatSDK->getRev()->getRevFrom();
 
         // 关注事件
-        if($event == "subscribe" && !$key){
-
-            // 获取用户详细信息
+        if ($event == "subscribe" && !$key) {
+            // 1、获取用户详细信息
             $wxUserInfoJson = json_encode($this->wechatSDK->getUserInfo($openid), JSON_UNESCAPED_UNICODE);
             /**
              * 验证用户表是否存在该用户
@@ -96,25 +99,28 @@ class Wechat
             } else {
                 $uid = $user->id;
             }
+
+            // 2. 获取二维码图片。。。。。。 2018、6/18 00:50
+
+
+
             return;
         }
 
         // 取消关注事件
-        if($event == "unsubscribe"){
+        if ($event == "unsubscribe") {
             return;
         }
 
         // 未关注扫描带参数二维码事件
-        if($event == "subscribe" && $key){
+        if ($event == "subscribe" && $key) {
             return;
         }
 
         // 已关注扫描带参数二维码事件
-        if($event == "SCAN" && $key){
+        if ($event == "SCAN" && $key) {
             return;
         }
-        
-
 
         // // 用户openid
         // $openid = $event['FromUserName'];
@@ -133,8 +139,6 @@ class Wechat
         //     $uid = $user->id;
         // }
 
-
-
         // $this->wechatSDK->text($uid)->reply();
     }
 
@@ -142,7 +146,7 @@ class Wechat
     public function handleImageMessage($type)
     {
         $type = json_encode($type);
-        $mediaid= "FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi";
+        $mediaid = "FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi";
         $this->wechatSDK->image($mediaid)->reply();
 
     }
@@ -166,7 +170,7 @@ class Wechat
             'nickname' => $wxUserInfo['nickname'],
             'wx_info' => $wxResult,
             'last_update_time' => time(),
-            'create_time' => time()
+            'create_time' => time(),
         ]);
 
         // 判断是否创建成功
@@ -194,8 +198,8 @@ class Wechat
              * 现在仅限对抽奖报名LotteryRecord进行入库
              */
             // 插入一条报名记录
-            $status = 1;    // 1已关注
-            $act_id = 2;    // 活动id，实际上应该从Url参数获取
+            $status = 1; // 1已关注
+            $act_id = 2; // 活动id，实际上应该从Url参数获取
             $parent_id = 1; // 推荐人id，实际上应该从URL参数获取
 
             $record = FansRecordModel::insertFansRecord($uid, $wxUserInfo['openid'], $status = 1, $act_id, $parent_id);
@@ -206,6 +210,35 @@ class Wechat
             // 并返回会员id
             return $uid;
         }
+    }
+
+    /**
+     * getQRcodeInfo() 获取推广二维码数据
+     * @return array('QRcode'=>'生成二维码信息','QRurl'=>二维码图片url,'expire_time'=>'二维码过期时间')
+     */
+    public function getQRcodeInfo($scene_id = 0, $type=0, $expire=2592000)
+    {
+        /**
+         * getQRCode 创建二维码ticket
+         * @param int|string $scene_id 自定义追踪id,临时二维码只能用数值型
+         * @param int $type 0:临时二维码；1:数值型永久二维码(此时expire参数无效)；2:字符串型永久二维码(此时expire参数无效)
+         * @param int $expire 临时二维码有效期，最大为604800秒
+         * @return array('ticket'=>'qrcode字串','expire_seconds'=>604800,'url'=>'二维码图片解析后的地址')
+         */
+        $getQRCodeArray = $this->wechatSDK->getQRCode($scene_id, $type, $expire);
+
+        /**
+         * getQRUrl() 获取二维码图片地址
+         * @param ticket|string     获取推广二维码ticket字串
+         */
+        $getQRUrlStr = $this->wechatSDK->getQRUrl($getQRCodeArray['ticket']);
+
+        return array(
+            "QRcode" => $getQRCodeArray,
+            "QRurl" => $getQRUrlStr,
+            "expire_time" => time() + $getQRCodeArray['expire_seconds'],
+        );
+
     }
 
 }

@@ -178,6 +178,7 @@ CREATE TABLE IF NOT EXISTS `fans_record` (
   `act_id` int(10) NOT NULL COMMENT '活动id',
   `parent_id` int(16) NOT NULL DEFAULT 0 COMMENT '推荐人id，官方默认0',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '粉丝状态，0取消关注，1关注，2已完成，3已领取',
+  `poster_url` varchar(255) DEFAULT NULL COMMENT '推广海报地址',
   `last_follow_unfollow_time` int(11) DEFAULT NULL COMMENT '最近的一次关注取消时间',
   `complete_time` int(11) DEFAULT NULL COMMENT '完成时间',
   `get_time` int(11) DEFAULT NULL COMMENT '领取时间',
