@@ -16,25 +16,47 @@ class FansRecord extends BaseModel
 {
 
     /**
-     * 微信公众号关注吸粉活动记录入库
-     * @param $user_id    |int      用户id
-     * @param $open_id    |string   用户openid
-     * @param $status     |int      状态，0取消关注、1已关注、2已完成、3已领取
-     * @param $act_id     |int      活动id
-     * @param $parent_id  |int      推荐人id，没有默认0
+     * insertFansRecord() 微信公众号关注吸粉活动记录入库
+     * @param int       $user_id        用户id
+     * @param string    $open_id        用户openid
+     * @param int       $status         状态，0取消关注、1已关注、2已完成、3已领取
+     * @param int       $act_id         活动id
+     * @param int       $poster_id      海报图id
+     * @param int       $parent_id      推荐人id，没有默认0
      */
-    public static function insertFansRecord($user_id, $open_id, $status = 1, $act_id = 2, $parent_id = 0)
+    public static function insertFansRecord($user_id, $open_id, $status = 1, $poster_id, $parent_id = 0, $act_id = 2)
     {
         $result_record = self::create([
             'user_id' => $user_id,
             'open_id' => $open_id,
             'status' => $status,
+            'poster_id' => $poster_id,
             'parent_id' => $parent_id,
             'act_id' => $act_id,
             'last_follow_unfollow_time' => time(),
             'create_time' => time(),
         ]);
         return $result_record;
+    }
+
+    /**
+     * 检查这条图片资源是否存在__通过 id
+     * 存在返回uid，不存在返回0
+     */
+    public static function getById($id)
+    {
+        $images = FansRecord::where('id', '=', $id)->find();
+        return $images;
+    }
+
+    /**
+     * 检查这条图片资源是否存在__通过 user_id
+     * 存在返回uid，不存在返回0
+     */
+    public static function getByUserId($uid)
+    {
+        $images = FansRecord::where('user_id', '=', $uid)->find();
+        return $images;
     }
 
 }

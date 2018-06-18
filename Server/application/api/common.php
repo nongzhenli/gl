@@ -101,9 +101,9 @@ function fromArrayToModel($m , $array)
  * @param string  $filename 生成海报文件名,不传此参数则不生成文件,直接输出图片
  * @return [type] [description]
  */
-function createPosterMan($config = array(), $filename = "")
+function createPoster($config = array(), $filename = "")
 {
-    //如果要看报什么错，可以先注释调这个header
+    // 如果要看报什么错，可以先注释调这个header
     if (empty($filename)) {
         header('Content-Type:image/jpg');
     }
@@ -181,7 +181,7 @@ function createPosterMan($config = array(), $filename = "")
         if (!$res) {
             return false;
         }
-
+        
         return $filename;
     } else {
         // 图像输出乱码问题：
@@ -193,13 +193,11 @@ function createPosterMan($config = array(), $filename = "")
 }
 
 
-
 /**
  * 海报生成业务处理
  * @param config|array  海报合成资源（文字、图片、背景图）
  */
-
-function posterImages($config = array())
+function posterImages($config = array(), $filename ='')
 {
     // $config = array(
     //     'text' => array(
@@ -242,16 +240,10 @@ function posterImages($config = array())
     //     ),
     //     'background' => PUBLIC_PATH.'src/img/2/poster_bg.jpg',
     // );
-
-    // $config = array(
-    //     'text' => $text,
-    //     'image' => $image,
-    //     'background' => $background,
-    // );
-    // $filename = 'qrcode/'. time().'.jpg';
-    //echo createPosterMan($config,$filename);
+    // $filename = PUBLIC_PATH.'src/img/2/qrcode/qrcode_1_2.jpg';
+    // echo createPoster($config,$filename);
     
-    createPosterMan($config);
+    createPoster($config, $filename);
     exit();
 }
 

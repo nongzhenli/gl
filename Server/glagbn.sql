@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `fans_record` (
   `act_id` int(10) NOT NULL COMMENT '活动id',
   `parent_id` int(16) NOT NULL DEFAULT 0 COMMENT '推荐人id，官方默认0',
   `status` int(2) NOT NULL DEFAULT '0' COMMENT '粉丝状态，0取消关注，1关注，2已完成，3已领取',
-  `poster_url` varchar(255) DEFAULT NULL COMMENT '推广海报地址',
+  `poster_id` int(16) NOT NULL DEFAULT NULL COMMENT '推广海报id',
   `last_follow_unfollow_time` int(11) DEFAULT NULL COMMENT '最近的一次关注取消时间',
   `complete_time` int(11) DEFAULT NULL COMMENT '完成时间',
   `get_time` int(11) DEFAULT NULL COMMENT '领取时间',
@@ -186,6 +186,27 @@ CREATE TABLE IF NOT EXISTS `fans_record` (
   `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='吸粉活动记录表' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `action_images`
+--
+
+CREATE TABLE IF NOT EXISTS `action_images` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `act_id` int(10) NOT NULL COMMENT '活动id',
+  `name` varchar(50) DEFAULT NULL COMMENT '图片名称',
+  `images_url` varchar(255) DEFAULT NULL COMMENT '图片地址',
+  `url_type` tinyint(1) DEFAULT '1' COMMENT '图片地址类型，1服务器地址，2外链地址',
+  `media_id` varchar(255) DEFAULT NULL COMMENT '图片媒体id',
+  `media_expire_time` int(11) DEFAULT NULL COMMENT '媒体资源有效期',
+  `last_time` int(11) DEFAULT NULL COMMENT '最近一次更新时间',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
+  `create_by` int(11) DEFAULT NULL COMMENT '创建操作人id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='活动图片资源表' AUTO_INCREMENT=1 ;
 
 
 --
