@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-16 15:46:47
+ * @Last Modified time: 2018-06-19 16:04:57
  */
 namespace app\api\controller\v1;
 
@@ -15,7 +15,6 @@ class Wechat
     public function wx()
     {
         $result = new WechatService();
-        var_dump($result);
     }
 
     // 海报图生成

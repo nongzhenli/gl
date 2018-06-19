@@ -29,7 +29,7 @@ class User extends BaseModel
     }
 
     /**
-     * 用户是否存在
+     * 用户是否存在__通过 openid
      * 存在返回uid，不存在返回0
      */
     public static function getByOpenID($openid)
@@ -38,6 +38,18 @@ class User extends BaseModel
             ->find();
         return $user;
     }
+
+    /**
+     * 用户是否存在__通过 uid
+     * 存在返回uid，不存在返回0
+     */
+    public static function getByUserID($uid)
+    {
+        $user = User::where('id', '=', $uid)->find();
+        return $user;
+    }
+
+
 
     // 用户登录验证模块
     public static function getToken()
