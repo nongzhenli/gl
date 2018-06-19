@@ -1,5 +1,7 @@
 <?php
 namespace WechatSdk;
+
+use think\Cache;
 /**
  *	微信公众平台PHP-SDK, 官方API部分
  *  @author  dodge <dodgepudding@gmail.com>
@@ -1184,7 +1186,8 @@ class Wechat
 	 */
 	protected function setCache($cachename,$value,$expired){
 		//TODO: set cache implementation
-		return false;
+        $result = Cache::set($cachename, $value, $expired);
+		return $result;
 	}
 
 	/**
@@ -1194,7 +1197,8 @@ class Wechat
 	 */
 	protected function getCache($cachename){
 		//TODO: get cache implementation
-		return false;
+		$result = Cache::get($cachename);
+		return $result;
 	}
 
 	/**
@@ -1204,7 +1208,8 @@ class Wechat
 	 */
 	protected function removeCache($cachename){
 		//TODO: remove cache implementation
-		return false;
+		$result = Cache::rm($cachename);
+		return $result;
 	}
 
 	/**
