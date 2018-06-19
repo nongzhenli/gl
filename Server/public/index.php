@@ -18,7 +18,7 @@ define('APP_PATH', __DIR__ . '/../application/');
 define('LOG_PATH', __DIR__ . '/../log/');
 
 // 站点访问根目录
-define('PUBLIC_PATH', __DIR__ . '/');
+define('PUBLIC_PATH', __DIR__);
 
 
 // 定义第三方类库引入目标路径

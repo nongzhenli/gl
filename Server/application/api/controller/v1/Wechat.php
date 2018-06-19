@@ -59,7 +59,7 @@ class Wechat
                 //     'opacity' => 100,
                 // ),
             ),
-            'background' => PUBLIC_PATH . 'src/img/2/poster_bg.jpg',
+            'background' => PUBLIC_PATH . '/src/img/2/poster_bg.jpg',
         );
         posterImages($config);
     }

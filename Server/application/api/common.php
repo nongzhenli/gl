@@ -238,9 +238,9 @@ function posterImages($config = array(), $filename ='')
     //         //     'opacity' => 100,
     //         // ),
     //     ),
-    //     'background' => PUBLIC_PATH.'src/img/2/poster_bg.jpg',
+    //     'background' => PUBLIC_PATH.'/src/img/2/poster_bg.jpg',
     // );
-    // $filename = PUBLIC_PATH.'src/img/2/qrcode/qrcode_1_2.jpg';
+    // $filename = PUBLIC_PATH.'/src/img/2/qrcode/qrcode_1_2.jpg';
     // echo createPoster($config,$filename);
     
     createPoster($config, $filename);
