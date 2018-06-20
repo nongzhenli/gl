@@ -1186,7 +1186,7 @@ class Wechat
 	 */
 	protected function setCache($cachename,$value,$expired){
 		//TODO: set cache implementation
-        $result = Cache::set($cachename, $value, $expired);
+		$result = Cache::set($cachename, $value, $expired);
 		return $result;
 	}
 

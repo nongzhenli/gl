@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:07:32
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-04 16:46:45
+ * @Last Modified time: 2018-06-20 11:54:57
  */
 namespace app\api\service;
 
@@ -178,25 +178,9 @@ class UserToken extends Token
                 'last_update_time' => time(),
                 'create_time' => time(),
             ]);
-            // 会员id
-            $uid = $user->id;
             
-            /**
-             * 此处应该封装一个通用函数用来判断会员参与活动进行入库
-             * 现在仅限对抽奖报名LotteryRecord进行入库
-             */
-            // 插入一条报名记录 
-            $act_id = 1;  // 写死活动id，实际上应该从Url参数获取
-            $lottery_record = LotteryRecord::insertWxRecord($uid, $wxUserInfo['openid'], $act_id);
-            if(!$lottery_record){
-                throw new TokenException([
-                    'msg' => '抽奖报名参与异常',
-                    'errorCode' => 10007,
-                ]);
-            }
-
             // 并返回会员id
-            return $uid;
+            return $user->id;
         }
     }
 }

@@ -290,9 +290,11 @@ export default {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            z-index: 2;
         }
     }
     .border_ {
+        position: relative;
         font-size: 0;
         border-radius: 0.2rem;
         background-color: #fff;
@@ -302,11 +304,14 @@ export default {
             height: 80%;
         }
         // background-image: url("../assets/img/lottery/border.png");
-        &.active img {
+        &.active::after {
+            content: "";
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
             border: 0.09rem solid #ff5722;
-            box-sizing: border-box;
-            border-radius: 0.2rem;
-            // background-image: url("../assets/img/lottery/borderSelect.png");
         }
     }
 }

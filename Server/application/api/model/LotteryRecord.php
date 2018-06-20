@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-04 13:44:19
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-11 15:19:18
+ * @Last Modified time: 2018-06-20 11:53:34
  */
 namespace app\api\model;
 
@@ -43,18 +43,26 @@ class LotteryRecord extends BaseModel
         
         $uid = Token::getCurrentUid();
         $user = self::where('user_id', '=', $uid)->field('open_id', true)->find();
-
+        // 当抽奖初始化记录不存在时
         if(!$user){
-            throw new Exception('会员不存在');
-        }else {
-            // 奖品索引位置
-            $user['prize_index'] = null;
-            if($user['prize_id']){
-                $user['prize_index'] = array_search($user['prize_id'], $sortArr);
+            // throw new Exception('会员不存在');
+            $act_id = 1;  // 写死活动id，实际上应该从Url参数获取
+            $openid = Token::getCurrentOpenID();
+            $user = self::insertWxRecord($uid, $openid, $act_id);
+            if(!$user){
+                throw new Exception('插入抽奖初始化记录失败');
             }
-            return $user;
         }
-        
+        // 奖品索引位置
+        $user['prize_index'] = null;
+        if($user['prize_id']){
+            $user['prize_index'] = array_search($user['prize_id'], $sortArr);
+        }
+
+        // 删除openid不应该传值
+        unset($user['openid']);
+
+        return $user;
     }
 
     /**

@@ -1,16 +1,42 @@
 <template>
     <div class="lottery-toast">
-        <img src="../../assets/img/lottery/circleLight.png" class="circleLight" alt="">
-
+        <img src="../../assets/img/lottery/circleLight.png" class="circleLight" />
         <!-- 恭喜抽中 -->
-        <div class="havePrize">
-            <p>恭喜您抽中 {{prizeObj.name}}</p>
-            <div class="proImg">
-                <img :src="prizeObj.img_url" :alt="prizeObj.name">
-            </div>
-            <div class="des-text">工作人员将会在新店开业之后与您联系到店领取 请您保持手机通话顺畅哦</div>
+        <div  v-if="status === 1">
+            <div class="havePrize status_1">
+                <p>恭喜您抽中 {{prizeObj.name}}</p>
+                <div class="proImg">
+                    <img :src="prizeObj.img_url" :alt="prizeObj.name">
+                </div>
+                <div class="des-text">工作人员将会在新店开业之后与您联系到店领取 请您保持手机通话顺畅哦</div>
 
-            <button class="colse-btn" @click="colseLayer()">x</button>
+                <button class="colse-btn" @click="colseLayer()">x</button>
+            </div>
+        </div>
+
+        <!-- 待领取 -->
+        <div  v-if="status === 2">
+            <div class="havePrize status_2">
+                <p>待领取奖品 {{prizeObj.name}}</p>
+                <div class="proImg">
+                    <img :src="prizeObj.img_url" :alt="prizeObj.name">
+                </div>
+                <div class="des-text">工作人员将会在新店开业之后与您联系到店领取 请您保持手机通话顺畅哦</div>
+
+                <button class="colse-btn" @click="colseLayer()">x</button>
+            </div>
+        </div>
+
+        <!-- 已领取 -->
+        <div  v-if="status === 3">
+            <div class="havePrize status_3">
+                <p>您已领取 {{prizeObj.name}}</p>
+                <div class="proImg">
+                    <img :src="prizeObj.img_url" :alt="prizeObj.name">
+                </div>
+
+                <button class="colse-btn" @click="colseLayer()">x</button>
+            </div>
         </div>
     </div>
 </template>
@@ -36,7 +62,9 @@ export default {
         // 关闭弹层
         colseLayer() {
             this.$emit("update:showToast", false);
-            this.$emit("update:status", 2);
+            if(this.status == 1){
+                this.$emit("update:status", 2);
+            }
         }
     },
 };
@@ -52,6 +80,7 @@ export default {
     left: 0;
     bottom: 0;
     right: 0;
+    z-index: 10;
     .noPrize {
         width: 5.3rem;
         height: 4.4rem;
@@ -186,9 +215,18 @@ export default {
         left: 0;
         right: 0;
         margin: auto;
-        background: #fff url("../../assets/img/lottery/prizinig.jpg") no-repeat;
+        background: #fff url("../../assets/img/lottery/status_1.jpg") no-repeat;
         background-position: top center;
         background-size: 7.4rem 2.22rem;
+        &.status_1 {
+            background-image: url('../../assets/img/lottery/status_1.jpg');
+        }
+        &.status_2 {
+            background-image: url('../../assets/img/lottery/status_2.jpg');
+        }
+        &.status_3 {
+            background-image: url('../../assets/img/lottery/status_3.jpg');
+        }
         .oneBar {
             width: 1.18rem;
             height: 0.46rem;

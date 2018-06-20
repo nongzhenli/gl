@@ -1,12 +1,122 @@
 
 -------------------
-2018-06-19 20:48:50
+2018-06-20 09:35:37
 -------------------
 <xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
 <FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
-<CreateTime>1529412530</CreateTime>
+<CreateTime>1529458537</CreateTime>
 <MsgType><![CDATA[event]]></MsgType>
-<Event><![CDATA[SCAN]]></Event>
-<EventKey><![CDATA[1]]></EventKey>
+<Event><![CDATA[subscribe]]></Event>
+<EventKey><![CDATA[qrscene_1]]></EventKey>
 <Ticket><![CDATA[gQHt7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyanhRbEEzUHRmUWwxbG44Z3hyMTQAAgRXuyhbAwQAjScA]]></Ticket>
+</xml>
+
+-------------------
+2018-06-20 09:35:38
+-------------------
+<xml><ToUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></ToUserName><FromUserName><![CDATA[gh_c59aebcd38af]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[50w0uELQycPng2Yn_QOgShCXn5vC5kAoP0J2MOzd2XcZ5SAs_wS07aOYr8uEImcb]]></MediaId></Image><CreateTime><![CDATA[1529458538]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-20 09:38:19
+-------------------
+10_rzbPsNmyWMl-sJ_MKY8dIQR7MPq981dda68SyAjXO4yDSeBZ7DAnMUI1Xi8mNlNjOwTvoGpVGvbHhRtJJnEdb9vZLuytjygbSDyUzTMZnRopufuTTz-8J5dffGyOlMj7h87fnBrTXpnBzcwQOCYgAGAFTP
+
+-------------------
+2018-06-20 09:38:19
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1529458699</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[VIEW]]></Event>
+<EventKey><![CDATA[http://gl.gxqqbaby.cn/#/action/aid/1]]></EventKey>
+<MenuId>444803481</MenuId>
+</xml>
+
+-------------------
+2018-06-20 09:38:25
+-------------------
+10_rzbPsNmyWMl-sJ_MKY8dIQR7MPq981dda68SyAjXO4yDSeBZ7DAnMUI1Xi8mNlNjOwTvoGpVGvbHhRtJJnEdb9vZLuytjygbSDyUzTMZnRopufuTTz-8J5dffGyOlMj7h87fnBrTXpnBzcwQOCYgAGAFTP
+
+-------------------
+2018-06-20 09:38:26
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1529458705</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[unsubscribe]]></Event>
+<EventKey><![CDATA[]]></EventKey>
+</xml>
+
+-------------------
+2018-06-20 09:38:48
+-------------------
+10_rzbPsNmyWMl-sJ_MKY8dIQR7MPq981dda68SyAjXO4yDSeBZ7DAnMUI1Xi8mNlNjOwTvoGpVGvbHhRtJJnEdb9vZLuytjygbSDyUzTMZnRopufuTTz-8J5dffGyOlMj7h87fnBrTXpnBzcwQOCYgAGAFTP
+
+-------------------
+2018-06-20 09:38:49
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1529458728</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[subscribe]]></Event>
+<EventKey><![CDATA[qrscene_1]]></EventKey>
+<Ticket><![CDATA[gQHt7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAyanhRbEEzUHRmUWwxbG44Z3hyMTQAAgRXuyhbAwQAjScA]]></Ticket>
+</xml>
+
+-------------------
+2018-06-20 09:38:49
+-------------------
+<xml><ToUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></ToUserName><FromUserName><![CDATA[gh_c59aebcd38af]]></FromUserName><MsgType><![CDATA[image]]></MsgType><Image><MediaId><![CDATA[50w0uELQycPng2Yn_QOgShCXn5vC5kAoP0J2MOzd2XcZ5SAs_wS07aOYr8uEImcb]]></MediaId></Image><CreateTime><![CDATA[1529458729]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-06-20 09:40:53
+-------------------
+10_rzbPsNmyWMl-sJ_MKY8dIQR7MPq981dda68SyAjXO4yDSeBZ7DAnMUI1Xi8mNlNjOwTvoGpVGvbHhRtJJnEdb9vZLuytjygbSDyUzTMZnRopufuTTz-8J5dffGyOlMj7h87fnBrTXpnBzcwQOCYgAGAFTP
+
+-------------------
+2018-06-20 09:40:54
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1529458853</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[1]]></Content>
+<MsgId>6568975754657475139</MsgId>
+</xml>
+
+-------------------
+2018-06-20 09:41:02
+-------------------
+10_rzbPsNmyWMl-sJ_MKY8dIQR7MPq981dda68SyAjXO4yDSeBZ7DAnMUI1Xi8mNlNjOwTvoGpVGvbHhRtJJnEdb9vZLuytjygbSDyUzTMZnRopufuTTz-8J5dffGyOlMj7h87fnBrTXpnBzcwQOCYgAGAFTP
+
+-------------------
+2018-06-20 09:41:03
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1529458861</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[VIEW]]></Event>
+<EventKey><![CDATA[http://www.soso.com/]]></EventKey>
+<MenuId>444803588</MenuId>
+</xml>
+
+-------------------
+2018-06-20 09:41:05
+-------------------
+10_rzbPsNmyWMl-sJ_MKY8dIQR7MPq981dda68SyAjXO4yDSeBZ7DAnMUI1Xi8mNlNjOwTvoGpVGvbHhRtJJnEdb9vZLuytjygbSDyUzTMZnRopufuTTz-8J5dffGyOlMj7h87fnBrTXpnBzcwQOCYgAGAFTP
+
+-------------------
+2018-06-20 09:41:07
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1529458865</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[VIEW]]></Event>
+<EventKey><![CDATA[http://v.qq.com/]]></EventKey>
+<MenuId>444803588</MenuId>
 </xml>

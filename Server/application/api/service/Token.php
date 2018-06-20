@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-25 10:39:18
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-04 16:01:00
+ * @Last Modified time: 2018-06-20 11:29:49
  */
 namespace app\api\service;
 
@@ -145,6 +145,18 @@ class Token
             return $uid;
         }
     }
+
+    /**
+     *当需要获取全局OpenID时，应当调用此方法
+     *而不应当自己解析OpenID
+     *
+     */
+    public static function getCurrentOpenID()
+    {
+        $openid = self::getCurrentTokenVar('openid');
+        return $openid;
+    }
+
 
     /**
      * 检查操作UID是否合法

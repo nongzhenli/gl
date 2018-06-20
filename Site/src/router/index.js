@@ -24,7 +24,8 @@
 // }]
 import Action from '@/components/pages/Action'
 import ActionType from '@/components/component/ActionType'
-import ActionView from '@/components/component/ActionView'
+import ActionLottery from '@/components/component/ActionLottery'
+import ActionWechatForm from '@/components/component/ActionWechatForm'
 
 import Author from '@/components/pages/Author'
 import NotFoundComponent from '@/components/pages/404'
@@ -46,20 +47,29 @@ export default [
                 component: ActionType
             },
             {
-                path: 'aid/:id',
-                name: 'ActionView',
-                component: ActionView
+                path: 'aid/1',
+                name: 'ActionLottery',
+                title: "点点按钮，抽取大奖",
+                component: ActionLottery
+            },
+            {
+                path: 'aid/2',
+                name: 'ActionWechatForm',
+                title: "填写领取联系信息",
+                component: ActionWechatForm
             }
         ]
     },
     {
         path: '/author',
         name: 'author',
+        title: "授权登录",
         component: Author
     },
     {
         path: '*',
         name: '404',
+        title: '404',
         component: NotFoundComponent,
     }
 ]

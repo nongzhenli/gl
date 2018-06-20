@@ -1,6 +1,6 @@
 <template>
     <div class="com-author">
-        <img :src="lodingImg" alt="loding.." width="100%">
+        <p class="login-tip">正在登陆中...</p>
     </div>
 </template>
 
@@ -18,11 +18,30 @@ export default {
         if (!this.utils.VueCookie.get("loginToken")) {
             let ua = window.navigator.userAgent.toLowerCase();
             if (ua.match(/MicroMessenger/i) == "micromessenger") {
-                // 跳转到微信授权页面
-                window.onload = function () {
-                    window.location.href = "http://gl.gxqqbaby.cn/api/v1/user/author";
-                }
+                // 判断URL是否存在code参数
+                if (this.getUrlParam("code")) {
+                    axios.post("http://gl.gxqqbaby.cn/api/v1/token/user",{
+                        "code": this.getUrlParam("code")
+                    }).then(response => {
+                        // 客户端存储token
+                        this.utils.VueCookie.set("loginToken", response.data.token);
 
+                        // 跳转回到登录前路由页面
+                        let beforeLoginUrl = this.utils.VueCookie.get("beforeLoginUrl")? this.utils.VueCookie.get("beforeLoginUrl") : "/index";
+                        // this.$router.push({
+                        //     path: beforeLoginUrl
+                        // });
+
+                    }).catch(error => {
+                        console.log(error);
+                    });
+
+                } else {
+                    // 跳转到微信授权页面
+                    window.onload = function(){
+                        window.location.href ="http://gl.gxqqbaby.cn/api/v1/user/author";
+                    }
+                }
             } else {
                 alert("请使用微信客户端打开");
                 return false;
@@ -55,4 +74,10 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.login-tip {
+    display: block;
+    padding: 0.5rem .3rem;
+    font-size: 0.4rem;
+    text-align: left;
+}
 </style>
