@@ -6,10 +6,13 @@ import vueRouter from 'vue-router'
 import axios from "axios";
 import App from './App'
 import routers from './router'
+import vueWchatTitle from 'vue-wechat-title'
 import * as utils from './utils/utils.js'
 
 // 全局使用 vue-router
 Vue.use(vueRouter)
+// 引入解决vue微信ios动态变更title（兼容安卓）
+Vue.use(vueWchatTitle)
 const router = new vueRouter({
     mode: 'hash',
     routes: routers

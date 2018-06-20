@@ -24,8 +24,8 @@
 // }]
 import Action from '@/components/pages/Action'
 import ActionType from '@/components/component/ActionType'
-import ActionLottery from '@/components/component/ActionLottery'
-import ActionWechatForm from '@/components/component/ActionWechatForm'
+// import ActionLottery from '@/components/component/ActionLottery'
+// import ActionWechatForm from '@/components/component/ActionWechatForm'
 
 import Author from '@/components/pages/Author'
 import NotFoundComponent from '@/components/pages/404'
@@ -49,14 +49,23 @@ export default [
             {
                 path: 'aid/1',
                 name: 'ActionLottery',
-                title: "点点按钮，抽取大奖",
-                component: ActionLottery
+                meta: {
+                    title: "点点按钮，抽取大奖",
+                },
+                // 路由组件懒加载
+                // component: ActionLottery
+                component: resolve => require(['@/components/component/ActionLottery'], resolve),//懒加载
             },
             {
                 path: 'aid/2',
                 name: 'ActionWechatForm',
-                title: "填写领取联系信息",
-                component: ActionWechatForm
+                meta: {
+                    title: "填写领取联系信息",
+                },
+                // 路由组件懒加载
+                // component: ActionWechatForm
+                component: resolve => require(['@/components/component/ActionWechatForm'], resolve),//懒加载
+
             }
         ]
     },

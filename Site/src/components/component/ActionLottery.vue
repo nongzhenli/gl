@@ -57,6 +57,7 @@ export default {
     position: relative;
     font-size: 0;
     overflow: hidden;
+    background-color: #fee330;
 
     .bg-img {
         display: block;
