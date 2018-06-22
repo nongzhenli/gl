@@ -3,10 +3,13 @@
  * @Author: big黑钦
  * @Date: 2018-06-04 13:44:19
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-16 11:19:08
+ * @Last Modified time: 2018-06-21 15:27:44
  */
 namespace app\api\model;
 use think\Model;
+use app\api\service\Token;
+use think\Exception;
+
 
 // public 表示全局，类内部外部子类都可以访问；
 // private 表示私有的，只有本类内部可以使用；
@@ -57,6 +60,41 @@ class FansRecord extends BaseModel
     {
         $images = FansRecord::where('user_id', '=', $uid)->find();
         return $images;
+    }
+
+    /**
+     * 检查用户状态
+     * @param int   $act_id    活动id
+     */
+    public static function getUserStatu($act_id){
+        $uid = Token::getCurrentUid();
+        $user = FansRecord::where([
+            'user_id' => $uid,
+            'act_id' => $act_id
+        ])->field('open_id', true)->find();
+        if(!$user){
+            throw new Exception('用户不存在');
+        }else {
+            return $user;
+        }
+    }
+
+
+    /**
+     * 活动报名，更新信息
+     * @param data|Array 更新数据
+     */
+    public static function updataNameMobile($data, $act_id)
+    {
+        $uid = Token::getCurrentUid();
+        // 额外定义 $record 好处是可以返回被更新的数据，否则仅返回1或 0
+        $record = new FansRecord;
+        $record->save($data, [
+            'user_id' => $uid,
+            'act_id' => $act_id
+        ]);
+
+        return $record;
     }
 
 }

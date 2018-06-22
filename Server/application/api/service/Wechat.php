@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-19 16:45:32
+ * @Last Modified time: 2018-06-22 10:32:36
  */
 namespace app\api\service;
 
@@ -34,37 +34,39 @@ class Wechat
         // token检验
         $this->wechatSDK->valid();
 
-        // 自定义菜单栏设置
-        $newmenu = array(
-            "button" => array(
-                0 => array(
-                    "type" => "view",
-                    "name" => "幸运抽奖",
-                    "url" => "http://gl.gxqqbaby.cn/#/action/aid/1",
-                ),
-                1 => array(
-                    "name" => "人气值",
-                    "sub_button" => array(
-                        0 => array(
-                            "type" => "view",
-                            "name" => "查看我的人气值",
-                            "url" => "http://www.soso.com/",
-                        ),
-                        1 => array(
-                            "type" => "view",
-                            "name" => "获取推广海报",
-                            "url" => "http://v.qq.com/",
-                        ),
-                        2 => array(
-                            "type" => "view",
-                            "name" => "填写领取信息",
-                            "url" => "http://v.qq.com/",
-                        ),
-                    ),
-                ),
-            ),
-        );
-        $newmenu_result = $this->wechatSDK->createMenu($newmenu);
+        // 获取菜单
+        // $menu = $weObj->getMenu();
+        // // 自定义菜单栏设置
+        // $newmenu = array(
+        //     "button" => array(
+        //         0 => array(
+        //             "type" => "view",
+        //             "name" => "幸运抽奖",
+        //             "url" => "http://gl.gxqqbaby.cn/#/action/aid/1",
+        //         ),
+        //         1 => array(
+        //             "name" => "人气值",
+        //             "sub_button" => array(
+        //                 0 => array(
+        //                     "type" => "click",
+        //                     "name" => "查看我的人气",
+        //                     "key" => "LOOK_MY_NUM",
+        //                 ),
+        //                 1 => array(
+        //                     "type" => "click",
+        //                     "name" => "获取推广海报",
+        //                     "key" => "GET_POSTER_IMAGES",
+        //                 ),
+        //                 2 => array(
+        //                     "type" => "view",
+        //                     "name" => "填写领取信息",
+        //                     "url" => "http://gl.gxqqbaby.cn/#/action/aid/2",
+        //                 ),
+        //             ),
+        //         ),
+        //     ),
+        // );
+        // $newmenu_result = $this->wechatSDK->createMenu($newmenu);
 
         // 获取微信服务器返回类型
         $type = $this->wechatSDK->getRev()->getRevType();
@@ -88,61 +90,8 @@ class Wechat
     // 处理文本消息
     public function handleTextMessage()
     {
-        // $mediaid= "FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi";
-        // 上传临时素材
-        // $data['media'] = '@'.PUBLIC_PATH.'/src/img/2/poster_bg.jpg';
-        // $media_result = $this->wechatSDK->uploadMedia($data, "image");
-        // $media_result = json_encode($media_result);
-        // $this->wechatSDK->text($media_result)->reply();
-        // $this->wechatSDK->image($result)->reply();
-
-        // $scene_id = 1;
-        // $type = 0;
-        // $expire = 2592000;
-        // $str = json_encode($this->getQRcodeInfo($scene_id, $type, $expire));
-        // $this->wechatSDK->text($str)->reply();
-
-        // $act_id = 2;
-        // $uid = 1;
-        // $poster_url = "/home/wwwroot/glagbn/public/src/img/2/qrcode/qrcode_2_1.jpg";
-        // $images_id = ActionImagesModel::insertActionImages($act_id, $uid, $poster_url);
-        // $images_id = json_encode($images_id);
-        // $this->wechatSDK->text($images_id)->reply();
-
-        // $template_id = "ar-pTZ5ciXl5kPYiAQJISfP1rd1b_RPV09wOBuKcyhg";
-        // $openid = "oMGUmwBCoSJ--lzk3N4I-faG0Tdc";
-        // $data =array (
-        //     "touser" => $openid,
-        //     "template_id" => $template_id,
-        //     "url" => "",
-        //     "topcolor" => "#FF0000",
-        //     "data" => array (
-        //         "first" => array(
-        //             "value" => "您有一位新朋友支持你啦！",
-        //             "color" => "#333"
-        //         ),
-        //         "keyword1" => array(
-        //             "value" => "big黑钦",
-        //             "color" => "#333"
-        //         ),
-        //         "keyword2" => array(
-        //             "value" => "2018年6月19日 10:47:36",
-        //             "color" => "#333"
-        //         ),
-        //         "remark" => array(
-        //             "value" => "您还差3位小伙伴的支持可获得ins风顽皮粉红豹礼物一份，快快喊上你的好友来为你助力吧！",
-        //             "color" => "#f44336"
-        //         )
-        //     )
-        // );
-        // $this->wechatSDK->sendTemplateMessage($data);
-        // $parent_user['openid'] = "oMGUmwBCoSJ--lzk3N4I-faG0Tdc";
-        // $this->sendReachSupporterTel($parent_user['openid'], 'www.baidu.com');
-
-        $result = $this->wechatSDK->deleteMenu();
-        // $result = json_encode($result);
-
-        // $this->wechatSDK->text($result)->reply();
+        // $result = $this->wechatSDK->deleteMenu();
+        // $this->getPosterImageMessage();
     }
 
     // 处理事件消息
@@ -342,7 +291,7 @@ class Wechat
             // 获取推荐人用户信息
             $parent_user = UserModel::getByUserID($parent_id);
             // 完成通知（仅做一次的提示，避免违反模板通知规则，后期拓展改进）
-            if ($parent_count == $where_count) {
+            if ($parent_count > 0) {
                 // 记录上级推荐人完成时间
                 $complete_time = time();
                 $updata_complete_time = (new FansRecordModel())->save([
@@ -353,7 +302,7 @@ class Wechat
                     'user_id' => $parent_id,
                 ]);
                 // 跳转url
-                $url = "www.baidu.com";
+                $url = "http://gl.gxqqbaby.cn/#/action/aid/2";
                 $this->sendReachSupporterTel($parent_user['openid'], $url, $complete_time);
 
             } elseif ($parent_count > 0) { // 好友助力通知
@@ -364,7 +313,7 @@ class Wechat
             return;
         }
 
-        // 取消关注事件
+        // // 取消关注事件
         if ($event == "unsubscribe") {
             $act_id = 2;
             // 获取用户表记录
@@ -384,8 +333,19 @@ class Wechat
             return;
         }
 
-        // 已关注扫描带参数二维码事件
+        // // 已关注扫描带参数二维码事件
         if ($event == "SCAN") {
+            // TODO
+        }
+        
+        // 自定义菜单点击事件
+        if($event == "CLICK"){
+            // 查看我的人气
+            if($getRevEvent['key'] == "LOOK_MY_NUM"){
+                $this->getCurrentUserPNum($openid, $act_id);
+            }elseif($getRevEvent['key'] == "GET_POSTER_IMAGES"){ // 获取推广海报
+                $this->getPosterImageMessage($openid);
+            }
             return;
         }
 
@@ -569,39 +529,66 @@ class Wechat
 
     /**
      * getPosterImageMessage 获取推广海报图片消息
-     * @param int   $uid    用户user_id
+     * @param string    $openid 用户openid
      */
-    public static function getPosterImageMessage($uid)
+    public function getPosterImageMessage($openid)
     {
-        // 查询粉丝关注记录详情
-        $fansRecor = FansRecordModel::getByUserId($uid);
-        // 查询对应图片资源记录
-        $imagesRecor = ActionImagesModel::getById($fansRecor['poster_id']);
-        if ($imagesRecor) {
-            if (time() >= $imagesRecor['media_expire_time']) {
-                // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
-                $data['media'] = '@' . PUBLIC_PATH . $imagesRecor['images_url'];
-                $mediaInfo = $this->wechatSDK->uploadMedia($data, "image");
-                // $mediaInfo = json_encode($mediaInfo);
-                // $this->wechatSDK->text($mediaInfo)->reply();
-                // exit();
+        // 获取用户信息
+        $user = UserModel::getByOpenID($openid);
+        if(!$user){
+            $this->wechatSDK->text('找不到当前用户信息')->reply();
+        }else {
+            // 查询粉丝关注记录详情
+            $fansRecor = FansRecordModel::getByUserId($user->id);
+            // 查询对应图片资源记录
+            $imagesRecor = ActionImagesModel::getById($fansRecor['poster_id']);
+            if ($imagesRecor) {
+                if (time() >= $imagesRecor['media_expire_time']) {
+                    // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
+                    $data['media'] = '@' . PUBLIC_PATH . $imagesRecor['images_url'];
+                    $mediaInfo = $this->wechatSDK->uploadMedia($data, "image");
 
-                // 重新更新 媒体id
-                (new ActionImagesModel())->save([
-                    'media_id' => $mediaInfo['media_id'],
-                    'media_expire_time' => $mediaInfo['created_at'] + 259200,
-                    'last_time' => time(),
-                ], [
-                    'id' => $fansRecor['poster_id'],
-                ]);
+                    // 重新更新 媒体id
+                    (new ActionImagesModel())->save([
+                        'media_id' => $mediaInfo['media_id'],
+                        'media_expire_time' => $mediaInfo['created_at'] + 259200,
+                        'last_time' => time(),
+                    ], [
+                        'id' => $fansRecor['poster_id'],
+                    ]);
 
-                $media_id = $mediaInfo['media_id'];
+                    $media_id = $mediaInfo['media_id'];
+                } else {
+                    $media_id = $imagesRecor['media_id'];
+                }
+                // 回复图片消息
+                $this->wechatSDK->image($media_id)->reply();
             } else {
-                $media_id = $imagesRecor['media_id'];
+                throw new Exception('找不到推广海报记录');
             }
-        } else {
-            throw new Exception('找不到推广海报记录');
         }
     }
 
+    /**
+     * getCurrentUserPNum 获取当前用户推荐人数
+     * @param string    $openid 用户openid
+     */
+    public function getCurrentUserPNum($openid, $act_id){
+        $user = UserModel::getByOpenID($openid);
+        if(!$user){
+            $this->wechatSDK->text('找不到当前用户信息')->reply();
+            exit();
+        }
+        $people_count = FansRecordModel::where([
+            'parent_id' => $user->id,
+            'act_id' => $act_id,
+        ])->count();
+        if($people_count == 0){
+            $this->wechatSDK->text('您还没有朋友支持哦，加油~')->reply(); 
+        }elseif($people_count > 0) {
+            $this->wechatSDK->text('已经有'.$people_count.'位朋友支持您了~ 棒棒的，加油！')->reply();
+        }
+        
+    }
+    
 }

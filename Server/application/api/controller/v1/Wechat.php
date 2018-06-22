@@ -3,11 +3,12 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-19 16:04:57
+ * @Last Modified time: 2018-06-21 15:27:31
  */
 namespace app\api\controller\v1;
 
 use app\api\service\Wechat as WechatService;
+use app\api\model\FansRecord as FansRecordModel;
 
 class Wechat
 {
@@ -15,6 +16,39 @@ class Wechat
     public function wx()
     {
         $result = new WechatService();
+    }
+
+    /**
+     * 查看活动状态
+     * @param int   $act_id    活动id
+     */
+    public function verifyUser($act_id = 0)
+    {
+        $result = FansRecordModel::getUserStatu($act_id);
+        return $result;
+    }
+
+
+    /**
+     * 提交联系方式
+     */
+    public function updataNameMobile()
+    {
+        // 服务器端未做手机号码验证
+        $data['custname'] = input('post.custname');
+        $data['mobile'] = input('post.mobile');
+        $data['sign_time'] = time();
+        $data['status'] = 4; // 已填写联系方式报名
+
+        // 活动id
+        $act_id = input('post.act_id');
+
+        $signInfo = FansRecordModel::updataNameMobile($data, $act_id);
+        if (!$signInfo) {
+            throw new Exception('请求错误');
+        } else {
+            return $signInfo;
+        }
     }
 
     // 海报图生成
