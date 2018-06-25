@@ -55,18 +55,7 @@ class Wechat
     public function test()
     {
         $config = array(
-            'text' => array(
-                // 微信昵称
-                // array(
-                //     'text' => '微信昵称',
-                //     'left' => 182,
-                //     'top' => 105,
-                //     'fontPath' => APP_PATH . 'fonst/simkai.ttf', //字体文件
-                //     'fontSize' => 18, //字号
-                //     'fontColor' => '255,0,0', //字体颜色
-                //     'angle' => 0,
-                // ),
-            ),
+            'text' => array(),
             'image' => array(
                 // 二维码
                 array(
@@ -80,18 +69,6 @@ class Wechat
                     'height' => 165,
                     'opacity' => 100,
                 ),
-                // 微信头像
-                // array(
-                //     'url' => 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eofD96opK97RXwM179G9IJytIgqXod8jH9icFf6Cia6sJ0fxeILLMLf0dVviaF3SnibxtrFaVO3c8Ria2w/0',
-                //     'left' => 120,
-                //     'top' => 70,
-                //     'right' => 0,
-                //     'stream' => 0,
-                //     'bottom' => 0,
-                //     'width' => 50,
-                //     'height' => 50,
-                //     'opacity' => 100,
-                // ),
             ),
             'background' => PUBLIC_PATH . '/src/img/2/poster_bg.jpg',
         );
