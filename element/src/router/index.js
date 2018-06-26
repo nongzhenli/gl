@@ -72,6 +72,29 @@ export const constantRouterMap = [
         ]
     },
 
+    {
+        path: '/marketing',
+        component: Layout,
+        redirect: '/marketing/list',
+        name: 'Marketing',
+        meta: { title: '营销管理', icon: 'example' },
+        children: [
+            {
+                path: 'list',
+                name: 'List',
+                component: () => import('@/views/table/index'),
+                meta: { title: '活动列表', icon: 'table' }
+            },
+            {
+                path: 'activity/:id',
+                name: 'Activity',
+                component: () => import('@/views/tree/index'),
+                meta: { title: '活动详情', icon: 'tree' }
+            }
+        ]
+    },
+
+
     { path: '*', redirect: '/404', hidden: true }
 ]
 

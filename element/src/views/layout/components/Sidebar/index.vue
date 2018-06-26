@@ -23,6 +23,7 @@ export default {
             'sidebar'
         ]),
         routes() {
+            // 传递所有路由配置
             return this.$router.options.routes
         },
         isCollapse() {
