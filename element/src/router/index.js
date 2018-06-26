@@ -72,6 +72,9 @@ export const constantRouterMap = [
         ]
     },
 
+    /**
+     * 营销活动模块路由地址
+     */
     {
         path: '/marketing',
         component: Layout,
@@ -79,17 +82,24 @@ export const constantRouterMap = [
         name: 'Marketing',
         meta: { title: '营销管理', icon: 'example' },
         children: [
-            {
+            {   // 营销活动列表
                 path: 'list',
-                name: 'List',
-                component: () => import('@/views/table/index'),
+                name: 'MarketingList',
+                component: () => import('@/views/marketing/index'),
                 meta: { title: '活动列表', icon: 'table' }
             },
-            {
-                path: 'activity/:id',
-                name: 'Activity',
+            {   // 营销活动详情
+                path: 'activity/:id(\d+)',
+                name: 'MarketingActivity',
+                hidden: true,  // 不将该路由地址展示sidebar
                 component: () => import('@/views/tree/index'),
                 meta: { title: '活动详情', icon: 'tree' }
+            },
+            {   // 创建营销活动
+                path: 'create',
+                name: 'MarketingCreate',
+                component: () => import('@/views/tree/index'),
+                meta: { title: '创建活动', icon: 'tree' }
             }
         ]
     },
