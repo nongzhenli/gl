@@ -1,0 +1,24 @@
+{
+    "code": 20000,
+    "data": {
+      "items": [{
+          "id": "1",
+          "name": "桂林九宫格抽奖活动",
+          "type": "报名抽奖",
+          "status": 0,
+          "author": "cc",
+          "create_time": "1980-04-13 21:14:41",
+          "pageviews": 786
+        },
+        {
+          "id": "2",
+          "name": "桂林安格贝妮公众号吸粉",
+          "type": "公众号吸粉",
+          "status": 1,
+          "author": "大黑",
+          "create_time": "1980-04-13 21:14:41",
+          "pageviews": 786
+        }
+      ]
+    }
+  }
