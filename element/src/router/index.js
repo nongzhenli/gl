@@ -89,10 +89,10 @@ export const constantRouterMap = [
                 meta: { title: '活动列表', icon: 'table' }
             },
             {   // 营销活动详情
-                path: 'activity/:id(\d+)',
+                path: 'activity/:id(\\d+)', // 此处正则要多加\符 (\d+) => (\\d+)
                 name: 'MarketingActivity',
                 hidden: true,  // 不将该路由地址展示sidebar
-                component: () => import('@/views/tree/index'),
+                component: () => import('@/views/marketing/activity'),
                 meta: { title: '活动详情', icon: 'tree' }
             },
             {   // 创建营销活动
