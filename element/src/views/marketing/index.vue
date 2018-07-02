@@ -3,12 +3,11 @@
         <el-table :data="list"
             v-loading.body="listLoading"
             element-loading-text="Loading"
-            border
             stripe
             fit
             highlight-current-row
             header-row-class-name="thead-row__header">
-            <el-table-column align="center"
+            <el-table-column align="left"
                 label='序号'
                 width="95">
                 <template slot-scope="scope">
@@ -23,7 +22,7 @@
             </el-table-column>
             <el-table-column label="活动类型"
                 width="160"
-                align="center"
+                align="left"
                 prop="type"
                 :filters="[{text: '报名抽奖', value: '报名抽奖'}, {text: '公众号吸粉', value: '公众号吸粉'}]"
                 :filter-method="filterHandler"
@@ -32,44 +31,44 @@
                     {{scope.row.type}}
                 </template>
             </el-table-column>
-            <el-table-column label="报名量（人）"
+            <el-table-column label="报名量"
                 width="110"
-                align="center">
+                align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pageviews}}
+                    {{scope.row.pageviews}}人
                 </template>
             </el-table-column>
-            <el-table-column label="支付量（人）"
+            <el-table-column label="支付量"
                 width="110"
-                align="center">
+                align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pageviews}}
+                    {{scope.row.pageviews}}人
                 </template>
             </el-table-column>
-            <el-table-column label="支付总金额（元）"
+            <el-table-column label="支付总金额"
                 width="150"
-                align="center">
+                align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pageviews}}
+                    {{scope.row.pageviews}}元
                 </template>
             </el-table-column>
 
             <el-table-column class-name="status-col"
                 label="活动状态"
                 width="110"
-                align="center">
+                align="left">
                 <template slot-scope="scope">
                     <el-tag :type="scope.row.status | statusFilter">{{scope.row.status| statusFilter | statusNameFilter}}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column label="操作人"
                 width="110"
-                align="center">
+                align="left">
                 <template slot-scope="scope">
                     <span>{{scope.row.author}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center"
+            <el-table-column align="left"
                 prop="created_at"
                 label="开始时间"
                 max-width="150">
@@ -78,14 +77,14 @@
                     <span>{{scope.row.create_time}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center"
+            <el-table-column align="left"
                 prop="created_at"
                 label="结束时间">
                 <template slot-scope="scope">
                     <span>N/A</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center"
+            <el-table-column align="left"
                 prop="created_at"
                 label="创建时间"
                 max-width="150">
@@ -147,6 +146,11 @@ export default {
 </script>
 
 <style lang="less">
+.el-table__header-wrapper {
+    .thead-row__header {
+        color: #333;
+    }
+}
 </style>
 
 

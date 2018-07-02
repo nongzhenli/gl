@@ -17,4 +17,3 @@ export function getMarktingNumber(params) {
         params
     })
 }
-
