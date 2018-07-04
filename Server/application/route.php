@@ -41,3 +41,23 @@ Route::rule('api/:version/wechat/verifyUser', 'api/:version.Wechat/verifyUser', 
 Route::rule('api/:version/wechat/updataNameMobile', 'api/:version.Wechat/updataNameMobile', 'POST');
 
 Route::rule('api/:version/wechat/test', 'api/:version.Wechat/test', 'GET|POST');    // 测试
+
+
+
+/**
+ * Admin后台管理 API数据接口
+ */
+
+Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList', 'GET');
+Route::rule('admin/:version/user/login', 'admin/:version.User/login', 'POST');
+Route::rule('admin/:version/user/logout', 'admin/:version.User/logout', 'POST');
+Route::rule('admin/:version/user/info', 'admin/:version.User/info', 'GET');
+
+
+/**
+ * 微信公众号接入开发配置口
+ */
+Route::rule('api/:version/get/:wechat_id', 'api/:version.Config/get', 'GET|POST');
+Route::rule('api/:version/set/:wechat_id', 'api/:version.Config/set', 'GET|POST');
+Route::rule('api/:version/menu/create', 'api/:version.Config/createMenu', 'POST');
+

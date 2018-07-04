@@ -10,9 +10,9 @@ export function getMarktingList(params) {
 }
 
 // 获取活动报名人数统计
-export function getMarktingNumber(params) {
+export function getMarktingGet(params) {
     return request({
-        url: '/marketing/number',
+        url: '/marketing/get',
         method: 'get',
         params
     })

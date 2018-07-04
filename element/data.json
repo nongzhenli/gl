@@ -3,30 +3,31 @@
     "data": {
         "items": [
             {
-                "user_id": "1",
-                "custname": "大黑",
-                "nickname": "big黑钦",
-                "mobile": 13132777334,
-                "status": "已完成",
-                "parent_id": 0,
-                "parent_name": "cc",
-                "complete_time": "04-13 21:14",
-                "sign_time": "04-16 09:14",
-                "get_time": "04-20 16:01",
-                "create_time": "04-10 21:14"
+                "id": "1",
+                "name": "桂林九宫格抽奖活动",
+                "type": "报名抽奖",
+                "status": 0,
+                "pageviews": 786,
+                "sigin_num": 1232,
+                "pay_num": 890,
+                "pay_total": 158715.00,
+                "author": "cc",
+                "start_time": "2018-04-13 21:14",
+                "end_time": "2018-04-13 21:14",
+                "create_time": "2018-04-13 21:14"
             },
             {
-                "user_id": "2",
-                "custname": "大秦",
-                "nickname": "VIP秦",
-                "mobile": 13132777335,
-                "status": "关注",
-                "parent_id": 1,
-                "parent_name": "大黑",
-                "complete_time": "04-13 21:14",
-                "sign_time": "04-16 09:14",
-                "get_time": "04-20 16:01",
-                "create_time": "04-12 21:14"
+                "id": "2",
+                "name": "桂林安格贝妮公众号吸粉",
+                "type": "公众号吸粉",
+                "status": 1,
+                "sigin_num": 147815,
+                "pay_num": 0,
+                "pay_total": 0,
+                "author": "cc",
+                "start_time": "2018-04-13 21:14",
+                "end_time": "2018-04-13 21:14",
+                "create_time": "2018-04-13 21:14"
             }
         ]
     }

@@ -207,8 +207,25 @@ CREATE TABLE IF NOT EXISTS `action_images` (
   `create_by` int(11) DEFAULT NULL COMMENT '创建操作人id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='活动图片资源表' AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
 
-
+--
+-- 表的结构 `wechat`
+--
+CREATE TABLE IF NOT EXISTS `wechat` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(50) NOT NULL COMMENT '公众号名称',
+  `app_id` varchar(255) NOT NULL COMMENT '开发者ID',
+  `app_secret` varchar(255) NOT NULL COMMENT '开发者密码',
+  `token` varchar(255) NULL COMMENT '服务器配置令牌',
+  `encodingaeskey` varchar(255) NULL COMMENT '消息加解密密钥',
+  `server_http_url` varchar(255) NULL COMMENT '请求服务器地址(URL)',
+  `last_time` int(11) DEFAULT NULL COMMENT '最近一次更新时间',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
+  `create_by` int(11) DEFAULT NULL COMMENT '创建操作人id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='微信公众号信息表' AUTO_INCREMENT=1;
 --
 -- 限制导出的表
 --

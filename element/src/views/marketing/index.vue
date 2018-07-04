@@ -17,7 +17,7 @@
             <el-table-column label="活动名"
                 class-name="el-table-cell__activity-name">
                 <template slot-scope="scope">
-                    <router-link :to="'activity/'+ scope.row.id ">{{scope.row.name}}</router-link>
+                    <router-link :to="scope.row.page_url+'/'+ scope.row.id ">{{scope.row.name}}</router-link>
                 </template>
             </el-table-column>
             <el-table-column label="活动类型"
@@ -25,8 +25,7 @@
                 align="left"
                 prop="type"
                 :filters="[{text: '报名抽奖', value: '报名抽奖'}, {text: '公众号吸粉', value: '公众号吸粉'}]"
-                :filter-method="filterHandler"
-                >
+                :filter-method="filterHandler">
                 <template slot-scope="scope">
                     {{scope.row.type}}
                 </template>
@@ -35,21 +34,21 @@
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pageviews}}人
+                    {{scope.row.sigin_num}}人
                 </template>
             </el-table-column>
             <el-table-column label="支付量"
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pageviews}}人
+                    {{scope.row.pay_num}}人
                 </template>
             </el-table-column>
             <el-table-column label="支付总金额"
                 width="150"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pageviews}}元
+                    {{scope.row.pay_total | valFloatFilter}}元
                 </template>
             </el-table-column>
 
@@ -58,7 +57,7 @@
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    <el-tag :type="scope.row.status | statusFilter">{{scope.row.status| statusFilter | statusNameFilter}}</el-tag>
+                    <el-tag :type="scope.row.status, 'type' | statusFilter">{{scope.row.status, 'name' | statusFilter}}</el-tag>
                 </template>
             </el-table-column>
             <el-table-column label="操作人"
@@ -69,27 +68,26 @@
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                prop="created_at"
+                prop="start_time"
                 label="开始时间"
                 max-width="150">
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                    <span>{{scope.row.create_time}}</span>
+                    <span>{{scope.row.start_time}}</span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                prop="created_at"
+                prop="end_time"
+                max-width="150"
                 label="结束时间">
                 <template slot-scope="scope">
-                    <span>N/A</span>
+                    <span>{{scope.row.end_time}}</span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                prop="created_at"
+                prop="create_time"
                 label="创建时间"
                 max-width="150">
                 <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
                     <span>{{scope.row.create_time}}</span>
                 </template>
             </el-table-column>
@@ -108,22 +106,33 @@ export default {
         }
     },
     filters: {
-        statusFilter(status) {
+        statusFilter(data, type) {
             const statusMap = {
-                "0": 'danger',
-                "1": 'success',
-                "2": 'gray',
+                "0": {
+                    "type": "danger",
+                    "name": "已结束"
+                },
+                "1": {
+                    "type": "success",
+                    "name": "进行中"
+                },
+                "2": {
+                    "type": "gray",
+                    "name": "未开始"
+                },
+
             }
-            return statusMap[status]
+            return statusMap[data][type];
         },
-        statusNameFilter(status) {
-            const statusMap = {
-                "danger": '已结束',
-                "success": '进行中',
-                "gray": '未开始',
-            }
-            return statusMap[status]
+        valFloatFilter(value) {
+            // 截取当前数据到小数点后三位
+            let transformVal = Number(value).toFixed(3);
+            let realVal = transformVal.substring(0, transformVal.length - 1);
+            // num.toFixed(3)获取的是字符串
+            return realVal
         }
+
+
     },
     created() {
         this.fetchData()
@@ -146,11 +155,7 @@ export default {
 </script>
 
 <style lang="less">
-.el-table__header-wrapper {
-    .thead-row__header {
-        color: #333;
-    }
-}
+
 </style>
 
 

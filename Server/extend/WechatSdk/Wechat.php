@@ -351,8 +351,8 @@ class Wechat
      * 设置消息的星标标志，官方已取消对此功能的支持
      */
     public function setFuncFlag($flag) {
-    		$this->_funcflag = $flag;
-    		return $this;
+		$this->_funcflag = $flag;
+		return $this;
     }
 
     /**
@@ -361,15 +361,15 @@ class Wechat
      * @return mixed
      */
     protected function log($log =''){
-    		// if ($this->debug && function_exists($this->logcallback)) {
-    		// 	if (is_array($log)) $log = print_r($log,true);
-    		// 	return call_user_func($this->logcallback,$log);
-			// }
+		// if ($this->debug && function_exists($this->logcallback)) {
+		// 	if (is_array($log)) $log = print_r($log,true);
+		// 	return call_user_func($this->logcallback,$log);
+		// }
 
-			// 暂时先如此吧
-			$file = LOG_PATH."log.txt";
-			$log = "\n-------------------\n".date("Y-m-d H:i:s",time())."\n-------------------\n".$log."\n";
-			file_put_contents($file, $log, FILE_APPEND);
+		// 暂时先如此吧
+		$file = LOG_PATH."log.txt";
+		$log = "\n-------------------\n".date("Y-m-d H:i:s",time())."\n-------------------\n".$log."\n";
+		file_put_contents($file, $log, FILE_APPEND);
     }
 
     /**

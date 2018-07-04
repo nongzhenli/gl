@@ -1,25 +1,28 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
-// in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
-// detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
-
 Vue.use(Router)
-
 /* Layout */
 import Layout from '../views/layout/Layout'
-
 /**
-* hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
-* alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
-*                                if not set alwaysShow, only more than one route under the children
-*                                it will becomes nested mode, otherwise not show the root menu
-* redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
-* name:'router-name'             the name is used by <keep-alive> (must set!!!)
-* meta : {
-    title: 'title'               the name show in submenu and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar,
-  }
+*当设置 true 的时候该路由不会再侧边栏出现 如401，login等页面，或者如一些编辑页面/edit/1
+hidden: true // (默认 false)
+
+*当设置 noredirect 的时候该路由在面包屑导航中不可被点击
+redirect: noredirect
+
+*当你一个路由下面的 children 声明的路由大于1个时，自动会变成嵌套的模式--如组件页面
+*只有一个时，会将那个子路由当做根路由显示在侧边栏--如引导页面
+*若你想不管路由下面的 children 声明的个数都显示你的根路由
+*你可以设置 alwaysShow: true，这样它就会忽略之前定义的规则，一直显示根路由
+alwaysShow: true
+
+name:'router-name'            //设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
+meta : {
+  roles: ['admin','editor']   //设置该路由进入的权限，支持多个权限叠加
+  title: 'title'              //设置该路由在侧边栏和面包屑中展示的名字
+  icon: 'svg-name'            //设置该路由的图标
+  noCache: true               //如果设置为true ,则不会被 <keep-alive> 缓存(默认 false)
+}
 **/
 export const constantRouterMap = [
     { path: '/login', component: () => import('@/views/login/index'), hidden: true },
@@ -88,20 +91,27 @@ export const constantRouterMap = [
                 path: 'list',
                 name: 'MarketingList',
                 component: () => import('@/views/marketing/index'),
-                meta: { title: '活动列表', icon: 'table' }
+                meta: { title: '活动列表' }
             },
-            {   // 营销活动详情
-                path: 'activity/:id(\\d+)', // 此处正则要多加\符 (\d+) => (\\d+)
-                name: 'MarketingActivity',
-                hidden: true,  // 不将该路由地址展示sidebar
-                component: () => import('@/views/marketing/activity'),
-                meta: { title: '活动详情', icon: 'tree' }
+            {   // 抽奖活动详情
+                path: 'lottery/:id(\\d+)', // 此处正则要多加\符 (\d+) => (\\d+)
+                name: 'LotteryActivity',
+                hidden: true,
+                component: () => import('@/views/marketing/lottery'),
+                meta: { title: '抽奖活动详情' }
+            },
+            {   // 吸粉活动详情
+                path: 'fans/:id(\\d+)',
+                name: 'FansActivity',
+                hidden: true,
+                component: () => import('@/views/marketing/fans'),
+                meta: { title: '吸粉活动详情' }
             },
             {   // 创建营销活动
                 path: 'create',
                 name: 'MarketingCreate',
                 component: () => import('@/views/tree/index'),
-                meta: { title: '创建活动', icon: 'tree' }
+                meta: { title: '创建活动' }
             }
         ]
     },
