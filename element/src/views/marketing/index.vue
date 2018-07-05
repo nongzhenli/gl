@@ -34,14 +34,14 @@
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.sigin_num}}人
+                    {{scope.row.sigin_num, "人" | intNumFilter}}
                 </template>
             </el-table-column>
             <el-table-column label="支付量"
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.pay_num}}人
+                    {{scope.row.pay_num , "人" | intNumFilter}}
                 </template>
             </el-table-column>
             <el-table-column label="支付总金额"
@@ -64,7 +64,7 @@
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    <span>{{scope.row.author}}</span>
+                    <span>{{scope.row.create_by}}</span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
@@ -130,8 +130,16 @@ export default {
             let realVal = transformVal.substring(0, transformVal.length - 1);
             // num.toFixed(3)获取的是字符串
             return realVal
-        }
+        },
+        intNumFilter(data, unit){
+            if(data){
+                data += unit;
+            }else {
+                data = "/";
+            }
+            return data;
 
+        }
 
     },
     created() {
@@ -140,7 +148,7 @@ export default {
     methods: {
         fetchData() {
             this.listLoading = true
-            getMarktingList(this.listQuery).then(response => {
+            getMarktingList().then(response => {
                 this.list = response.data.items
                 this.listLoading = false
             })

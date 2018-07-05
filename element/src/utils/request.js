@@ -1,4 +1,5 @@
 import axios from 'axios'
+import QS from 'qs'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
@@ -11,6 +12,15 @@ const service = axios.create({
 
 // request拦截器
 service.interceptors.request.use(config => {
+
+    // 解决了POST请求变成OPTIONS 请求的问题
+    config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+    if (config.method === 'post') {
+        config.data = QS.stringify({
+            ...config.data
+        })
+    }
+
     if (store.getters.token) {
         config.headers['X-Token'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }

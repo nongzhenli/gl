@@ -6,11 +6,19 @@ const path = require('path')
 
 module.exports = {
     dev: {
-
         // Paths
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
-        proxyTable: {},
+        proxyTable: {
+            '/v1': {
+                target: 'http://www.glagbn.com/admin', // 接口的域名
+                secure: false,  // 如果是https接口，需要配置这个参数
+                changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+                // pathRewrite: { //后面可以使重写的新路径，因为线上地址存在 /v1，所以不用重写
+                //   '^/v1': '/'
+                // }
+            }
+        },
 
         // Various Dev Server settings
         host: 'localhost', // can be overwritten by process.env.HOST
@@ -63,7 +71,8 @@ module.exports = {
          * then assetsPublicPath should be set to "/bar/".
          * In most cases please use '/' !!!
          */
-        assetsPublicPath: '/vueAdmin-template/', // If you are deployed on the root path, please use '/'
+        // 打包资源路径
+        assetsPublicPath: '/admin/', // If you are deployed on the root path, please use '/'
 
         /**
          * Source Maps

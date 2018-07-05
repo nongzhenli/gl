@@ -4,6 +4,9 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
     NODE_ENV: '"development"',
-    // BASE_API: '"https://easy-mock.com/mock/5950a2419adc231f356a6636/vue-admin"',
-    BASE_API: '"https://www.easy-mock.com/mock/5b31d5225b00583c51b94abe/mqwxadmin"'
+
+    /**
+     * 使用axios代理 proxyTable解决dev跨域请求线上地址，此请求地址应该是 http://localhost:9528/v1...形式
+     */
+    BASE_API: '"/v1"',
 })

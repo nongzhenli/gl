@@ -98,20 +98,20 @@ export const constantRouterMap = [
                 name: 'LotteryActivity',
                 hidden: true,
                 component: () => import('@/views/marketing/lottery'),
-                meta: { title: '抽奖活动详情' }
+                meta: { title: '抽奖活动详情', page: 'lottery' }
             },
             {   // 吸粉活动详情
                 path: 'fans/:id(\\d+)',
                 name: 'FansActivity',
                 hidden: true,
                 component: () => import('@/views/marketing/fans'),
-                meta: { title: '吸粉活动详情' }
+                meta: { title: '吸粉活动详情', page: 'fans' }
             },
             {   // 创建营销活动
                 path: 'create',
                 name: 'MarketingCreate',
                 component: () => import('@/views/tree/index'),
-                meta: { title: '创建活动' }
+                meta: { title: '创建活动', page: 'create' }
             }
         ]
     },

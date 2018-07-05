@@ -48,10 +48,12 @@ Route::rule('api/:version/wechat/test', 'api/:version.Wechat/test', 'GET|POST');
  * Admin后台管理 API数据接口
  */
 
-Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList', 'GET');
 Route::rule('admin/:version/user/login', 'admin/:version.User/login', 'POST');
 Route::rule('admin/:version/user/logout', 'admin/:version.User/logout', 'POST');
 Route::rule('admin/:version/user/info', 'admin/:version.User/info', 'GET');
+
+Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList', 'GET');
+Route::rule('admin/:version/marketing/get', 'admin/:version.Marketing/getById', 'GET');
 
 
 /**

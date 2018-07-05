@@ -135,7 +135,7 @@ export default {
         // 初始化数据
         fetchData() {
             this.listLoading = true
-            getMarktingGet({ act_id: this.$route.params.id }).then(response => {
+            getMarktingGet({ id: this.$route.params.id }).then(response => {
                 this.list = response.data.items
                 this.listLoading = false
             })
