@@ -17,14 +17,15 @@ class Marketing extends Model
     public static function getList()
     {
         $data = self::select();
+        // ( select act_id from fans_record  UNION ALL select act_id from lottery_record )
         foreach ($data as $key => $value) {
-
             // Db::view('User', 'id,name')
             //     ->view('Profile', 'truename,phone,email', 'Profile.user_id=User.id')
             //     ->view('Score', 'score', 'Score.user_id=Profile.id')
             //     ->where('score', '>', 80)
             //     ->select();
-
+            $count = Db::query("select count(*) as total from ( select act_id from fans_record  UNION ALL select act_id from lottery_record ) as A where act_id=".$value['id']);
+            $value['total'] = $count[0]['total'];
             $value['type'] = self::MARKETING_TYPE[$value['type']];
         }
         return $data;
