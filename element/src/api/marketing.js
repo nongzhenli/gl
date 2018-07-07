@@ -9,10 +9,26 @@ export function getMarktingList(params) {
     })
 }
 
-// 获取活动报名人数统计
-export function getMarktingGet(params) {
+/**
+ * 公众号吸粉类活动
+ * #获取活动详情
+ */
+export function getMarktingGetFans(params) {
     return request({
-        url: '/marketing/get',
+        url: '/marketing/get/fans',
+        method: 'get',
+        params
+    })
+}
+
+
+/**
+ * 抽奖类活动
+ * #获取活动详情
+ */
+export function getMarktingGetLottery(params) {
+    return request({
+        url: '/marketing/get/lottery',
         method: 'get',
         params
     })

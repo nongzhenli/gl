@@ -44,43 +44,52 @@
                     <el-tag :type="scope.row.status, 'type' | statusFilter">{{ scope.row.status, 'name' | statusFilter }}</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="奖品名称"
+            <el-table-column label="推荐人"
                 max-width="160"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.prize_name | isEmptyFilter}}
-                </template>
-            </el-table-column>
-             <el-table-column align="left"
-                prop="sign_time"
-                label="报名时间"
-                width="130">
-                <template slot-scope="scope">
-                    <span>{{scope.row.sign_time | isEmptyFilter}}</span>
+                    {{scope.row.prize_id}}
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                prop="draw_time"
-                label="抽奖时间"
+                prop="last_follow_unfollow_time"
+                label="关注/取消时间"
                 width="130">
                 <template slot-scope="scope">
-                    <span>{{scope.row.draw_time | isEmptyFilter}}</span>
+                    <span  v-html="isEmptyFilter(scope.row.last_follow_unfollow_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
                 width="130"
-                prop="get_time"
-                label="领取时间">
+                prop="complete_time"
+                label="完成时间">
                 <template slot-scope="scope">
-                    <span>{{scope.row.get_time | isEmptyFilter}}</span>
+                    <span  v-html="isEmptyFilter(scope.row.complete_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                prop="created_at"
+                prop="sign_time"
+                label="填表时间"
+                width="130">
+                <template slot-scope="scope">
+                    <span v-html="isEmptyFilter(scope.row.sign_time)"></span>
+                </template>
+            </el-table-column>
+
+            <el-table-column align="left"
+                prop="get_time"
+                label="领取时间"
+                width="130">
+                <template slot-scope="scope">
+                    <span v-html="isEmptyFilter(scope.row.get_time)"></span>
+                </template>
+            </el-table-column>
+            <el-table-column align="left"
+                prop="create_time"
                 label="创建时间"
                 width="130">
                 <template slot-scope="scope">
-                    <span>{{scope.row.create_time | isEmptyFilter}}</span>
+                    <span v-html="isEmptyFilter(scope.row.create_time)"></span>
                 </template>
             </el-table-column>
         </el-table>
@@ -88,7 +97,7 @@
 </template>
 
 <script>
-import { getMarktingGet } from '@/api/marketing'
+import { getMarktingGetFans } from '@/api/marketing'
 export default {
     data() {
         return {
@@ -101,32 +110,34 @@ export default {
         // 获取路由信息
         console.log(this.$route);
     },
+    computed: {
+    },
     filters: {
         statusFilter(data, type) {
             const statusMap = {
                 "0": {
                     "type": "danger",
-                    "name": "未报名"
+                    "name": "取消关注"
                 },
                 "1": {
                     "type": "gray",
-                    "name": "报名成功"
+                    "name": "已关注"
                 },
                 "2": {
                     "type": "success",
-                    "name": "抽奖成功"
+                    "name": "已完成"
                 },
                 "3": {
                     "type": "success",
                     "name": "成功领取奖品"
                 },
+                "4": {
+                    "type": "gray",
+                    "name": "已成功填表"
+                },
             }
             return statusMap[data][type];
         },
-        // 过滤单元格空数据
-        isEmptyFilter(data){
-            return data || '/';
-        }
     },
     mounted() {
 
@@ -135,10 +146,14 @@ export default {
         // 初始化数据
         fetchData() {
             this.listLoading = true
-            getMarktingGet({ id: this.$route.params.id }).then(response => {
+            getMarktingGetFans({ id: this.$route.params.id }).then(response => {
                 this.list = response.data.items
                 this.listLoading = false
             })
+        },
+        // 过滤单元格空数据 【无法通过过滤器、计算器实现，替换methods方法使用，OK】
+        isEmptyFilter(data) {
+            return data || `<i style='color: #bbb;'>NULL</i>`;
         }
     },
 }

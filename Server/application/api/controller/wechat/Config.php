@@ -54,7 +54,7 @@ class Config extends BaseWechat
         // 公众号规则处理
         switch ($type) {
             case WechatSdk::MSGTYPE_TEXT:
-                self::handleTextMessage($weObj);
+                self::handleTextMessage($weObj, $config['app_id'], $config['app_secret']);
                 break;
             case WechatSdk::MSGTYPE_EVENT:
                 self::handleEventMessage($weObj);
@@ -65,9 +65,11 @@ class Config extends BaseWechat
     }
 
     // 文本回复处理集中方法
-    public static function handleTextMessage($weObj)
+    public static function handleTextMessage($weObj, $app_id, $app_secret)
     {
         // $weObj->text("回复了")->reply();
+        // $str = $weObj->checkAuth($app_id, $app_secret);
+        // $weObj->text($str)->reply();
     }
 
     // 事件处理集中方法
@@ -79,7 +81,7 @@ class Config extends BaseWechat
         $openid = $weObj->getRev()->getRevFrom();
 
         // 普通关注事件、未关注扫描带参数二维码事件
-        if ($event == "subscribe") {
+        if ($event == "subscribe" || $event == "SCAN") {
             $weObj->text("够品质/够实力/够美好!\n在线打卡签到，点击链接：<a href='https://jinshuju.net/f/bXyUsD'>https://jinshuju.net/f/bXyUsD</a>")->reply();
         }
     }
@@ -87,7 +89,6 @@ class Config extends BaseWechat
     /**
      * 自定义菜单
      * #只需要调用一次，应该单独作为事件调用
-     * @param   $wechat_id  微信公众号id
      */
     public static function createMenu($wechat_id = 0)
     {

@@ -30,4 +30,22 @@ class Marketing extends Model
         }
         return $data;
     }
+
+    /**
+     * 公众号吸粉活动获取活动详情
+     */
+    public static function getFansById($id)
+    {
+        $data = Db::table('fans_record')->where('act_id',$id)->field('open_id', true)->select();
+        return $data;
+    }
+
+    /**
+     * 抽奖活动获取活动详情
+     */
+    public static function getLotteryById($id)
+    {
+        $data = Db::table('lottery_record')->where('act_id',$id)->field('open_id', true)->select();
+        return $data;
+    }
 }

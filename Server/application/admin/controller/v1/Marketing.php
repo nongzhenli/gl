@@ -15,53 +15,42 @@ class Marketing
                 "items" => $result,
             ),
         );
-        return $result;
-        // $data = array(
-        //     "code" => 20000,
-        //     "data" => array(
-        //         "items" => array(
-        //             array(
-        //                 "id" => "1",
-        //                 "name" => "桂林九宫格抽奖活动",
-        //                 "type" => "报名抽奖",
-        //                 "page_url" => "lottery",
-        //                 "status" => 0,
-        //                 "pageviews" => 786,
-        //                 "sigin_num" => 1232,
-        //                 "pay_num" => 890,
-        //                 "pay_total" => 158715.00,
-        //                 "author" => "cc",
-        //                 "start_time" => "2018-04-13 21:14",
-        //                 "end_time" => "2018-04-13 21:14",
-        //                 "create_time" => "2018-04-13 21:14",
-        //             ),
-        //             array(
-        //                 "id" => "2",
-        //                 "name" => "桂林安格贝妮公众号吸粉",
-        //                 "type" => "公众号吸粉",
-        //                 "page_url" => "fans",
-        //                 "status" => 1,
-        //                 "sigin_num" => 147815,
-        //                 "pay_num" => 0,
-        //                 "pay_total" => 0,
-        //                 "author" => "cc",
-        //                 "start_time" => "2018-04-13 21:14",
-        //                 "end_time" => "2018-04-13 21:14",
-        //                 "create_time" => "2018-04-13 21:14",
-        //             ),
-        //         ),
-        //     ),
-        // );
-        // return json($data);
+        return $data;
     }
 
     /**
      * 获取指定的marketing信息
      * @param id    marketing的id号
      * @http        GET
+     * @type        Fans 公众号吸粉活动
      */
-    public function getById($id)
+    public function getFansById($id)
     {
-        return $id;
+        $result = MarketingModel::getFansById($id);
+        $data = array(
+            "code" => 20000,
+            "data" => array(
+                "items" => $result,
+            ),
+        );
+        return $data;
+    }
+
+    /**
+     * 获取指定的marketing信息
+     * @param id    marketing的id号
+     * @http        GET
+     * @type        Lottery 抽奖活动
+     */
+    public function getLotteryById($id)
+    {
+        $result = MarketingModel::getLotteryById($id);
+        $data = array(
+            "code" => 20000,
+            "data" => array(
+                "items" => $result,
+            ),
+        );
+        return $data;
     }
 }

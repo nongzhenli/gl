@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { getMarktingGet } from '@/api/marketing'
+import { getMarktingGetLottery } from '@/api/marketing'
 export default {
     data() {
         return {
@@ -135,7 +135,7 @@ export default {
         // 初始化数据
         fetchData() {
             this.listLoading = true
-            getMarktingGet({ id: this.$route.params.id }).then(response => {
+            getMarktingGetLottery({ id: this.$route.params.id }).then(response => {
                 this.list = response.data.items
                 this.listLoading = false
             })

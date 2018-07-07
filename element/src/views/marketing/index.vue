@@ -34,7 +34,7 @@
                 width="110"
                 align="left">
                 <template slot-scope="scope">
-                    {{scope.row.sigin_num, "人" | intNumFilter}}
+                    {{scope.row.total, "人" | intNumFilter}}
                 </template>
             </el-table-column>
             <el-table-column label="支付量"
@@ -97,6 +97,7 @@
 
 <script>
 import { getMarktingList } from '@/api/marketing'
+import { formatTime } from '@/utils/index'
 
 export default {
     data() {
@@ -143,7 +144,7 @@ export default {
 
     },
     created() {
-        this.fetchData()
+        this.fetchData();
     },
     methods: {
         fetchData() {
@@ -152,6 +153,7 @@ export default {
                 this.list = response.data.items
                 this.listLoading = false
             })
+            console.log(formatTime(new data(), 'yyyy-MM-dd hh:mm'))
         },
         // 数据筛选方法
         filterHandler(value, row, column) {

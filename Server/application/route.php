@@ -53,7 +53,8 @@ Route::rule('admin/:version/user/logout', 'admin/:version.User/logout', 'POST');
 Route::rule('admin/:version/user/info', 'admin/:version.User/info', 'GET');
 
 Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList', 'GET');
-Route::rule('admin/:version/marketing/get', 'admin/:version.Marketing/getById', 'GET');
+Route::rule('admin/:version/marketing/get/fans', 'admin/:version.Marketing/getFansById', 'GET');    // 公众号吸粉类活动详情
+Route::rule('admin/:version/marketing/get/lottery', 'admin/:version.Marketing/getLotteryById', 'GET'); // 抽奖类活动详情
 
 
 /**
