@@ -124,13 +124,13 @@ export const constantRouterMap = [
         component: Layout,
         redirect: '/wechat/list',
         name: 'Wechat',
-        meta: { title: '微信公众号', icon: 'example' },
+        meta: { title: '微信公众号', icon: 'wechat' },
         children: [
             {   // 微信公众号列表
                 path: 'list',
                 name: 'WechatList',
                 component: () => import('@/views/wechat/index'),
-                meta: { title: '公众号列表' }
+                meta: { title: '公众号列表'}
             },
             {   // 微信公众号详情页
                 path: 'detail/:id(\\d+)',

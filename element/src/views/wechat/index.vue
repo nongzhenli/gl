@@ -9,7 +9,7 @@
             header-row-class-name="thead-row__header">
             <el-table-column align="left"
                 label='序号'
-                width="95">
+                width="60">
                 <template slot-scope="scope">
                     {{scope.$index}}
                 </template>
