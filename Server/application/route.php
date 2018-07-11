@@ -56,6 +56,11 @@ Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList',
 Route::rule('admin/:version/marketing/get/fans', 'admin/:version.Marketing/getFansById', 'GET');    // 公众号吸粉类活动详情
 Route::rule('admin/:version/marketing/get/lottery', 'admin/:version.Marketing/getLotteryById', 'GET'); // 抽奖类活动详情
 
+// 公众号
+Route::rule('admin/:version/wechat/list', 'admin/:version.Wechat/getList', 'GET');
+Route::rule('admin/:version/wechat/detail/:id', 'admin/:version.Wechat/getDetail', 'GET');
+
+
 
 /**
  * 微信公众号接入开发配置口

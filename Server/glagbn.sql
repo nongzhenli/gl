@@ -227,9 +227,27 @@ CREATE TABLE IF NOT EXISTS `wechat` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='微信公众号信息表' AUTO_INCREMENT=1;
 --
--- 限制导出的表
---
+-- --------------------------------------------------------
 
+-- 表的结构 `wechat_menu`
+--
+CREATE TABLE IF NOT EXISTS `wechat_menu` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `wechat_id` int(10) NOT NULL COMMENT '公众号id',
+  `name` varchar(50) NOT NULL COMMENT '菜单名称',
+  `parent_id` int(10) NOT NULL DEFAULT 0 COMMENT '父级菜单id，默认0（首级）',
+  `sort` int(10) NOT NULL COMMENT '菜单顺序',
+  `is_active` tinyint(1) DEFAULT '1' COMMENT '是否显示菜单，1显示，0隐藏',
+  `responsetype` int(2) NOT NULL COMMENT '1链接类型view/2事件类型click',
+  `jsonstr` varchar(1024) NOT NULL COMMENT 'JSON字符串配置',
+  `link_url` varchar(255) DEFAULT NULL COMMENT 'view类型的url',
+  `last_time` int(11) DEFAULT NULL COMMENT '最近一次更新时间',
+  `create_time` int(11) NOT NULL COMMENT '创建时间',
+  `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
+  `create_by` int(11) DEFAULT NULL COMMENT '创建操作人id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='微信公众号自定义菜单' AUTO_INCREMENT=1;
+--
 --
 -- 限制表 `lottery_record`
 --

@@ -15,13 +15,6 @@
                     {{scope.$index}}
                 </template>
             </el-table-column>
-            <el-table-column label="昵称"
-                width="140"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.nickname}}
-                </template>
-            </el-table-column>
             <el-table-column label="姓名"
                 class-name="el-table-cell__activity-name"
                 width="140">
@@ -38,7 +31,7 @@
                 </template>
             </el-table-column>
             <el-table-column label="状态"
-                width="130"
+                min-width="130"
                 align="left">
                 <template slot-scope="scope">
                     <el-tag :type="scope.row.status, 'type' | statusFilter">{{ scope.row.status, 'name' | statusFilter }}</el-tag>
@@ -51,16 +44,21 @@
                     {{scope.row.prize_id}}
                 </template>
             </el-table-column>
+            <el-table-column label="支持人数"
+                max-width="160"
+                align="left">
+                <template slot-scope="scope">0</template>
+            </el-table-column>
             <el-table-column align="left"
                 prop="last_follow_unfollow_time"
                 label="关注/取消时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
                     <span  v-html="isEmptyFilter(scope.row.last_follow_unfollow_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                width="130"
+                width="150"
                 prop="complete_time"
                 label="完成时间">
                 <template slot-scope="scope">
@@ -70,7 +68,7 @@
             <el-table-column align="left"
                 prop="sign_time"
                 label="填表时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
                     <span v-html="isEmptyFilter(scope.row.sign_time)"></span>
                 </template>
@@ -79,7 +77,7 @@
             <el-table-column align="left"
                 prop="get_time"
                 label="领取时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
                     <span v-html="isEmptyFilter(scope.row.get_time)"></span>
                 </template>
@@ -87,7 +85,7 @@
             <el-table-column align="left"
                 prop="create_time"
                 label="创建时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
                     <span v-html="isEmptyFilter(scope.row.create_time)"></span>
                 </template>
@@ -98,6 +96,7 @@
 
 <script>
 import { getMarktingGetFans } from '@/api/marketing'
+import { formatTime } from '@/utils/index'
 export default {
     data() {
         return {
@@ -153,7 +152,7 @@ export default {
         },
         // 过滤单元格空数据 【无法通过过滤器、计算器实现，替换methods方法使用，OK】
         isEmptyFilter(data) {
-            return data || `<i style='color: #bbb;'>NULL</i>`;
+            return formatTime(data, true, "{y}-{m}-{d} {h}:{i}") || `<i style='color: #bbb;'>NULL</i>`;
         }
     },
 }

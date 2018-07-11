@@ -3,7 +3,7 @@
  */
 
 export function parseTime(time, cFormat) {
-    if (arguments.length === 0) {
+    if (arguments.length === 0 || time === 0) {
         return null
     }
     const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
@@ -34,23 +34,30 @@ export function parseTime(time, cFormat) {
     return time_str
 }
 
-export function formatTime(time, option) {
+/**
+ * 时间格式转换
+ * @param {*时间戳} time 
+ * @param {*是否强制转换格式} bool 
+ * @param {*要转换的格式} option 
+ */
+export function formatTime(time, bool, option) {
+    option = option || '{y}-{m}-{d} {h}:{i}:{s}'
     time = +time * 1000
     const d = new Date(time)
     const now = Date.now()
-
     const diff = (now - d) / 1000
 
-    if (diff < 30) {
+    if (diff < 30 && !bool) {
         return '刚刚'
-    } else if (diff < 3600) { // less 1 hour
+    } else if (diff < 3600 && !bool) { // less 1 hour
         return Math.ceil(diff / 60) + '分钟前'
-    } else if (diff < 3600 * 24) {
+    } else if (diff < 3600 * 24 && !bool) {
         return Math.ceil(diff / 3600) + '小时前'
-    } else if (diff < 3600 * 24 * 2) {
+    } else if (diff < 3600 * 24 * 2 && !bool) {
         return '1天前'
     }
-    if (option) {
+
+    if (bool && option) {
         return parseTime(time, option)
     } else {
         return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'

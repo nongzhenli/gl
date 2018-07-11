@@ -15,13 +15,6 @@
                     {{scope.$index}}
                 </template>
             </el-table-column>
-            <el-table-column label="昵称"
-                width="140"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.nickname}}
-                </template>
-            </el-table-column>
             <el-table-column label="姓名"
                 class-name="el-table-cell__activity-name"
                 width="140">
@@ -54,33 +47,33 @@
              <el-table-column align="left"
                 prop="sign_time"
                 label="报名时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
-                    <span>{{scope.row.sign_time | isEmptyFilter}}</span>
+                    <span v-html="isEmptyFilter(scope.row.sign_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
                 prop="draw_time"
                 label="抽奖时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
-                    <span>{{scope.row.draw_time | isEmptyFilter}}</span>
+                    <span v-html="isEmptyFilter(scope.row.draw_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                width="130"
+                width="150"
                 prop="get_time"
                 label="领取时间">
                 <template slot-scope="scope">
-                    <span>{{scope.row.get_time | isEmptyFilter}}</span>
+                    <span v-html="isEmptyFilter(scope.row.get_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
                 prop="created_at"
                 label="创建时间"
-                width="130">
+                width="150">
                 <template slot-scope="scope">
-                    <span>{{scope.row.create_time | isEmptyFilter}}</span>
+                    <span v-html="isEmptyFilter(scope.row.create_time)"></span>
                 </template>
             </el-table-column>
         </el-table>
@@ -89,6 +82,7 @@
 
 <script>
 import { getMarktingGetLottery } from '@/api/marketing'
+import { formatTime } from '@/utils/index'
 export default {
     data() {
         return {
@@ -139,6 +133,10 @@ export default {
                 this.list = response.data.items
                 this.listLoading = false
             })
+        },
+        // 过滤单元格空数据 【无法通过过滤器、计算器实现，替换methods方法使用，OK】
+        isEmptyFilter(data) {
+            return formatTime(data, true, "{y}-{m}-{d} {h}:{i}") || `<i style='color: #bbb;'>NULL</i>`;
         }
     },
 }

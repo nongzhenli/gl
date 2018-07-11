@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container view-marketing-index">
+    <div class="app-container view-wechat-index">
         <el-table :data="list"
             v-loading.body="listLoading"
             element-loading-text="Loading"
@@ -14,50 +14,48 @@
                     {{scope.$index}}
                 </template>
             </el-table-column>
-            <el-table-column label="活动名"
+            <el-table-column label="公众号名称"
                 class-name="el-table-cell__activity-name">
                 <template slot-scope="scope">
-                    <router-link :to="scope.row.page_url+'/'+ scope.row.id ">{{scope.row.name}}</router-link>
+                    <router-link :to="'detail/'+ scope.row.id ">{{scope.row.name}}</router-link>
                 </template>
             </el-table-column>
-            <el-table-column label="活动类型"
-                width="160"
+            <el-table-column label="APP_ID"
+                width="170"
+                class-name="el-table-cell__activity-name">
+                <template slot-scope="scope">
+                    <router-link :to="scope.row.page_url+'/'+ scope.row.id ">{{scope.row.app_id}}</router-link>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态"
+                width="100"
                 align="left"
-                prop="type"
-                :filters="[{text: '报名抽奖', value: '报名抽奖'}, {text: '公众号吸粉', value: '公众号吸粉'}]"
+                prop="status"
+                :filters="[{text: '正常', value: 1}, {text: '注销', value: 0}]"
                 :filter-method="filterHandler">
                 <template slot-scope="scope">
-                    {{scope.row.type}}
-                </template>
-            </el-table-column>
-            <el-table-column label="报名量"
-                width="110"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.total, "人" | intNumFilter}}
-                </template>
-            </el-table-column>
-            <el-table-column label="支付量"
-                width="110"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.pay_num , "人" | intNumFilter}}
-                </template>
-            </el-table-column>
-            <el-table-column label="支付总金额"
-                width="150"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.pay_total | valFloatFilter}}元
-                </template>
-            </el-table-column>
-
-            <el-table-column class-name="status-col"
-                label="活动状态"
-                width="110"
-                align="left">
-                <template slot-scope="scope">
                     <el-tag :type="scope.row.status, 'type' | statusFilter">{{scope.row.status, 'name' | statusFilter}}</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column label="token令牌"
+                min-width="110"
+                align="left">
+                <template slot-scope="scope">
+                    <span>{{scope.row.token}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="消息加解密密钥"
+                min-width="160"
+                align="left">
+                <template slot-scope="scope">
+                    <span>{{scope.row.encodingaeskey}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column label="服务器地址(URL)"
+                min-width="160"
+                align="left">
+                <template slot-scope="scope">
+                    <span>{{scope.row.server_http_url}}</span>
                 </template>
             </el-table-column>
             <el-table-column label="操作人"
@@ -68,19 +66,11 @@
                 </template>
             </el-table-column>
             <el-table-column align="left"
-                prop="start_time"
-                label="开始时间"
+                prop="last_time"
+                label="最近更新时间"
                 max-width="150">
                 <template slot-scope="scope">
-                    <span v-html="isEmptyFilter(scope.row.start_time)"></span>
-                </template>
-            </el-table-column>
-            <el-table-column align="left"
-                prop="end_time"
-                max-width="150"
-                label="结束时间">
-                <template slot-scope="scope">
-                    <span v-html="isEmptyFilter(scope.row.end_time)"></span>
+                    <span v-html="isEmptyFilter(scope.row.last_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
@@ -96,7 +86,7 @@
 </template>
 
 <script>
-import { getMarktingList } from '@/api/marketing'
+import { getWechatList } from '@/api/wechat'
 import { formatTime } from '@/utils/index'
 
 export default {
@@ -107,15 +97,16 @@ export default {
         }
     },
     filters: {
+        // 状态过滤器
         statusFilter(data, type) {
             const statusMap = {
                 "0": {
                     "type": "danger",
-                    "name": "已结束"
+                    "name": "注销"
                 },
                 "1": {
                     "type": "success",
-                    "name": "进行中"
+                    "name": "正常"
                 },
                 "2": {
                     "type": "gray",
@@ -125,26 +116,6 @@ export default {
             }
             return statusMap[data][type];
         },
-        valFloatFilter(value) {
-            if(!value){
-                value = 0.00;
-            }
-            // 截取当前数据到小数点后三位
-            let transformVal = Number(value).toFixed(3);
-            let realVal = transformVal.substring(0, transformVal.length - 1);
-            // num.toFixed(3)获取的是字符串
-            return realVal
-        },
-        intNumFilter(data, unit){
-            if(data){
-                data += unit;
-            }else {
-                data = "/";
-            }
-            return data;
-
-        }
-
     },
     created() {
         this.fetchData();
@@ -152,7 +123,7 @@ export default {
     methods: {
         fetchData() {
             this.listLoading = true
-            getMarktingList().then(response => {
+            getWechatList().then(response => {
                 this.list = response.data.items
                 this.listLoading = false
             })
@@ -171,7 +142,6 @@ export default {
 </script>
 
 <style lang="less">
-
 </style>
 
 
