@@ -1,13 +1,15 @@
 <?php
-/*
+/* 微信公众号开发基础库类
  * @Author: big黑钦
  * @Date: 2018-05-22 12:02:38
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-13 09:46:54
+ * @Last Modified time: 2018-07-13 13:53:14
  */
-namespace app\api\controller\wechat;
+namespace app\admin\model;
 
-class BaseWechat
+use think\Model;
+
+class BaseWechat extends Model
 {
     /**
      * 加密

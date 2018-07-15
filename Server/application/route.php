@@ -24,7 +24,6 @@ Route::get('api/:version/user/author', 'api/:version.User/author');
 Route::rule('api/:version/token/user', 'api/:version.Token/getToken', 'GET|POST');
 Route::post('api/:version/token/verify', 'api/:version.Token/verifyToken');
 
-
 // Lottery
 Route::get('api/:version/lottery/prize/info', 'api/:version.Lottery/getAllPrizeInfo');
 Route::post('api/:version/lottery/user/sign', 'api/:version.Lottery/sign');
@@ -32,7 +31,6 @@ Route::post('api/:version/lottery/user/get', 'api/:version.Lottery/get');
 Route::post('api/:version/lottery/user/prize', 'api/:version.Lottery/getPrizeIndex');
 // 模拟抽奖测试
 Route::get('api/:version/lottery/prize/test', 'api/:version.Lottery/test');
-
 
 
 // Wxcaht
@@ -58,7 +56,7 @@ Route::rule('admin/:version/marketing/get/lottery', 'admin/:version.Marketing/ge
 
 // 公众号
 Route::rule('admin/:version/wechat/list', 'admin/:version.Wechat/getList', 'GET');
-Route::rule('admin/:version/wechat/detail/:id', 'admin/:version.Wechat/getDetail', 'GET');
+Route::rule('admin/:version/wechat/detail', 'admin/:version.Wechat/getDetail', 'GET');
 
 
 

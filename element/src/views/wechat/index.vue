@@ -24,7 +24,7 @@
                 width="170"
                 class-name="el-table-cell__activity-name">
                 <template slot-scope="scope">
-                    <router-link :to="scope.row.page_url+'/'+ scope.row.id ">{{scope.row.app_id}}</router-link>
+                    {{scope.row.app_id}}
                 </template>
             </el-table-column>
             <el-table-column label="状态"
@@ -79,6 +79,16 @@
                 max-width="150">
                 <template slot-scope="scope">
                     <span v-html="isEmptyFilter(scope.row.create_time)"></span>
+                </template>
+            </el-table-column>
+            <el-table-column align="left"
+                label="操作"
+                width="80">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                        type="primary">
+                        <router-link :to="'detail/'+ scope.row.id ">查看</router-link>
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>

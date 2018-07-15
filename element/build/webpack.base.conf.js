@@ -34,7 +34,9 @@ module.exports = {
     // 不打包库
     externals: {
         vue: 'Vue',
-        'element-ui': 'ELEMENT'
+        'element-ui': 'ELEMENT',
+        echarts: 'echarts',
+        'v-charts': 'v-charts',
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],

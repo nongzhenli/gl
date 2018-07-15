@@ -91,6 +91,16 @@
                     <span v-html="isEmptyFilter(scope.row.create_time)"></span>
                 </template>
             </el-table-column>
+            <el-table-column align="left"
+                label="操作"
+                width="80">
+                <template slot-scope="scope">
+                    <el-button size="mini"
+                        type="primary">
+                        <router-link :to="scope.row.page_url+'/'+ scope.row.id ">查看</router-link>
+                    </el-button>
+                </template>
+            </el-table-column>
         </el-table>
     </div>
 </template>
@@ -126,7 +136,7 @@ export default {
             return statusMap[data][type];
         },
         valFloatFilter(value) {
-            if(!value){
+            if (!value) {
                 value = 0.00;
             }
             // 截取当前数据到小数点后三位
@@ -135,10 +145,10 @@ export default {
             // num.toFixed(3)获取的是字符串
             return realVal
         },
-        intNumFilter(data, unit){
-            if(data){
+        intNumFilter(data, unit) {
+            if (data) {
                 data += unit;
-            }else {
+            } else {
                 data = "/";
             }
             return data;
@@ -171,7 +181,6 @@ export default {
 </script>
 
 <style lang="less">
-
 </style>
 
 
