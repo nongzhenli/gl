@@ -1,7 +1,7 @@
 <template>
     <div class="component component_echarts component_echarts__map">
-        <div id="echart_map"
-            style="display: inline-block; width: 600px; height: 380px;">
+        <div :id="key"
+            style="width: 500px; height:360px;">
         </div>
     </div>
 </template>
@@ -9,20 +9,20 @@
 <script>
 export default {
     data() {
-        return {}
+        return {
+            key: 'echart_map_' + Math.random()
+        }
     },
     created() {
     },
     mounted() {
         this.mapEchartInit();
     },
+
     methods: {
         // 图表数据
         mapEchartInit() {
-            // 基于准备好的dom，初始化echarts实例
-            let myChart = this.$echarts.init(document.getElementById('echart_map'))
-            // 绘制图表 【地图只显示左下角，是因为官网已经暂停地图，只能手动引入地图（待解决）】
-
+            let myChart = this.$echarts.init(document.getElementById(this.key))
             var citydata = [
                 { name: "北京", value: 974 },
                 { name: "天津", value: 532 },
@@ -96,11 +96,11 @@ export default {
                     name: "人数",
                     type: "map",
                     mapType: "china",
-                    left: '200',
-                    width: '40%',
+                    left: '50',
+                    width: '80%',
                     roam: true,
                     mapValueCalculation: "sum",
-                    zoom: 2,
+                    zoom: 1,
                     selectedMode: false,
                     showLegendSymbol: false,
                     label: {
@@ -135,4 +135,9 @@ export default {
 </script>
 
 <style scoped>
+.component_echarts {
+    display: inline-block;
+    vertical-align: top;
+    margin-bottom: 30px;
+}
 </style>

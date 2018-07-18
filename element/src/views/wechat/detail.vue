@@ -13,9 +13,9 @@
                             alt="">
                     </div>
                     <div class="wacht-info__text display_ib">
-                        <p>公众号微信：maiqi0771</p>
-                        <p>公众号名称：南宁麦琪儿童摄影</p>
-                        <p>公众号类型：认证服务号</p>
+                        <p>微信：maiqi0771</p>
+                        <p>名称：南宁麦琪儿童摄影</p>
+                        <p>类型：认证服务号</p>
                     </div>
                 </div>
             </div>
@@ -48,19 +48,9 @@
 
         <!-- 微信数据统计区域 -->
         <div class="wechat-data">
-            <!-- 粉丝区域分布统计 -->
-            <div class="wechat-charts">
-               <echart-map></echart-map>
-            </div>
-            <!-- 粉丝性别统计 -->
-            <div class="wechat-charts">
-
-            </div>
-
-            <!-- 粉丝关注来源统计 -->
-            <div class="wechat-charts">
-               <echart-pie></echart-pie>
-            </div>
+            <echart-pie></echart-pie>
+            <echart-pie-sex></echart-pie-sex>
+            <echart-map></echart-map>
         </div>
     </div>
 </template>
@@ -69,16 +59,19 @@
 import { getWechatDetail } from '@/api/wechat'
 import EchartMap from '@/components/Echarts/map';
 import EchartPie from '@/components/Echarts/pie';
+import EchartPieSex from '@/components/Echarts/pieSex';
+
 export default {
     data() {
         return {
             list: null,
-            listLoading: true
+            listLoading: true,
         }
     },
     components: {
         EchartMap,
-        EchartPie
+        EchartPie,
+        EchartPieSex
     },
     created() {
         this.fetchData();
@@ -109,9 +102,28 @@ export default {
     float: left;
 }
 
+.view-wechat-detail {
+    padding: 50px 80px;
+}
+.wechat-data {
+    margin: 30px auto;
+    padding: 15px;
+    border: 30px solid #eff3f6;
+    background-color: #eff3f6;
+
+    & > .component_echarts {
+        display: inline-block;
+        vertical-align: top;
+        margin-bottom: 30px;
+        margin-right: 30px;
+    }
+    
+}
 .wechat-header {
     overflow: hidden;
     .wx_box {
+        vertical-align: top;
+        border: 1px solid #e7e9ea;
         .hd {
             width: 100%;
             display: block;
@@ -120,13 +132,16 @@ export default {
             border-radius: 0;
             padding: 8px 16px;
             color: gray;
+            border-bottom: 1px solid #e0e5e8;
         }
         .bd {
+            height: 120px;
             padding: 15px;
         }
-        vertical-align: top;
     }
     .wx_info {
+        min-width: 400px;
+        margin-right: 15px;
         .wechat-info__img {
             img {
                 vertical-align: middle;
@@ -143,7 +158,9 @@ export default {
     }
     .wx_setting {
         overflow: hidden;
-        padding-left: 15px;
+        .bd {
+            padding-top: 0;
+        }
         ul,
         li {
             display: inline-block;
@@ -153,7 +170,7 @@ export default {
             overflow: hidden;
             font-size: 0;
             margin-right: 15px;
-            margin-bottom: 15px;
+            margin-top: 14px;
             & > a {
                 display: block;
                 padding: 10px 20px;
@@ -170,6 +187,10 @@ export default {
                 }
             }
         }
+        ul {
+            margin: 0;
+        }
+        li { vertical-align: middle; }
     }
 }
 </style>

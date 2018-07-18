@@ -1,7 +1,7 @@
 <template>
     <div class="component component_echarts component_echarts__pie">
         <div :id="key"
-            style="width: 500px; height:360px;"></div>
+            style="width: 400px; height:360px;"></div>
     </div>
 </template>
 
@@ -22,13 +22,12 @@ export default {
             let myChart = this.$echarts.init(document.getElementById(this.key))
             let option = {
                 title: {
-                    text: '新增用户来源',
-                    subtext: '近七日数据',
+                    text: '用户性别比例',
                     textStyle: {
                         fontSize: 14
                     }
                 },
-                color: ['#5182e4', '#9bcc66', '#3fb27e', '#f7cb4a', '#f88d48', '#f35352'],
+                color: ['#4d5fb0', '#0fa8e0'],
                 tooltip: {
                     trigger: 'item',
                     padding: 15,
@@ -36,29 +35,28 @@ export default {
                 },
                 legend: {
                     orient: 'vertical',
-                    right: 'right',
+                    right: '30',
                     itemWidth: 10,
                     itemHeight: 10,
                     textStyle: {
                         color: "#aaa"
                     },
-                    data: ['扫码二维码', '名片分享', '公众号搜索', '图文右上角搜索', '图文页内公众号名称', '其他合计']
+                    data: ['男', '女']
                 },
                 series: [
                     {
                         name: '访问来源',
                         type: 'pie',
                         radius: '65%',
-                        center: ['40%', '55%'],
+                        center: ['35%', '55%'],
                         hoverAnimation: false,  // 高亮不开启动画
                         animation: true,   // 开启动画效果
+                        labelLine: {
+                            show: false
+                        },
                         data: [
-                            { value: 1548, name: '扫码二维码' },
-                            { value: 310, name: '名片分享' },
-                            { value: 234, name: '公众号搜索' },
-                            { value: 135, name: '图文右上角搜索' },
-                            { value: 135, name: '图文页内公众号名称' },
-                            { value: 81, name: '其他合计' }
+                            { value: 654, name: '男' },
+                            { value: 1548, name: '女' },
                         ],
                         itemStyle: {
                             emphasis: {

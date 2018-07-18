@@ -3,15 +3,13 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:02:38
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-13 09:46:54
+ * @Last Modified time: 2018-07-04 10:58:14
  */
 namespace app\api\controller\wechat;
 
+
 class BaseWechat
 {
-    /**
-     * 加密
-     */
     public static function passport_encrypt($txt, $key = 'www.glagbn.com')
     {
         srand((double) microtime() * 1000000);
@@ -25,9 +23,6 @@ class BaseWechat
         return urlencode(base64_encode(self::passport_key($tmp, $key)));
     }
 
-    /**
-     * 解密
-     */
     public static function passport_decrypt($txt, $key = 'www.glagbn.com')
     {
         $txt = self::passport_key(base64_decode(urldecode($txt)), $key);
