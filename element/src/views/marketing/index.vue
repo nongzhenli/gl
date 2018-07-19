@@ -37,21 +37,6 @@
                     {{scope.row.total, "人" | intNumFilter}}
                 </template>
             </el-table-column>
-            <el-table-column label="支付量"
-                width="110"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.pay_num , "人" | intNumFilter}}
-                </template>
-            </el-table-column>
-            <el-table-column label="支付总金额"
-                width="150"
-                align="left">
-                <template slot-scope="scope">
-                    {{scope.row.pay_total | valFloatFilter}}元
-                </template>
-            </el-table-column>
-
             <el-table-column class-name="status-col"
                 label="活动状态"
                 width="110"

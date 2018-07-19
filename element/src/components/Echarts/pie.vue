@@ -22,8 +22,8 @@ export default {
             let myChart = this.$echarts.init(document.getElementById(this.key))
             let option = {
                 title: {
-                    text: '新增用户来源',
-                    subtext: '近七日数据',
+                    text: '近七日粉丝来源统计',
+                    subtext: '2018.7.19 - 2018.7.26',
                     textStyle: {
                         fontSize: 14
                     }
@@ -80,9 +80,4 @@ export default {
 </script>
 
 <style scoped>
-.component_echarts {
-    display: inline-block;
-    vertical-align: top;
-    margin-bottom: 30px;
-}
 </style>

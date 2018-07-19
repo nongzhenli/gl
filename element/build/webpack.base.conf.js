@@ -36,7 +36,9 @@ module.exports = {
         vue: 'Vue',
         'element-ui': 'ELEMENT',
         echarts: 'echarts',
-        'v-charts': 'v-charts',
+        axios: 'axios',
+        // 'vue-router': 'vue-router',
+        // vuex: 'vuex'
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],

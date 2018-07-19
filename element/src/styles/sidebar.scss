@@ -41,16 +41,17 @@
             height: 100%;
             width: 100% !important;
         }
+
     }
     .hideSidebar {
         .sidebar-container {
-            width: 36px !important;
+            width: 64px !important;
         }
         .main-container {
-            margin-left: 36px;
+            margin-left: 64px;
         }
         .submenu-title-noDropdown {
-            padding-left: 10px !important;
+            // padding-left: 10px !important;
             position: relative;
             .el-tooltip {
                 padding: 0 10px !important;
@@ -59,9 +60,12 @@
         .el-submenu {
             overflow: hidden;
             &>.el-submenu__title {
-                padding-left: 10px !important;
+                // padding-left: 10px !important;
                 .el-submenu__icon-arrow {
                     display: none;
+                }
+                i {
+                    color: #fff;
                 }
             }
         }
@@ -83,6 +87,9 @@
     .sidebar-container .el-submenu .el-menu-item {
         min-width: 180px !important;
         background-color: $subMenuBg !important;
+        &.is-active {
+            background-color: $menuHover !important;
+        }
         &:hover {
             background-color: $menuHover !important;
         }

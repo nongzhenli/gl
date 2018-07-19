@@ -85,7 +85,7 @@ export const constantRouterMap = [
         component: Layout,
         redirect: '/marketing/list',
         name: 'Marketing',
-        meta: { title: '营销管理', icon: 'example' },
+        meta: { title: '营销管理', icon: 'icon-yingxiao' },
         children: [
             {   // 营销活动列表
                 path: 'list',
@@ -124,7 +124,7 @@ export const constantRouterMap = [
         component: Layout,
         redirect: '/wechat/list',
         name: 'Wechat',
-        meta: { title: '微信公众号', icon: 'wechat' },
+        meta: { title: '微信公众号', icon: 'icon-ms-peizhi' },
         children: [
             {   // 微信公众号列表
                 path: 'list',

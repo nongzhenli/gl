@@ -13,9 +13,39 @@
                             alt="">
                     </div>
                     <div class="wacht-info__text display_ib">
-                        <p>微信：maiqi0771</p>
+                        <p>I &nbsp;&nbsp;D：1</p>
                         <p>名称：南宁麦琪儿童摄影</p>
                         <p>类型：认证服务号</p>
+                    </div>
+                    <div class="wacht-info__base_option">
+                        <header class="hd">公众号基本配置</header>
+                        <div class="bd">
+                            <ul>
+                                <li>
+                                    <span>开发者ID：</span>
+                                    <strong>wxa97eb027b796594e</strong>
+                                </li>
+                                <li>
+                                    <span>开发者密码：</span>
+                                    <strong class="app_secret">
+                                        0b753bf072ca2e8a0a996f2d15da97a8
+                                    </strong>
+                                </li>
+                                <li>
+                                    <span>服务器地址：</span>
+                                    <strong>http://gl.gxqqbaby.cn/api/wechat/set/1</strong>
+                                </li>
+                                <li>
+                                    <span>令牌Token：</span>
+                                    <strong>mqqzjlb</strong>
+                                </li>
+                                <li>
+                                    <span>消息加解密钥：</span>
+                                    <strong>84Hdh1rerzWzypUINtASz6Mg2JhF1h2eAYWoeeVK5ka</strong>
+                                </li>
+                            </ul>
+                            <p class="tip_text">（注意！请严格保证配置信息需要同微信公众号官方平台一致）</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -30,7 +60,7 @@
                             <a href="javascirpt:void(0)">素材管理</a>
                         </li>
                         <li>
-                            <a href="javascirpt:void(0)">最定义菜单</a>
+                            <a href="javascirpt:void(0)">自定义菜单</a>
                         </li>
                         <li>
                             <a href="javascirpt:void(0)">自动回复</a>
@@ -48,9 +78,13 @@
 
         <!-- 微信数据统计区域 -->
         <div class="wechat-data">
-            <echart-pie></echart-pie>
-            <echart-pie-sex></echart-pie-sex>
-            <echart-map></echart-map>
+            <div class="row">
+                <echart-pie></echart-pie>
+                <echart-pie-sex></echart-pie-sex>
+            </div>
+            <div class="row">
+                <echart-map></echart-map>
+            </div>
         </div>
     </div>
 </template>
@@ -101,6 +135,12 @@ export default {
 .float_l {
     float: left;
 }
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
 
 .view-wechat-detail {
     padding: 50px 80px;
@@ -108,16 +148,21 @@ export default {
 .wechat-data {
     margin: 30px auto;
     padding: 15px;
-    border: 30px solid #eff3f6;
+    border: 20px solid #eff3f6;
     background-color: #eff3f6;
-
-    & > .component_echarts {
+    outline: 1px solid #e7e9ea;
+    .row {
+        background-color: #fff;
+        padding: 20px;
+        margin-bottom: 30px;
+        outline: 1px solid #e7e9ea;
+    }
+    .component_echarts {
         display: inline-block;
         vertical-align: top;
-        margin-bottom: 30px;
+        margin-bottom: 15px;
         margin-right: 30px;
     }
-    
 }
 .wechat-header {
     overflow: hidden;
@@ -131,21 +176,19 @@ export default {
             background: #eff3f6;
             border-radius: 0;
             padding: 8px 16px;
-            color: gray;
+            color: #808080;
             border-bottom: 1px solid #e0e5e8;
         }
         .bd {
-            height: 120px;
+            // height: 120px;
             padding: 15px;
         }
     }
     .wx_info {
-        min-width: 400px;
+        min-width: 600px;
         margin-right: 15px;
-        .wechat-info__img {
-            img {
-                vertical-align: middle;
-            }
+        .wechat-info__img .img {
+            vertical-align: middle;
         }
         .wacht-info__text {
             vertical-align: top;
@@ -153,6 +196,41 @@ export default {
                 padding-left: 10px;
                 margin: 0;
                 line-height: 1.6;
+            }
+        }
+        .wacht-info__base_option {
+            margin-top: 15px;
+
+            .hd {
+                background-color: transparent;
+                padding-left: 0;
+            }
+            .bd {
+                padding-left: 0;
+                padding-bottom: 0;
+            }
+            li {
+                display: block;
+                line-height: 1.6;
+                color: #808080;
+
+                & > span {
+                    display: inline-block;
+                    width: 112px;
+                    text-align: right;
+                }
+                & > strong {
+                    font-weight: 400;
+                    color: #a7a4a4;
+
+                    &:hover {
+                        background-color: #eff3f6;
+                        color: #333;
+                    }
+                }
+            }
+            .tip_text {
+                color: #E6A23C;
             }
         }
     }
@@ -164,9 +242,6 @@ export default {
         ul,
         li {
             display: inline-block;
-            list-style: none;
-            padding: 0;
-            margin: 0;
             overflow: hidden;
             font-size: 0;
             margin-right: 15px;
@@ -190,7 +265,9 @@ export default {
         ul {
             margin: 0;
         }
-        li { vertical-align: middle; }
+        li {
+            vertical-align: middle;
+        }
     }
 }
 </style>

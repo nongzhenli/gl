@@ -78,9 +78,5 @@ export default {
 </script>
 
 <style scoped>
-.component_echarts {
-    display: inline-block;
-    vertical-align: top;
-    margin-bottom: 30px;
-}
+
 </style>

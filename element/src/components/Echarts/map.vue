@@ -1,7 +1,7 @@
 <template>
     <div class="component component_echarts component_echarts__map">
         <div :id="key"
-            style="width: 500px; height:360px;">
+            style="width: 560px; height:400px;">
         </div>
     </div>
 </template>
@@ -72,15 +72,17 @@ export default {
                 legend: { show: false },
                 visualMap: {
                     type: 'continuous',
+                    orient: 'horizontal',
                     min: 0,
                     max: 1000,
                     text: ['多', '少'],
                     seriesIndex: [0, 2],
                     dimension: 0,
                     realtime: true,
-                    left: 0,
-                    itemWidth: 18,
-                    itemHeight: 100,
+                    left: 50,
+                    bottom: 0,
+                    itemWidth: 16,
+                    itemHeight: 350,
                     calculable: true,
                     inRange: {
                         color: ['rgba(159,205,253,0.50)', '#60ACFC'],
@@ -97,7 +99,8 @@ export default {
                     type: "map",
                     mapType: "china",
                     left: '50',
-                    width: '80%',
+                    top: '30',
+                    width: '70%',
                     roam: true,
                     mapValueCalculation: "sum",
                     zoom: 1,
@@ -135,9 +138,4 @@ export default {
 </script>
 
 <style scoped>
-.component_echarts {
-    display: inline-block;
-    vertical-align: top;
-    margin-bottom: 30px;
-}
 </style>
