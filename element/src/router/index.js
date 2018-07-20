@@ -137,13 +137,20 @@ export const constantRouterMap = [
                 name: 'WechatDetail',
                 hidden: true,
                 component: () => import('@/views/wechat/detail'),
-                meta: { title: '详情页' }
+                meta: { title: '详情' }
             },
             {   // 创建营销活动
                 path: 'create',
                 name: 'WechatCreate',
                 component: () => import('@/views/tree/index'),
                 meta: { title: '公众号接入', page: 'create' }
+            },
+            {   // 公共号自定义菜单
+                path: 'detail/menu/:id(\\d+)',
+                name: 'WechatMenu',
+                hidden: true,
+                component: () => import('@/views/wechat/menu'),
+                meta: { title: '公众号自定义菜单', page: 'menu' }
             }
         ]
     },

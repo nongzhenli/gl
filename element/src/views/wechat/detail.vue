@@ -9,6 +9,7 @@
                     <div class="wechat-info__img display_ib font_size_0">
                         <img width="80"
                             height="80"
+                            class="display_ib"
                             src="http://wx.qlogo.cn/mmopen/9MS2zuo1Gianicic2ZrV80ITJwKo38QQub4qS6Y6C2clTjjia2f0RpbkX9fqHwXAFp8pDEN4ic3UicYpnIujbhHsnfp6bEoD766ibqia/0"
                             alt="">
                     </div>
@@ -60,7 +61,8 @@
                             <a href="javascirpt:void(0)">素材管理</a>
                         </li>
                         <li>
-                            <a href="javascirpt:void(0)">自定义菜单</a>
+                            <!-- <a href="/">自定义菜单</a> -->
+                            <router-link :to="'menu/'+ this.$route.params.id">自定义菜单</router-link>
                         </li>
                         <li>
                             <a href="javascirpt:void(0)">自动回复</a>
@@ -206,8 +208,9 @@ li {
                 padding-left: 0;
             }
             .bd {
-                padding-left: 0;
-                padding-bottom: 0;
+                background-color: #eff3f6a8;
+                border: 1px solid #e0e5e8;
+                border-top: 0;
             }
             li {
                 display: block;
@@ -222,15 +225,11 @@ li {
                 & > strong {
                     font-weight: 400;
                     color: #a7a4a4;
-
-                    &:hover {
-                        background-color: #eff3f6;
-                        color: #333;
-                    }
+                    font-family: Helvetica Neue;
                 }
             }
             .tip_text {
-                color: #E6A23C;
+                color: #e6a23c;
             }
         }
     }
