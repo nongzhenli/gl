@@ -5,7 +5,7 @@
             <span class="sub-text">若近期开启过吸粉活动，请确认吸粉活动已经结束，否则切勿修改菜单，以免影响吸粉活动进行。</span>
         </div>
         <main class="wechat-menu__body">
-
+            
         </main>
     </div>
 </template>
@@ -25,7 +25,7 @@ export default {
 <style lang="less" scoped>
 // 自定义菜单容器
 .view-wechat__menu {
-    padding: 50px 80px;
+    padding: 50px 60px;
 }
 
 // 头部提示

@@ -3,6 +3,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 /* Layout */
 import Layout from '../views/layout/Layout'
+import LayoutWx from '../views/layout/LayoutWx'
+
 /**
 *当设置 true 的时候该路由不会再侧边栏出现 如401，login等页面，或者如一些编辑页面/edit/1
 hidden: true // (默认 false)
@@ -95,26 +97,45 @@ export const constantRouterMap = [
                 meta: { title: '公众号列表' }
             },
             {   // 微信公众号详情页
-                path: 'detail/:id(\\d+)',
-                name: 'WechatDetail',
+                path: 'detail',
+                redirect: '/wechat/list',
                 hidden: true,
-                component: () => import('@/views/wechat/detail'),
-                meta: { title: '详情',  page: 'detail' }
+                component: LayoutWx,
+                children: [
+                    {   // 微信公众号详情页
+                        path: ':id(\\d+)',
+                        name: 'WechatDetail',
+                        hidden: true,
+                        component: () => import('@/views/wechat/detail'),
+                        meta: { title: '详情', page: 'detail' },
+                    },
+                    {   // 公共号自定义菜单
+                        path: 'menu/:id(\\d+)',
+                        name: 'WechatMenu',
+                        hidden: true,
+                        component: () => import('@/views/wechat/menu'),
+                        meta: { 
+                            title: '公众号自定义菜单', 
+                            // 填写完整的路由地址
+                            page: 'menu', parent: "/wecaht/detail/:id"
+                        }
+                    },
+                ]
             },
-            {   // 公共号自定义菜单
-                path: 'detail/menu/:id(\\d+)',
-                name: 'WechatMenu',
-                hidden: true,
-                component: () => import('@/views/wechat/menu'),
-                meta: { title: '公众号自定义菜单', page: 'menu', parent: "detail/:id" }
-            },
+            // {   // 公共号自定义菜单
+            //     path: 'detail/menu/:id(\\d+)',
+            //     name: 'WechatMenu',
+            //     hidden: true,
+            //     component: () => import('@/views/wechat/menu'),
+            //     meta: { title: '公众号自定义菜单', page: 'menu', parent: "detail/:id" }
+            // },
             {   // 创建营销活动
                 path: 'create',
                 name: 'WechatCreate',
                 component: () => import('@/views/tree/index'),
                 meta: { title: '公众号接入', page: 'create' }
             },
-            
+
         ]
     },
 
