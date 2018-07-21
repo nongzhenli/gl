@@ -37,6 +37,9 @@ export default {
                 matched = [{ path: '/dashboard', meta: { title: '起始页' } }].concat(matched)
             }
             this.levelList = matched
+            console.log(this.levelList);
+            console.log(matched.length);
+
         }
     }
 }

@@ -39,44 +39,6 @@ export const constantRouterMap = [
             component: () => import('@/views/dashboard/index')
         }]
     },
-
-    {
-        path: '/example',
-        component: Layout,
-        redirect: '/example/table',
-        name: 'Example',
-        hidden: true,
-        meta: { title: 'Example', icon: 'example' },
-        children: [
-            {
-                path: 'table',
-                name: 'Table',
-                component: () => import('@/views/table/index'),
-                meta: { title: 'Table', icon: 'table' }
-            },
-            {
-                path: 'tree',
-                name: 'Tree',
-                component: () => import('@/views/tree/index'),
-                meta: { title: 'Tree', icon: 'tree' }
-            }
-        ]
-    },
-
-    {
-        path: '/form',
-        hidden: true,
-        component: Layout,
-        children: [
-            {
-                path: 'index',
-                name: 'Form',
-                component: () => import('@/views/form/index'),
-                meta: { title: 'Form', icon: 'form' }
-            }
-        ]
-    },
-
     /**
      * 营销活动模块路由地址
      */
@@ -130,14 +92,21 @@ export const constantRouterMap = [
                 path: 'list',
                 name: 'WechatList',
                 component: () => import('@/views/wechat/index'),
-                meta: { title: '公众号列表'}
+                meta: { title: '公众号列表' }
             },
             {   // 微信公众号详情页
                 path: 'detail/:id(\\d+)',
                 name: 'WechatDetail',
                 hidden: true,
                 component: () => import('@/views/wechat/detail'),
-                meta: { title: '详情' }
+                meta: { title: '详情',  page: 'detail' }
+            },
+            {   // 公共号自定义菜单
+                path: 'detail/menu/:id(\\d+)',
+                name: 'WechatMenu',
+                hidden: true,
+                component: () => import('@/views/wechat/menu'),
+                meta: { title: '公众号自定义菜单', page: 'menu', parent: "detail/:id" }
             },
             {   // 创建营销活动
                 path: 'create',
@@ -145,16 +114,25 @@ export const constantRouterMap = [
                 component: () => import('@/views/tree/index'),
                 meta: { title: '公众号接入', page: 'create' }
             },
-            {   // 公共号自定义菜单
-                path: 'detail/menu/:id(\\d+)',
-                name: 'WechatMenu',
-                hidden: true,
-                component: () => import('@/views/wechat/menu'),
-                meta: { title: '公众号自定义菜单', page: 'menu' }
-            }
+            
         ]
     },
 
+    /**
+    * 表单模块路由地址
+    */
+    {
+        path: '/form',
+        component: Layout,
+        children: [
+            {
+                path: 'index',
+                name: 'Form',
+                component: () => import('@/views/form/index'),
+                meta: { title: '表单制作', icon: 'icon-biaodan' }
+            }
+        ]
+    },
     { path: '*', redirect: '/404', hidden: true }
 ]
 
