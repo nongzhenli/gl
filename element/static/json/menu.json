@@ -1,0 +1,53 @@
+{
+    "version": 548916872,
+    "name": "test menu",
+    "button_list": [
+        {
+            "name": "测试文章",
+            "type": 0,
+            "act_list": [],
+            "sub_button_list": [
+                {
+                    "name": "图片测试",
+                    "act_list": [
+                        {
+                            "type": 5,
+                            "value": "100000004"
+                        }
+                    ],
+                    "type": 1,
+                    "sub_button_list": []
+                },
+                {
+                    "name": "小程序",
+                    "act_list": [
+                        {
+                            "type": 13,
+                            "value": "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzIxNzczOTI4MQ==#wechat_redirect",
+                            "weapp_data": {
+                                "appid": "wx85f622fd9c1c3c2d",
+                                "path": "pages/index/index",
+                                "service_type": "0"
+                            }
+                        }
+                    ],
+                    "type": 5,
+                    "sub_button_list": []
+                },
+                {
+                    "name": "跳转网页测试",
+                    "act_list": [
+                        {
+                            "type": 6,
+                            "value": "http://mp.weixin.qq.com/s?__biz=MzIxNzczOTI4MQ==&mid=100000004&idx=1&sn=1c265dd5b014dbdd70eddd3300a067d5&chksm=17f4787a2083f16c29c0ecaea8a31643009f6a1797f870b7d823907debe484aa8c5099392076&scene=18#wechat_redirect",
+                            "name": "",
+                            "title": ""
+                        }
+                    ],
+                    "type": 2,
+                    "sub_button_list": []
+                }
+            ]
+        }
+    ]
+}

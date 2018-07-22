@@ -67,6 +67,17 @@ a:hover {
     }
 }
 
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+p {
+    margin: 0;
+}
+
 //main-container全局样式
 .app-main {
     min-height: 100%;
