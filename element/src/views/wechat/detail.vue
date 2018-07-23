@@ -230,6 +230,7 @@ li {
             }
             .tip_text {
                 color: #e6a23c;
+                margin: 15px auto;
             }
         }
     }

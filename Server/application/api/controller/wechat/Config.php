@@ -84,9 +84,9 @@ class Config extends BaseWechat
 
         // 普通关注事件、未关注扫描带参数二维码事件
         if ($event == "subscribe" || $event == "SCAN") {
-            if(self::$wx_id == 1){
+            if (self::$wx_id == 1) {
                 $weObj->text("够品质/够实力/够美好!\n在线打卡签到，点击链接：<a href='https://jinshuju.net/f/bXyUsD'>https://jinshuju.net/f/bXyUsD</a>")->reply();
-            }elseif(self::$wx_id == 3) {
+            } elseif (self::$wx_id == 3) {
                 $weObj->text("与你共度趣味亲子时光！\n够品质 / 够实力 / 够美好！!\n在线打卡签到，点击链接：<a href='https://jinshuju.net/f/bXyUsD'>https://jinshuju.net/f/bXyUsD</a>")->reply();
             }
         }
@@ -113,9 +113,9 @@ class Config extends BaseWechat
 
         $weObj = new WechatSdk($options);
 
-        if(self::$wx_id == 3){
+        if (self::$wx_id == 3) {
             $url = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUyNzQ5NTUwMQ==&scene=126#wechat_redirect";
-        }elseif (self::$wx_id == 1) {
+        } elseif (self::$wx_id == 1) {
             $url = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzI1MjUxMjUzMw==&scene=126#wechat_redirect";
         }
 
@@ -125,7 +125,38 @@ class Config extends BaseWechat
                 0 => array(
                     "type" => "view",
                     "name" => "往期活动回看",
-                    "url" => $url
+                    "url" => 'https://www.baidu.com',
+                ),
+            ),
+        );
+        $result = $weObj->createMenu($data);
+        return $result;
+    }
+
+    // 测试自定义菜单
+    public static function createTestMenu($wechat_id = 0)
+    {
+        if (!$wechat_id) {
+            throw new Exception('公众号开发信息不能为空！');
+        }
+        // 先获取公众号微信配置信息
+        $config = self::get($wechat_id);
+        // 配置信息
+        $options = array(
+            'appid' => $config['app_id'],
+            'appsecret' => $config['app_secret'],
+            'token' => $config['token'],
+            'encodingaeskey' => $config['encodingaeskey'],
+        );
+        $weObj = new WechatSdk($options);
+
+        // 创建自定义菜单
+        $data = array(
+            "button" => array(
+                0 => array(
+                    "type" => "view",
+                    "name" => "往期活动回看",
+                    "url" => 'https://www.baidu.com',
                 ),
             ),
         );

@@ -28,6 +28,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         clientLogLevel: 'warning',
         historyApiFallback: true,
         hot: true,
+        // 设置页面引入
+        inline: true,
         compress: true,
         host: HOST || config.dev.host,
         port: PORT || config.dev.port,
