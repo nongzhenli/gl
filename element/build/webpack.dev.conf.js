@@ -21,6 +21,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
     },
     // cheap-module-eval-source-map is faster for development
+    // 【可以尝试注释下行配置，加快webpack 编译速度】
     devtool: config.dev.devtool,
 
     // these devServer options should be customized in /config/index.js
@@ -57,7 +58,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
             template: 'index.html',
             inject: true,
             favicon: resolve('favicon.ico'),
-            title: 'vue-element-admin'
+            title: '麦琪微信营销后台管理系统'
         }),
     ]
 })

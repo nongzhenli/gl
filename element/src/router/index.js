@@ -122,13 +122,6 @@ export const constantRouterMap = [
                     },
                 ]
             },
-            // {   // 公共号自定义菜单
-            //     path: 'detail/menu/:id(\\d+)',
-            //     name: 'WechatMenu',
-            //     hidden: true,
-            //     component: () => import('@/views/wechat/menu'),
-            //     meta: { title: '公众号自定义菜单', page: 'menu', parent: "detail/:id" }
-            // },
             {   // 创建营销活动
                 path: 'create',
                 name: 'WechatCreate',

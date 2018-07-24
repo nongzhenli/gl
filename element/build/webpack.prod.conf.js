@@ -69,7 +69,7 @@ const webpackConfig = merge(baseWebpackConfig, {
             template: 'index.html',
             inject: true,
             favicon: resolve('favicon.ico'),
-            title: 'vue-element-admin',
+            title: '麦琪微信营销后台管理系统',
             minify: {
                 removeComments: true,
                 collapseWhitespace: true,
