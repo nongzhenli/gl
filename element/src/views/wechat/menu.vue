@@ -85,6 +85,7 @@
                                         title="最多添加3个一级菜单"
                                         draggable="false"
                                         @click.stop="menuTab(0, idx)">
+                                        <i class="icon_menu_dot js_icon_menu_dot dn" v-show="menuOptionsJson[idx].sub_button_list.length > 0"></i>
                                         <span class="js_l1Title">菜单名称</span>
                                     </a>
                                     <!-- 子菜单 -->
@@ -92,6 +93,7 @@
                                         v-show="isCurrent(idx)">
                                         <ul class="sub_pre_menu_list">
                                             <li class="js_addMenuBox"
+                                                :class="{current: subIsCurrent(sub_idx)}"
                                                 v-for="(sub_item, sub_idx) in menuOptionsJson[idx].sub_button_list"
                                                 :key="sub_idx">
                                                 <a href="javascript:void(0);"
@@ -105,10 +107,9 @@
                                                 </a>
                                             </li>
                                             <li class="js_addMenuBox"
-                                                v-if="menuOptionsJson[idx].sub_button_list.length < 5">
+                                                v-show="menuOptionsJson[idx].sub_button_list.length < 5">
                                                 <a href="javascript:void(0);"
                                                     class="jsSubView js_addL2Btn"
-                                                    :class="{current: subIsCurrent(sub_idx)}"
                                                     title="最多添加5个子菜单"
                                                     draggable="false"
                                                     @click.stop="menuAdd($event, 1, idx)">
@@ -132,7 +133,7 @@
                                     @click.stop="menuAdd($event, 0)">
                                     <i class="icon14_menu_add"></i>
                                     <span class="js_l1Title"
-                                        v-if="menuOptionsJson.length == 0">添加菜单</span>
+                                        v-show="menuOptionsJson.length == 0">添加菜单</span>
                                 </a>
                             </li>
                         </ul>
@@ -182,7 +183,7 @@ export default {
             return false;
         },
         // 子菜单判断当前 【待优化】
-        subIsCurrent(idx){
+        subIsCurrent(idx) {
             if (idx == this.subCurrentIdx) {
                 return true;
             }
@@ -220,9 +221,9 @@ export default {
         },
         // 菜单切换
         menuTab(typeIdx, _idx) {
-            if(typeIdx == 0){
+            if (typeIdx == 0) {
                 this.currentIdx = _idx;
-            }else if(typeIdx == 1){
+            } else if (typeIdx == 1) {
                 this.subCurrentIdx = _idx;
             }
         }
@@ -393,16 +394,6 @@ export default {
             a {
                 padding: 0 0.5em;
             }
-            &.current {
-                background-color: #fff;
-                border: 1px solid #44b549;
-                position: relative;
-                z-index: 1;
-                line-height: 45px;
-                a {
-                    color: #44b549;
-                }
-            }
             &:hover {
                 background-color: #eee;
                 border: 1px solid #d0d0d0;
@@ -411,6 +402,16 @@ export default {
 
                 .sub_pre_menu_inner {
                     border-top: 0;
+                }
+            }
+            &.current {
+                background-color: #fff;
+                border: 1px solid #44b549;
+                position: relative;
+                z-index: 1;
+                line-height: 45px;
+                a {
+                    color: #44b549;
                 }
             }
         }

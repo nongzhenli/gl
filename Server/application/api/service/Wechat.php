@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-18 16:55:07
+ * @Last Modified time: 2018-07-25 15:39:56
  */
 namespace app\api\service;
 
@@ -313,7 +313,7 @@ class Wechat
             return;
         }
 
-        // // 取消关注事件
+        // 取消关注事件
         if ($event == "unsubscribe") {
             $act_id = 2;
             // 获取用户表记录
@@ -333,7 +333,7 @@ class Wechat
             return;
         }
 
-        // // 已关注扫描带参数二维码事件
+        // 已关注扫描带参数二维码事件
         if ($event == "SCAN") {
             // TODO
         }
@@ -520,7 +520,6 @@ class Wechat
      * followEventUnified() 集中处理用户关注业务
      * @param string    $type  事件类型，此处针对：subscribe关注、unsubscribe取消关注、SCAN已关注扫码
      * @param string    $key   参数，仅扫带参数二维码存在值，否则空对象
-     * @param string    $type  事件类型，此处针对：subscribe关注、unsubscribe取消关注、SCAN已关注扫码
      */
     public static function followEventUnified($type = 0, $key = null)
     {
