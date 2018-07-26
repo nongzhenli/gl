@@ -57,6 +57,8 @@ Route::rule('admin/:version/marketing/get/lottery', 'admin/:version.Marketing/ge
 // 公众号
 Route::rule('admin/:version/wechat/list', 'admin/:version.Wechat/getList', 'GET');
 Route::rule('admin/:version/wechat/detail', 'admin/:version.Wechat/getDetail', 'GET');
+Route::rule('admin/:version/wechat/getconf/:wx_id', 'admin/:version.Wechat/getConfig', 'GET');
+Route::rule('admin/:version/wechat/setconf/:wx_id', 'admin/:version.Wechat/setConfig', 'GET|POST');
 
 
 

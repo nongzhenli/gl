@@ -90,6 +90,7 @@ class Config extends BaseWechat
                 $weObj->text("与你共度趣味亲子时光！\n够品质 / 够实力 / 够美好！!\n在线打卡签到，点击链接：<a href='https://jinshuju.net/f/bXyUsD'>https://jinshuju.net/f/bXyUsD</a>")->reply();
             }
         }
+        
     }
 
     /**

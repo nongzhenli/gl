@@ -247,6 +247,54 @@ CREATE TABLE IF NOT EXISTS `wechat_menu` (
   `create_by` int(11) DEFAULT NULL COMMENT '创建操作人id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='微信公众号自定义菜单' AUTO_INCREMENT=1;
+
+----------------------------------------------------------
+--
+-- 表的结构 `wechat_rule`
+--
+CREATE TABLE IF NOT EXISTS `wechat_rule` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` char(20) NOT NULL DEFAULT '' COMMENT '规则名称',
+  `wx_id` int(10) NOT NULL DEFAULT '0' COMMENT '所属公众号id',
+  `last_time` int(11) DEFAULT NULL COMMENT '最近一次更新时间',
+  `create_time` int(11) NOT NULL COMMENT '录入时间',
+  `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
+  `create_by` int(10) DEFAULT NULL COMMENT '发布者id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='自动回复_规则表' AUTO_INCREMENT=1 ;
+
+----------------------------------------------------------
+--
+-- 表的结构 `wechat_keywords`
+--
+CREATE TABLE IF NOT EXISTS `wechat_keywords` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `keyword` char(20) NOT NULL DEFAULT '' COMMENT '关键词',
+  `rule_id` int(10) NOT NULL DEFAULT '0' COMMENT '所属规则id',
+  `last_time` int(11) DEFAULT NULL COMMENT '最近一次更新时间',
+  `create_time` int(11) NOT NULL COMMENT '录入时间',
+  `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
+  `create_by` int(10) DEFAULT NULL COMMENT '发布者',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='自动回复_关键词表' AUTO_INCREMENT=1 ;
+
+----------------------------------------------------------
+--
+-- 表的结构 `wechat_replys`
+--
+CREATE TABLE IF NOT EXISTS `wechat_replys` (
+  `id` int(16) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `type` int(10) NOT NULL DEFAULT '1' COMMENT '回复内容类型type：1文本2图片3语音4视频5图文6音乐7链接8地图',
+  `rule_id` int(10) NOT NULL DEFAULT '0' COMMENT '所属规则id',
+  `json_str` VARCHAR(1024) DEFAULT '' COMMENT '回复内容，json字符串',
+  `last_time` int(11) DEFAULT NULL COMMENT '最近一次更新时间',
+  `create_time` int(11) NOT NULL COMMENT '录入时间',
+  `delete_time` int(11) DEFAULT NULL COMMENT '软删除日期',
+  `create_by` int(10) DEFAULT NULL COMMENT '发布者id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='自动回复_回复内容表' AUTO_INCREMENT=1 ;
+
+----------------------------------------------------------
 --
 --
 -- 限制表 `lottery_record`

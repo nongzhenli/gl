@@ -2,6 +2,8 @@
 namespace app\admin\controller\v1;
 
 use app\admin\model\Wechat as WechatModel;
+use app\admin\service\Wechat as WechatService;
+use think\Exception;
 
 class Wechat
 {
@@ -30,5 +32,23 @@ class Wechat
         );
         return $data;
     }
-    
+
+    // 获取公众号配置信息
+    public function getConfig($wx_id = 0)
+    {
+        if (!$wx_id) {
+            throw new Exception('公众号不存在！');
+        }
+        $result = (new WechatService())->get($wx_id);
+        if(!$result){
+            throw new Exception('公众号配置信息不存在！');
+        }
+        return $result;
+    }
+
+
+    // 公众号配置【自定义菜单、自动回复、关注回复、模板消息等】
+    public function setConfig($wx_id = 0) {
+        
+    }
 }
