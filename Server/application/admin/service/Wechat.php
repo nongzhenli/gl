@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-25 15:39:56
+ * @Last Modified time: 2018-07-27 13:06:45
  */
 namespace app\admin\service;
 
@@ -20,6 +20,7 @@ class Wechat extends BaseWechat
         if (!$wx_id) {
             throw new Exception('公众号开发信息不能为空！');
         }
+        self::$wx_id = $wx_id;
 
         // 获取微信配置信息
         $wechatConfigArr = WechatModel::getWechat($wx_id);

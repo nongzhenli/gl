@@ -166,6 +166,12 @@ export default {
 </script>
 
 <style lang="less">
+.thead-row__header {
+    th {
+        color: #9a9a9a;
+        font-weight: 400;
+    }
+}
 </style>
 
 

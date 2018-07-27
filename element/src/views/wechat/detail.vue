@@ -61,11 +61,10 @@
                             <a href="javascirpt:void(0)">素材管理</a>
                         </li>
                         <li>
-                            <!-- <a href="/">自定义菜单</a> -->
                             <router-link :to="'menu/'+ this.$route.params.id">自定义菜单</router-link>
                         </li>
                         <li>
-                            <a href="javascirpt:void(0)">自动回复</a>
+                            <router-link :to="'smartreply/'+ this.$route.params.id">自动回复</router-link>
                         </li>
                     </ul>
                 </div>

@@ -20,10 +20,5 @@ export default {
 </script>
 
 <style lang="less">
-.el-table__header-wrapper {
-    .thead-row__header {
-        color: #333;
-    }
-}
 </style>
 

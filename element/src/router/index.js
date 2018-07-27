@@ -120,6 +120,36 @@ export const constantRouterMap = [
                             page: 'menu', parent: "/wecaht/detail/:id"
                         }
                     },
+                    {   // 公共号关键词回复
+                        path: 'smartreply/:id(\\d+)',
+                        name: 'WechatMenu',
+                        hidden: true,
+                        component: () => import('@/views/wechat/smartreply'),
+                        meta: { 
+                            title: '关键词回复规则', 
+                            page: 'smartreply', parent: "/wecaht/detail/:id"
+                        }
+                    },
+                    {   // 公共号收到消息回复
+                        path: 'autoreply/:id(\\d+)',
+                        name: 'WechatMenu',
+                        hidden: true,
+                        component: () => import('@/views/wechat/menu'),
+                        meta: { 
+                            title: '收到消息回复规则', 
+                            page: 'autoreply', parent: "/wecaht/detail/:id"
+                        }
+                    },
+                    {   // 公共号被关注回复
+                        path: 'followreply/:id(\\d+)',
+                        name: 'WechatMenu',
+                        hidden: true,
+                        component: () => import('@/views/wechat/menu'),
+                        meta: { 
+                            title: '被关注回复规则', 
+                            page: 'followreply', parent: "/wecaht/detail/:id"
+                        }
+                    },
                 ]
             },
             {   // 创建营销活动
