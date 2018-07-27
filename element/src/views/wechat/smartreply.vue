@@ -85,7 +85,7 @@
             <div class="data-add">
                 <div class="form-row__group">
                     <label class="form_row__title el-form-item__label">规则名称</label>
-                    <div class="form-row__input el-form-item__content">
+                    <div class="form-row__input el-form-item__content not_style">
                         <el-input placeholder="请输入内容"
                             clearable>
                         </el-input>
@@ -106,6 +106,12 @@
                                     value="2"></el-option>
                             </el-select>
                         </el-input>
+                    </div>
+                </div>
+                <div class="form-row__group">
+                    <label class="form_row__title el-form-item__label">回复内容</label>
+                    <div class="form-row__input el-form-item__content not_style">
+                        xxxx
                     </div>
                 </div>
                 <div class="form-row__group">
