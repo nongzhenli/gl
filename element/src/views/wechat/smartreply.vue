@@ -82,7 +82,43 @@
             <!-- 编辑数据 -->
             <div class="data-eidt"></div>
             <!-- 添加数据 -->
-            <div class="data-add"></div>
+            <div class="data-add">
+                <div class="form-row__group">
+                    <label class="form_row__title el-form-item__label">规则名称</label>
+                    <div class="form-row__input el-form-item__content">
+                        <el-input placeholder="请输入内容"
+                            clearable>
+                        </el-input>
+                    </div>
+                </div>
+                <div class="form-row__group">
+                    <label class="form_row__title el-form-item__label">关键词</label>
+                    <div class="form-row__input el-form-item__content">
+                        <el-input placeholder="请输入内容"
+                            v-model="input5"
+                            class="input-with-select">
+                            <el-select v-model="select"
+                                slot="prepend"
+                                placeholder="请选择">
+                                <el-option label="办匹配"
+                                    value="1"></el-option>
+                                <el-option label="全匹配"
+                                    value="2"></el-option>
+                            </el-select>
+                        </el-input>
+                    </div>
+                </div>
+                <div class="form-row__group">
+                    <label class="form_row__title el-form-item__label">回复方式</label>
+                    <div class="form-row__input el-form-item__content not_style">
+                        <el-radio v-model="radio"
+                            label="1">回复全部</el-radio>
+                        <el-radio v-model="radio"
+                            label="2">随机回复一条</el-radio>
+                    </div>
+                </div>
+
+            </div>
         </main>
     </div>
 </template>
@@ -91,40 +127,46 @@
 export default {
     data() {
         return {
-
-            tableData5: [{
-                id: '12987122',
-                name: '投票',
-                keywords: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333'
-            }, {
-                id: '12987123',
-                name: '免费',
-                keywords: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333'
-            }, {
-                id: '12987125',
-                name: '宝宝照	',
-                keywords: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333'
-            }, {
-                id: '12987126',
-                name: '孕妇照',
-                keywords: '江浙小吃、小吃零食',
-                desc: '荷兰优质淡奶，奶香浓而不腻',
-                address: '上海市普陀区真北路',
-                shop: '王小虎夫妻店',
-                shopId: '10333'
-            }]
+            input3: '',
+            input4: '',
+            input5: '',
+            select: '',
+            radio: '2',
+            tableData5: [
+                {
+                    id: '12987122',
+                    name: '投票',
+                    keywords: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }, {
+                    id: '12987123',
+                    name: '免费',
+                    keywords: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }, {
+                    id: '12987125',
+                    name: '宝宝照	',
+                    keywords: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }, {
+                    id: '12987126',
+                    name: '孕妇照',
+                    keywords: '江浙小吃、小吃零食',
+                    desc: '荷兰优质淡奶，奶香浓而不腻',
+                    address: '上海市普陀区真北路',
+                    shop: '王小虎夫妻店',
+                    shopId: '10333'
+                }
+            ]
         }
     }
 
@@ -231,6 +273,20 @@ export default {
             overflow: hidden;
             padding-top: 12px;
             line-height: 1.6;
+        }
+        .data-add .el-form-item__content {
+            display: block;
+            overflow: hidden;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e4e8eb;
+            &.not_style {
+                margin: 0;
+                border-bottom: 0;
+            }
+            .el-select .el-input {
+                width: 100px;
+            }
         }
     }
     .table-td__private {
