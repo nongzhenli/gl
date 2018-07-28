@@ -3,11 +3,13 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-27 13:06:45
+ * @Last Modified time: 2018-07-28 14:23:08
  */
 namespace app\admin\service;
 
 use app\admin\model\Wechat as WechatModel;
+use WechatSdk\Wechat as WechatSdk;
+
 class Wechat extends BaseWechat
 {
 
@@ -20,7 +22,7 @@ class Wechat extends BaseWechat
         if (!$wx_id) {
             throw new Exception('公众号开发信息不能为空！');
         }
-        self::$wx_id = $wx_id;
+        self::$base_wx_id = $wx_id;
 
         // 获取微信配置信息
         $wechatConfigArr = WechatModel::getWechat($wx_id);
@@ -33,7 +35,8 @@ class Wechat extends BaseWechat
         return $wechatConfigArr;
     }
 
-    public static function set($wx_id){
+    public static function set($wx_id)
+    {
         if (!$wx_id) {
             throw new Exception('公众号开发信息不能为空！');
         }
@@ -55,10 +58,10 @@ class Wechat extends BaseWechat
         // 公众号规则处理
         switch ($type) {
             case WechatSdk::MSGTYPE_TEXT:
-                self::handleTextMessage($wxSDKObj, $config['app_id'], $config['app_secret']);
+                // self::handleTextMessage($wxSDKObj, $config['app_id'], $config['app_secret']);
                 break;
             case WechatSdk::MSGTYPE_EVENT:
-                self::handleEventMessage($wxSDKObj);
+                // self::handleEventMessage($wxSDKObj);
                 break;
             default:
                 return true;

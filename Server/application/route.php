@@ -59,11 +59,12 @@ Route::rule('admin/:version/wechat/list', 'admin/:version.Wechat/getList', 'GET'
 Route::rule('admin/:version/wechat/detail', 'admin/:version.Wechat/getDetail', 'GET');
 Route::rule('admin/:version/wechat/getconf/:wx_id', 'admin/:version.Wechat/getConfig', 'GET');
 Route::rule('admin/:version/wechat/setconf/:wx_id', 'admin/:version.Wechat/setConfig', 'GET|POST');
+Route::rule('admin/:version/wechat/getsmartrule', 'admin/:version.Wechat/getSmartRule', 'GET');  // 关键字回复规则
 
 
 
 /**
- * 微信公众号接入开发配置口
+ * 微信公众号接入开发配置口 【待更新替换】
  */
 Route::rule('api/:version/get/:wechat_id', 'api/:version.Config/get', 'GET|POST');
 Route::rule('api/:version/set/:wechat_id', 'api/:version.Config/set', 'GET|POST');

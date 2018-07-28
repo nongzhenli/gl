@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:02:38
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-04 12:24:32
+ * @Last Modified time: 2018-07-28 14:11:11
  */
 namespace app\admin\service;
 
@@ -15,8 +15,8 @@ use app\admin\model\CommonImages as CommonImagesModel;
 
 class BaseWechat
 {
-    protected $wx_id;
-    protected $act_id;
+    protected static $base_wx_id;
+    protected static $base_act_id;
 
     // 加密
     public static function passport_encrypt($txt, $key = 'www.glagbn.com')

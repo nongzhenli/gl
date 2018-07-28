@@ -20,7 +20,8 @@
             </div>
         </header>
         <main class="view-wechat-page__body">
-            <div class="data-list">
+            <div class="rule-list"
+                v-show="!is_rule_add">
                 <div class="top-header clearfix">
                     <div class="search-row float_l">
                         <el-input placeholder="搜索关键词/规则名称"
@@ -31,11 +32,12 @@
                     </div>
                     <div class="search-row float_r">
                         <el-button type="success"
-                            size="medium ">添加回复</el-button>
+                            size="medium "
+                            @click="ruleDataSet">添加回复</el-button>
                     </div>
                 </div>
                 <div class="table-body">
-                    <el-table :data="tableData5"
+                    <el-table :data="smartReplyList"
                         style="width: 100%"
                         header-row-class-name="thead-row__header"
                         cell-class-name="table-td__private">
@@ -45,7 +47,7 @@
                                     inline
                                     class="demo-table-expand">
                                     <el-form-item label="关键词">
-                                        <span>{{ props.row.keywords }}</span>
+                                        <span v-for="keywords of props.row.keywords">{{ keywords.key_name }}、</span>
                                         <i class="keywords_name_status">(半匹配)</i>
                                     </el-form-item>
                                     <el-form-item label="回复内容">
@@ -60,8 +62,10 @@
                         <el-table-column label="规则名称"
                             prop="name">
                         </el-table-column>
-                        <el-table-column label="关键词"
-                            prop="keywords">
+                        <el-table-column label="关键词">
+                            <template slot-scope="props">
+                                <span v-for="keywords of props.row.keywords">{{ keywords.key_name }}、</span>
+                            </template>
                         </el-table-column>
                         <el-table-column label="回复内容"
                             prop="desc">
@@ -80,13 +84,15 @@
                 </div>
             </div>
             <!-- 编辑数据 -->
-            <div class="data-eidt"></div>
+            <div class="rule-eidt"></div>
             <!-- 添加数据 -->
-            <div class="data-add">
+            <div class="rule-add"
+                v-show="is_rule_add">
                 <div class="form-row__group">
                     <label class="form_row__title el-form-item__label">规则名称</label>
                     <div class="form-row__input el-form-item__content not_style">
                         <el-input placeholder="请输入内容"
+                            v-model="rule_data.name"
                             clearable>
                         </el-input>
                     </div>
@@ -95,12 +101,12 @@
                     <label class="form_row__title el-form-item__label">关键词</label>
                     <div class="form-row__input el-form-item__content">
                         <el-input placeholder="请输入内容"
-                            v-model="input5"
+                            v-model="rule_data.keywords.name"
                             class="input-with-select">
-                            <el-select v-model="select"
+                            <el-select v-model="rule_data.keywords.statu"
                                 slot="prepend"
                                 placeholder="请选择">
-                                <el-option label="办匹配"
+                                <el-option label="半匹配"
                                     value="1"></el-option>
                                 <el-option label="全匹配"
                                     value="2"></el-option>
@@ -111,33 +117,54 @@
                 <div class="form-row__group">
                     <label class="form_row__title el-form-item__label">回复内容</label>
                     <div class="form-row__input el-form-item__content not_style">
-                        xxxx
+                        <el-row>
+                            <div class="msg_sender_wrp"
+                                v-show="is_msg_send_button">
+                                <ul class="clearfix">
+                                    <li class="msg-sender__tab_appmsg">图文消息</li>
+                                    <li class="msg-sender__tab_text">文字</li>
+                                    <li class="msg-sender__tab_img">图片</li>
+                                    <li class="msg-sender__tab_audio">语音</li>
+                                    <li class="msg-sender__tab_video">视频</li>
+                                </ul>
+                            </div>
+                        </el-row>
+
                     </div>
                 </div>
                 <div class="form-row__group">
                     <label class="form_row__title el-form-item__label">回复方式</label>
                     <div class="form-row__input el-form-item__content not_style">
-                        <el-radio v-model="radio"
-                            label="1">回复全部</el-radio>
-                        <el-radio v-model="radio"
-                            label="2">随机回复一条</el-radio>
+                        <el-radio-group v-model="rule_data.type"
+                            class="reply_all__type">
+                            <el-radio label="1">回复全部</el-radio>
+                            <el-radio label="2">随机回复一条</el-radio>
+                        </el-radio-group>
                     </div>
                 </div>
 
+                <div class="form-row__group form-row__group-btn">
+                    <el-row class="text_align_c">
+                        <el-button type="success"
+                            small="small"
+                            @click="ruleDataSet('new')"
+                            native-type="button">保存</el-button>
+                        <el-button plain
+                            small="small"
+                            native-type="button"
+                            @click="ruleDataSet('cancel')">取消</el-button>
+                    </el-row>
+                </div>
             </div>
         </main>
     </div>
 </template>
 
 <script>
+import { getWxSmartReply } from '@/api/wechat'
 export default {
     data() {
         return {
-            input3: '',
-            input4: '',
-            input5: '',
-            select: '',
-            radio: '2',
             tableData5: [
                 {
                     id: '12987122',
@@ -172,10 +199,55 @@ export default {
                     shop: '王小虎夫妻店',
                     shopId: '10333'
                 }
-            ]
+            ],
+            smartReplyList: [],
+            is_rule_add: false,
+            is_msg_send_button: true,
+            
+            rule_data: {
+                name: '',
+                keywords: [
+                    {
+                        name: '',
+                        statu: '',
+                    }
+                    // 可多个关键字
+                ],
+                contents: [
+                    {
+                        type: "",
+                        text: ""
+                    },
+                    // 可多条内容
+                ],
+                type: "2"
+            },
         }
-    }
+    },
+    created() {
+        this.fetchData();
+    },
+    methods: {
+        fetchData() {
+            this.listLoading = true
+            getWxSmartReply({ wx_id: this.$route.params.id }).then(response => {
+                this.smartReplyList = response.data
+                this.listLoading = false
+            })
+        },
+        // 规则弹层集中处理函数
+        ruleDataSet(type) {
+            if (type == 'save') {
+                this.createRulePost();
+            }
+            this.is_rule_add = !this.is_rule_add;
+        },
+        // 创建规则请求
+        createRulePost() {
+            console.log('xxx')
+        }
 
+    },
 }
 </script>
 
@@ -265,6 +337,37 @@ export default {
             }
         }
     }
+
+    .msg_sender_wrp {
+        position: relative;
+        top: 0;
+        left: 5px;
+        z-index: 3;
+        width: 700px;
+        background: #ffffff;
+        margin-top: 6px;
+        box-shadow: 0 1px 20px 0 #e4e8eb;
+        border-radius: 2px;
+        li {
+            display: inline-block;
+            padding: 0 20px;
+            cursor: pointer;
+            &:hover {
+                color: #1aad19;
+            }
+        }
+    }
+    .msg_sender__button {
+        // &:hover + .msg_sender_wrp {
+        //     display: block;
+        // }
+    }
+    .form-row__group {
+        margin: 15px auto;
+        &.form-row__group-btn {
+            margin-top: 80px;
+        }
+    }
 }
 </style>
 <style lang="less">
@@ -280,11 +383,13 @@ export default {
             padding-top: 12px;
             line-height: 1.6;
         }
-        .data-add .el-form-item__content {
+        .rule-add .el-form-item__content {
             display: block;
             overflow: hidden;
             margin-bottom: 20px;
             padding-bottom: 20px;
+            padding-top: 0;
+            line-height: 40px;
             border-bottom: 1px solid #e4e8eb;
             &.not_style {
                 margin: 0;
@@ -294,12 +399,24 @@ export default {
                 width: 100px;
             }
         }
+        .rule-add .el-form-item__label {
+            padding-right: 30px;
+        }
     }
     .table-td__private {
         padding: 17px 0;
     }
     .thead-row__header th {
         background-color: #f6f8f9;
+    }
+    .reply_all__type {
+        .el-radio__input.is-checked .el-radio__inner {
+            border-color: #1aad19;
+            background: #1aad19;
+        }
+        .el-radio__input.is-checked + .el-radio__label {
+            color: #1aad19;
+        }
     }
 }
 </style>

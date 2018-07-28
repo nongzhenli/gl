@@ -19,15 +19,15 @@ export function getWechatDetail(params) {
 }
 
 // 公众号关键词回复规则
-export function WechatSmartReply(params) {
+export function getWxSmartReply(params) {
     return request({
-        url: '/wechat/smartreply',
+        url: '/wechat/getsmartrule',
         method: 'get',
         params
     })
 }
 // 公众号收到消息回复规则
-export function WechatAutoReply(params) {
+export function getWxAutoReply(params) {
     return request({
         url: '/wechat/autoreply',
         method: 'get',
@@ -35,7 +35,7 @@ export function WechatAutoReply(params) {
     })
 }
 // 公众号被关注回复规则
-export function WechatFollowReply(params) {
+export function getWxFollowReply(params) {
     return request({
         url: '/wechat/followreply',
         method: 'get',

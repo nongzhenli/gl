@@ -1,6 +1,6 @@
 <template>
-    <div class="app-container view-wechat-detail">
-
+    <div class="app-container view-wechat-detail"
+        v-loading.body="listLoading">
         <!-- 微信基本信息区域 -->
         <div class="wechat-header">
             <div class="wx_box wx_info float_l">
@@ -14,8 +14,8 @@
                             alt="">
                     </div>
                     <div class="wacht-info__text display_ib">
-                        <p>I &nbsp;&nbsp;D：1</p>
-                        <p>名称：南宁麦琪儿童摄影</p>
+                        <p>I &nbsp;&nbsp;D：{{wxData.options.id}}</p>
+                        <p>名称：{{wxData.options.name}}</p>
                         <p>类型：认证服务号</p>
                     </div>
                     <div class="wacht-info__base_option">
@@ -24,25 +24,23 @@
                             <ul>
                                 <li>
                                     <span>开发者ID：</span>
-                                    <strong>wxa97eb027b796594e</strong>
+                                    <strong>{{wxData.options.app_id}}</strong>
                                 </li>
                                 <li>
                                     <span>开发者密码：</span>
-                                    <strong class="app_secret">
-                                        0b753bf072ca2e8a0a996f2d15da97a8
-                                    </strong>
+                                    <strong class="app_secret"> {{wxData.options.app_secret}}</strong>
                                 </li>
                                 <li>
                                     <span>服务器地址：</span>
-                                    <strong>http://gl.gxqqbaby.cn/api/wechat/set/1</strong>
+                                    <strong>{{wxData.options.server_http_url}}</strong>
                                 </li>
                                 <li>
                                     <span>令牌Token：</span>
-                                    <strong>mqqzjlb</strong>
+                                    <strong>{{wxData.options.token}}</strong>
                                 </li>
                                 <li>
                                     <span>消息加解密钥：</span>
-                                    <strong>84Hdh1rerzWzypUINtASz6Mg2JhF1h2eAYWoeeVK5ka</strong>
+                                    <strong v-html="isEmptyFilter(wxData.options.encodingaeskey)"></strong>
                                 </li>
                             </ul>
                             <p class="tip_text">（注意！请严格保证配置信息需要同微信公众号官方平台一致）</p>
@@ -99,7 +97,9 @@ import EchartPieSex from '@/components/Echarts/pieSex';
 export default {
     data() {
         return {
-            list: null,
+            wxData: {
+                options: {}
+            },
             listLoading: true,
         }
     },
@@ -112,13 +112,17 @@ export default {
         this.fetchData();
         console.log(this.$route);
     },
+    filters: {},
     mounted() {
     },
     methods: {
+        isEmptyFilter(data) {
+            return data || `<span style='color: #bbb; font-size: 14px'>（配置项为空）</span>`;
+        },
         fetchData() {
             this.listLoading = true
             getWechatDetail({ id: this.$route.params.id }).then(response => {
-                this.list = response.data.items
+                this.wxData.options = response.data.options
                 this.listLoading = false
             })
         },
@@ -205,6 +209,7 @@ li {
             .hd {
                 background-color: transparent;
                 padding-left: 0;
+                padding-bottom: 12px;
             }
             .bd {
                 background-color: #eff3f6a8;
