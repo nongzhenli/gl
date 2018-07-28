@@ -57,8 +57,8 @@ class FansRecord extends BaseModel
      */
     public static function getByUserId($uid)
     {
-        $images = FansRecord::where('user_id', '=', $uid)->find();
-        return $images;
+        $userInfo = FansRecord::where('user_id', '=', $uid)->find();
+        return $userInfo;
     }
 
     /**

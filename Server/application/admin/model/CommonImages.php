@@ -21,7 +21,7 @@ class CommonImages extends BaseModel
      * @param string    $name       图片名称
      * @return array                返回一条新记录id
      */
-    public static function insertCommonImages($act_id= 2, $user_id = 1, $images_url = '', $media_id = NULL, $url_type = 1, $name = NULL)
+    public static function insertCommonImages($act_id= 0, $user_id = 0, $images_url = '', $media_id = NULL, $url_type = 1, $name = NULL)
     {
         if(!$media_id){
             $media_expire_time = null;

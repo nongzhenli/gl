@@ -7,7 +7,7 @@
  */
 namespace app\api\service;
 
-use app\api\model\ActionImages as ActionImagesModel;
+use app\admin\model\CommonImages as CommonImagesModel;
 use app\api\model\FansRecord as FansRecordModel;
 use app\api\model\User as UserModel;
 use app\api\model\WxUser as WxUserModel;
@@ -195,7 +195,7 @@ class Wechat
                      * @param  int       $media_id          海报媒体id
                      * @return int                          返回记录id
                      */
-                    $images_record = ActionImagesModel::insertActionImages($act_id, $uid, $relative_filename, $media_id);
+                    $images_record = CommonImagesModel::insertCommonImages($act_id, $uid, $relative_filename, $media_id);
                     if (!$images_record) {
                         throw new Exception('推广海报图片资源入库失败');
                     } else {
@@ -235,7 +235,7 @@ class Wechat
 
                     if ($result) {
                         // 查询对应图片资源记录
-                        $imagesRecor = ActionImagesModel::getById($fansRecor['poster_id']);
+                        $imagesRecor = CommonImagesModel::getById($fansRecor['poster_id']);
                         if ($imagesRecor) {
                             if (time() >= $imagesRecor['media_expire_time']) {
                                 // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
@@ -246,7 +246,7 @@ class Wechat
                                 // exit();
 
                                 // 重新更新 媒体id
-                                (new ActionImagesModel())->save([
+                                (new CommonImagesModel())->save([
                                     'media_id' => $mediaInfo['media_id'],
                                     'media_expire_time' => $mediaInfo['created_at'] + 259200,
                                     'last_time' => time(),
@@ -291,7 +291,7 @@ class Wechat
             // 获取推荐人用户信息
             $parent_user = UserModel::getByUserID($parent_id);
             // 完成通知（仅做一次的提示，避免违反模板通知规则，后期拓展改进）
-            if ($parent_count > 0) {
+            if ($parent_count == $where_count) {
                 // 记录上级推荐人完成时间
                 $complete_time = time();
                 $updata_complete_time = (new FansRecordModel())->save([
@@ -540,7 +540,7 @@ class Wechat
             // 查询粉丝关注记录详情
             $fansRecor = FansRecordModel::getByUserId($user->id);
             // 查询对应图片资源记录
-            $imagesRecor = ActionImagesModel::getById($fansRecor['poster_id']);
+            $imagesRecor = CommonImagesModel::getById($fansRecor['poster_id']);
             if ($imagesRecor) {
                 if (time() >= $imagesRecor['media_expire_time']) {
                     // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
@@ -548,7 +548,7 @@ class Wechat
                     $mediaInfo = $this->wechatSDK->uploadMedia($data, "image");
 
                     // 重新更新 媒体id
-                    (new ActionImagesModel())->save([
+                    (new CommonImagesModel())->save([
                         'media_id' => $mediaInfo['media_id'],
                         'media_expire_time' => $mediaInfo['created_at'] + 259200,
                         'last_time' => time(),

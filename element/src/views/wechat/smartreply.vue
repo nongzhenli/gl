@@ -91,10 +91,11 @@
                 <div class="form-row__group">
                     <label class="form_row__title el-form-item__label">规则名称</label>
                     <div class="form-row__input el-form-item__content not_style">
-                        <el-input placeholder="请输入内容"
+                        <el-input placeholder="输入规则名称"
                             v-model="rule_data.name"
                             clearable>
                         </el-input>
+                        <p style="font-size: 14px; color: #606266;">规则名称不能为空且最多60个字</p>
                     </div>
                 </div>
                 <div class="form-row__group">
@@ -401,6 +402,11 @@ export default {
         }
         .rule-add .el-form-item__label {
             padding-right: 30px;
+        }
+        .rule-add .input-with-select {
+            .el-input-group__prepend {
+                color: #333;
+            }
         }
     }
     .table-td__private {

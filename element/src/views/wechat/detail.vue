@@ -148,7 +148,7 @@ li {
 }
 
 .view-wechat-detail {
-    padding: 50px 60px;
+    padding: 50px;
 }
 .wechat-data {
     margin: 30px auto;

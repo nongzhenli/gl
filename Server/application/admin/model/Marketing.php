@@ -33,6 +33,14 @@ class Marketing extends Model
         $data = Db::table('fans_record')->where('act_id',$id)->field('open_id', true)->select();
         return $data;
     }
+    /**
+     * 公众号吸粉活动获取活动详情
+     */
+    public static function getByWxId($wx_id='0')
+    {
+        $data = Db::table('marketing')->where('source',$wx_id)->find();
+        return $data;
+    }
 
     /**
      * 抽奖活动获取活动详情
