@@ -135,13 +135,13 @@ class Config extends BaseWechat
     }
 
     // 测试自定义菜单
-    public static function createTestMenu($wechat_id = 0)
+    public static function createTestMenu($wx_id = 0)
     {
-        if (!$wechat_id) {
+        if (!$wx_id) {
             throw new Exception('公众号开发信息不能为空！');
         }
         // 先获取公众号微信配置信息
-        $config = self::get($wechat_id);
+        $config = self::get($wx_id);
         // 配置信息
         $options = array(
             'appid' => $config['app_id'],
@@ -155,9 +155,44 @@ class Config extends BaseWechat
         $data = array(
             "button" => array(
                 0 => array(
-                    "type" => "view",
-                    "name" => "往期活动回看",
-                    "url" => 'https://www.baidu.com',
+                    "name" => "10秒询价",
+                    "sub_button" => array(
+                        0 => array(
+                            "type" => "view",
+                            "name" => "查询优惠报价",
+                            "url" => "https://jinshuju.net/f/eBK12Q",
+                        ),
+                        1 => array(
+                            "type" => "view",
+                            "name" => "100元秒杀孕照",
+                            "url" => "https://jinshuju.net/f/K555ow",
+                        ),
+                    )
+                ),
+                1 => array(
+                    "name" => "童模大赛",
+                    "sub_button" => array(
+                        0 => array(
+                            "type" => "view",
+                            "name" => "立即报名",
+                            "url" => "http://modelbaby.xianyuan.net/phone/dist/module/homePage.html?id=162&empid=728",
+                        ),
+                    )
+                ),
+                2 => array(
+                    "name" => "关于我们",
+                    "sub_button" => array(
+                        0 => array(
+                            "type" => "view",
+                            "name" => "口碑见证",
+                            "url" => "https://ludanmall.com/webApps/newMobile/dist/module/microPage.html?pageid=13292&shopId=1268&merchantId=1352",
+                        ),
+                        1 => array(
+                            "type" => "view",
+                            "name" => "品牌介绍",
+                            "url" => "https://ludanmall.com/webApps/newMobile/dist/module/microPage.html?pageid=14001&shopId=1268&merchantId=1352",
+                        ),
+                    )
                 ),
             ),
         );

@@ -7,8 +7,8 @@
  */
 namespace app\api\controller\v1;
 
-use app\api\service\Wechat as WechatService;
 use app\api\model\FansRecord as FansRecordModel;
+use app\api\service\Wechat as WechatService;
 
 class Wechat
 {
@@ -27,7 +27,6 @@ class Wechat
         $result = FansRecordModel::getUserStatu($act_id);
         return $result;
     }
-
 
     /**
      * 提交联系方式
@@ -55,7 +54,18 @@ class Wechat
     public function test()
     {
         $config = array(
-            'text' => array(),
+            'text' => array(
+                // 微信昵称
+                array(
+                    'text' => '微信昵称',
+                    'left' => 360,
+                    'top' => 56,
+                    'fontPath' => APP_PATH . 'fonst/simkai.ttf', //字体文件
+                    'fontSize' => 14, //字号
+                    'fontColor' => '255,0,0', //字体颜色
+                    'angle' => 0,
+                ),
+            ),
             'image' => array(
                 // 二维码
                 array(
@@ -69,8 +79,21 @@ class Wechat
                     'height' => 165,
                     'opacity' => 100,
                 ),
+                // 微信头像
+                array(
+                    'url' => 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eofD96opK97RXwM179G9IJytIgqXod8jH9icFf6Cia6sJ0fxeILLMLf0dVviaF3SnibxtrFaVO3c8Ria2w/0',
+                    'left' => 300,
+                    'top' => 20,
+                    'right' => 0,
+                    'stream' => 0,
+                    'bottom' => 0,
+                    'width' => 46,
+                    'height' => 46,
+                    'opacity' => 100,
+                    'circ' => true
+                ),
             ),
-            'background' => PUBLIC_PATH . '/src/img/2/poster_bg.jpg',
+            'background' => PUBLIC_PATH . '/src/img/3/poster_bg.jpg',
         );
         posterImages($config);
     }

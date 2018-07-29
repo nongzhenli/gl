@@ -72,4 +72,17 @@ class Wechat
         }
         return $result;
     }
+
+    // 公众号配置【自定义菜单、自动回复、关注回复、模板消息等】
+    public function createMenu($wx_id = 0)
+    {
+        if (!$wx_id) {
+            throw new Exception('公众号不存在！');
+        }
+        $result = (new WechatService())->createMenu($wx_id);
+        if (!$result) {
+            throw new Exception('公众号配置信息不存在！');
+        }
+        return $result;
+    }
 }

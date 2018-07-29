@@ -100,8 +100,8 @@ class BaseWechat
                 'create_time' => time(),
                 'source_actid' => self::$base_act_id,
             ]);
-            // 会员id
-            return $user->id;
+            // 返回新会员信息
+            return $user;
         }
     }
 

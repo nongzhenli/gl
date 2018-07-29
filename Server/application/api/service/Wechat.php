@@ -283,13 +283,18 @@ class Wechat
             // **************************** 推荐拉人模板消息 **********************************
             // 用户每次关注，都对上级推广人的数据进行统计、消息推送
             $where_count = 28; // 完成条件
-            $parent_count = FansRecordModel::where([
-                'parent_id' => $parent_id,
-                'act_id' => $act_id,
-            ])->count();
-
-            // 获取推荐人用户信息
-            $parent_user = UserModel::getByUserID($parent_id);
+            if($parent_id != 0){
+                $parent_count = FansRecordModel::where([
+                    'parent_id' => $parent_id,
+                    'act_id' => $act_id,
+                ])->count();
+                
+                // 获取推荐人用户信息
+                $parent_user = UserModel::getByUserID($parent_id);
+            }elseif($parent_id == 0) {
+                // 将推荐数设置0，方便代码过渡
+                $parent_count = 0;
+            }
             // 完成通知（仅做一次的提示，避免违反模板通知规则，后期拓展改进）
             if ($parent_count == $where_count) {
                 // 记录上级推荐人完成时间

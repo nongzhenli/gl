@@ -19,7 +19,7 @@ function curl_post($url, array $params = array())
     curl_setopt(
         $ch, CURLOPT_HTTPHEADER,
         array(
-            'Content-Type: application/json'
+            'Content-Type: application/json',
         )
     );
     $data = curl_exec($ch);
@@ -40,7 +40,7 @@ function curl_post_raw($url, $rawData)
     curl_setopt(
         $ch, CURLOPT_HTTPHEADER,
         array(
-            'Content-Type: text'
+            'Content-Type: text',
         )
     );
     $data = curl_exec($ch);
@@ -75,25 +75,21 @@ function getRandChar($length)
     $max = strlen($strPol) - 1;
 
     for ($i = 0;
-         $i < $length;
-         $i++) {
+        $i < $length;
+        $i++) {
         $str .= $strPol[rand(0, $max)];
     }
 
     return $str;
 }
 
-
-
-function fromArrayToModel($m , $array)
+function fromArrayToModel($m, $array)
 {
-    foreach ($array as $key => $value)
-    {
+    foreach ($array as $key => $value) {
         $m[$key] = $value;
     }
     return $m;
 }
-
 
 /**
  * 生成宣传海报
@@ -116,6 +112,7 @@ function createPoster($config = array(), $filename = "")
         'width' => 100,
         'height' => 100,
         'opacity' => 100,
+        'circ' => false
     );
     $textDefault = array(
         'text' => '',
@@ -134,9 +131,14 @@ function createPoster($config = array(), $filename = "")
     $backgroundWidth = imagesx($background); //背景宽度
     $backgroundHeight = imagesy($background); //背景高度
     $imageRes = imageCreatetruecolor($backgroundWidth, $backgroundHeight);
-    $color = imagecolorallocate($imageRes, 0, 0, 0);
-    imagefill($imageRes, 0, 0, $color);
+
+    // 原来的解决方案【但是无效，待研究】
+    // $color = imagecolorallocate($imageRes, 0, 0, 0);
     // imageColorTransparent($imageRes, $color);  //颜色透明
+
+    // 【简单暴力，设置相似颜色】
+    $color = imagecolorallocatealpha($imageRes, 222, 248, 221, 127);
+    imagefill($imageRes, 0, 0, $color);
     imagecopyresampled($imageRes, $background, 0, 0, 0, 0, imagesx($background), imagesy($background), imagesx($background), imagesy($background));
     //处理了图片
     if (!empty($config['image'])) {
@@ -149,6 +151,10 @@ function createPoster($config = array(), $filename = "")
                 $function = 'imagecreatefromstring';
             }
             $res = $function($val['url']);
+            // 是否裁剪成圆形（建议微信头像适用）
+            if ($val['circ'] == true) {
+                $res = circImages($val['url']);
+            }
             $resWidth = $info[0];
             $resHeight = $info[1];
             //建立画板 ，缩放图片至指定尺寸
@@ -181,7 +187,7 @@ function createPoster($config = array(), $filename = "")
         if (!$res) {
             return false;
         }
-        
+
         return $filename;
     } else {
         // 图像输出乱码问题：
@@ -192,12 +198,11 @@ function createPoster($config = array(), $filename = "")
     }
 }
 
-
 /**
  * 海报生成业务处理
  * @param config|array  海报合成资源（文字、图片、背景图）
  */
-function posterImages($config = array(), $filename ='')
+function posterImages($config = array(), $filename = '')
 {
     // $config = array(
     //     'text' => array(
@@ -242,8 +247,48 @@ function posterImages($config = array(), $filename ='')
     // );
     // $filename = PUBLIC_PATH.'/src/img/2/qrcode/qrcode_1_2.jpg';
     // echo createPoster($config,$filename);
-    
+
     createPoster($config, $filename);
     exit();
 }
 
+/**
+ * 生成圆形图片
+ * @param $imgpath  图片地址/支持微信、QQ头像等没有后缀的网络图
+ * @param $saveName string 保存文件名，默认空。
+ * @return resource 返回图片资源或保存文件
+ */
+function circImages($imgpath, $saveName = '')
+{
+    $src_img = imagecreatefromstring(file_get_contents($imgpath));
+    $w = imagesx($src_img);
+    $h = imagesy($src_img);
+    $w = $h = min($w, $h);
+
+    $img = imagecreatetruecolor($w, $h);
+    //这一句一定要有
+    imagesavealpha($img, true);
+    //拾取一个完全透明的颜色,最后一个参数127为全透明
+    $bg = imagecolorallocatealpha($img, 255, 255, 255, 127);
+    imagefill($img, 0, 0, $bg);
+    $r = $w / 2; //圆半径
+    for ($x = 0; $x < $w; $x++) {
+        for ($y = 0; $y < $h; $y++) {
+            $rgbColor = imagecolorat($src_img, $x, $y);
+            if (((($x - $r) * ($x - $r) + ($y - $r) * ($y - $r)) < ($r * $r))) {
+                imagesetpixel($img, $x, $y, $rgbColor);
+            }
+        }
+    }
+
+    //返回资源
+    if (!$saveName) {
+        return $img;
+    }
+
+    //输出图片到文件
+    imagepng($img, $saveName);
+    //释放空间
+    imagedestroy($src_img);
+    imagedestroy($img);
+}

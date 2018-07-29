@@ -7,7 +7,6 @@
  */
 namespace app\admin\service;
 
-
 use app\admin\model\CommonImages as CommonImagesModel;
 use app\admin\model\Marketing as MarketingModel;
 use app\admin\model\Wechat as WechatModel;
@@ -90,8 +89,18 @@ class Wechat extends BaseWechat
         // 普通关注事件、未关注扫描带参数二维码事件
         if ($event == "subscribe") {
             // ****************************共用区域*************************************
+            // 发送客服消息，提醒作用
+            $customArr = array(
+                "touser" => self::$openid,
+                "msgtype" => "text",
+                "text" => array(
+                    "content" => "感谢您对麦琪儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值49元的智能酸奶机（限宝妈领取哟）\n--------\n第一步：点击保存二维码海报\n第二步：分享给10位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！全自动智能酸奶机等着你！\n\n感谢您对麦琪儿童摄影的支持！",
+                ),
+            );
+            self::$base_wxSDKObj->sendCustomMessage($customArr);
             // 获取用户详细信息
-            $wxUserInfoJson = json_encode(self::$base_wxSDKObj->getUserInfo(self::$openid), JSON_UNESCAPED_UNICODE);
+            $wxUserInfoArr = self::$base_wxSDKObj->getUserInfo(self::$openid);
+            $wxUserInfoJson = json_encode($wxUserInfoArr, JSON_UNESCAPED_UNICODE);
             /**
              * 验证用户表是否存在该用户
              * 1.如果存在，返回用户uid
@@ -103,7 +112,8 @@ class Wechat extends BaseWechat
                  * 创建新用户，并添加活动记录
                  * @param string    $wxUserInfoJson 微信用户信息
                  */
-                $uid = self::newUser($wxUserInfoJson);
+                $user = self::newUser($wxUserInfoJson);
+                $uid = $user->id;
             } else {
                 $uid = $user->id;
             }
@@ -123,19 +133,30 @@ class Wechat extends BaseWechat
             // 自定义一个局部媒体id变量
             $media_id = "";
             if (!$fansRecor) {
-                
+
                 // *********** 1、生成二维码图片 *******************************
                 // $scene_id = $uid; // 参数可以是推荐人id
                 $type = 0; // 临时二维码
                 $expire = 2592000; // 二维码有效期时长
                 $getQRcodeInfo = self::getQRcodeInfo($uid, $type, $expire);
                 // 海报背景图
-                $posterBackground = PUBLIC_PATH . '/src/img/'.self::$base_act_id.'/poster_bg.jpg';
+                $posterBackground = PUBLIC_PATH . '/src/img/' . self::$base_act_id . '/poster_bg.jpg';
                 // *********** 生成二维码图片 end *****************************
                 // *********** 2、海报生成，并返回服务器保存地址 *******************************
                 $config = array(
                     // 文字
-                    'text' => array(),
+                    'text' => array(
+                        // 微信昵称
+                        // array(
+                        //     'text' => $user['nickname'],
+                        //     'left' => 360,
+                        //     'top' => 56,
+                        //     'fontPath' => APP_PATH . 'fonst/simkai.ttf', //字体文件
+                        //     'fontSize' => 14, //字号
+                        //     'fontColor' => '255,0,0', //字体颜色
+                        //     'angle' => 0,
+                        // ),
+                    ),
                     'image' => array(
                         // 二维码
                         array(
@@ -149,6 +170,19 @@ class Wechat extends BaseWechat
                             'height' => 165,
                             'opacity' => 100,
                         ),
+                        // // 微信头像
+                        // array(
+                        //     'url' => $wxUserInfoArr['headimgurl'],
+                        //     'left' => 300,
+                        //     'top' => 20,
+                        //     'right' => 0,
+                        //     'stream' => 0,
+                        //     'bottom' => 0,
+                        //     'width' => 46,
+                        //     'height' => 46,
+                        //     'opacity' => 100,
+                        //     'circ' => false,    // 暂时关闭圆形头像裁剪，因为时间太久，还没有找到解决排重的问题
+                        // ),
                     ),
                     'background' => $posterBackground,
                 );
@@ -172,7 +206,7 @@ class Wechat extends BaseWechat
                      * @param  int       $media_id          海报媒体id
                      * @return int                          返回记录id
                      */
-                    
+
                     $images_record = CommonImagesModel::insertCommonImages(self::$base_act_id, $uid, $relative_filename, $media_id);
                     if (!$images_record) {
                         throw new Exception('推广海报图片资源入库失败');
@@ -210,7 +244,6 @@ class Wechat extends BaseWechat
                     ], [
                         'id' => $fansRecor['id'],
                     ]);
-
                     if ($result) {
                         // 查询对应图片资源记录
                         $imagesRecor = CommonImagesModel::getById($fansRecor['poster_id']);
@@ -219,9 +252,6 @@ class Wechat extends BaseWechat
                                 // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
                                 $data['media'] = '@' . PUBLIC_PATH . $imagesRecor['images_url'];
                                 $mediaInfo = self::$base_wxSDKObj->uploadMedia($data, "image");
-                                // $mediaInfo = json_encode($mediaInfo);
-                                // self::$base_wxSDKObj->text($mediaInfo)->reply();
-                                // exit();
 
                                 // 重新更新 媒体id
                                 (new CommonImagesModel())->save([
@@ -239,37 +269,34 @@ class Wechat extends BaseWechat
                         } else {
                             throw new Exception('找不到推广海报记录');
                         }
-
                     } else {
                         throw new Exception('用户非首次关注发生异常');
                     }
                 }
             }
-
-            // 发送客服消息，提醒作用
-            $customArr = array(
-                "touser" => self::$openid,
-                "msgtype" => "text",
-                "text" => array(
-                    "content" => "感谢您对安格贝妮儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值\n--------\n第一步：点击保存二维码海报\n第二步：分享给28位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！ins风顽皮粉红豹等着你！",
-                ),
-            );
-            self::$base_wxSDKObj->sendCustomMessage($customArr);
             // 推送海报图片消息
             self::$base_wxSDKObj->image($media_id)->reply();
 
             // **************************** 推荐拉人模板消息 **********************************
             // 用户每次关注，都对上级推广人的数据进行统计、消息推送
-            $where_count = 28; // 完成条件
-            $parent_count = FansRecordModel::where([
-                'parent_id' => $parent_id,
-                'act_id' => self::$base_act_id,
-            ])->count();
+            $where_count = 10; // 完成条件
+            // 【情况分析：仅有在非首次关注且或扫同推荐人二维码进来，则出现$parent_id与记录user_id一样时，推荐人为0】
+            // 必须推荐人uid不能等于0，不存在这个uid，默认官方
+            if ($parent_id != 0) {
+                $parent_count = FansRecordModel::where([
+                    'parent_id' => $parent_id,
+                    'act_id' => self::$base_act_id,
+                ])->count();
 
-            // 获取推荐人用户信息
-            $parent_user = UserModel::getByUserID($parent_id);
+                // 获取推荐人用户信息
+                $parent_user = UserModel::getByUserID($parent_id);
+            } elseif ($parent_id == 0) {
+                // 将推荐数设置0，方便代码过渡
+                $parent_count = 0;
+            }
+
             // 完成通知（仅做一次的提示，避免违反模板通知规则，后期拓展改进）
-            if ($parent_count == $where_count) {
+            if ($parent_count >= $where_count) {
                 // 记录上级推荐人完成时间
                 $complete_time = time();
                 $updata_complete_time = (new FansRecordModel())->save([
@@ -280,7 +307,7 @@ class Wechat extends BaseWechat
                     'user_id' => $parent_id,
                 ]);
                 // 跳转url
-                $url = "http://gl.gxqqbaby.cn/#/action/aid/".self::$base_act_id;
+                $url = "http://gl.gxqqbaby.cn/#/action/aid/" . self::$base_act_id;
                 // 消息模板id
                 $template_id = "iU84hYFOKttuOevYhLNrRHqvd-dXOj1hwxZabhVRy5g";
                 self::sendReachSupporterTel($template_id, $parent_user['openid'], $url, $complete_time);
@@ -317,11 +344,82 @@ class Wechat extends BaseWechat
         // 已关注扫描带参数二维码事件【避免以关注，但是扫描二维码进入报错的问题】
         if ($event == "SCAN") {
             // TODO
+            exit();
         }
     }
     // 文本消息推送集中处理方法
     public static function handleTextMessage($wxSDKObj)
     {
-        $wxSDKObj->text(self::$openid)->reply();
+        // $wxUserInfoArr = self::$base_wxSDKObj->getUserInfo(self::$openid);
+        // $wxSDKObj->text($wxUserInfoArr['headimgurl'])->reply();
+        exit();
+    }
+
+    /**
+     * 自定义菜单
+     * #只需要调用一次，应该单独作为事件调用
+     */
+    public static function createMenu($wx_id = 0)
+    {
+        if (!$wx_id) {
+            throw new Exception('公众号开发信息不能为空！');
+        }
+        // 先获取公众号微信配置信息
+        $config = self::get($wx_id);
+        // 配置信息
+        $options = array(
+            'appid' => $config['app_id'],
+            'appsecret' => $config['app_secret'],
+            'token' => $config['token'],
+            'encodingaeskey' => $config['encodingaeskey'],
+        );
+        $weObj = new WechatSdk($options);
+        // 创建自定义菜单
+        $data = array(
+            "button" => array(
+                0 => array(
+                    "name" => "10秒询价",
+                    "sub_button" => array(
+                        0 => array(
+                            "type" => "view",
+                            "name" => "查询优惠报价",
+                            "url" => "https://jinshuju.net/f/eBK12Q",
+                        ),
+                        1 => array(
+                            "type" => "view",
+                            "name" => "100元秒杀孕照",
+                            "url" => "https://jinshuju.net/f/K555ow",
+                        ),
+                    ),
+                ),
+                1 => array(
+                    "name" => "童模大赛",
+                    "sub_button" => array(
+                        0 => array(
+                            "type" => "view",
+                            "name" => "立即报名",
+                            "url" => "http://modelbaby.xianyuan.net/phone/dist/module/homePage.html?id=162&empid=728",
+                        ),
+                    ),
+                ),
+                2 => array(
+                    "name" => "关于我们",
+                    "sub_button" => array(
+                        0 => array(
+                            "type" => "view",
+                            "name" => "口碑见证",
+                            "url" => "https://ludanmall.com/webApps/newMobile/dist/module/microPage.html?pageid=13292&shopId=1268&merchantId=1352",
+                        ),
+                        1 => array(
+                            "type" => "view",
+                            "name" => "品牌介绍",
+                            "url" => "https://ludanmall.com/webApps/newMobile/dist/module/microPage.html?pageid=14001&shopId=1268&merchantId=1352",
+                        ),
+                    ),
+                ),
+            ),
+        );
+        $result = $weObj->createMenu($data);
+        return $result;
     }
 }

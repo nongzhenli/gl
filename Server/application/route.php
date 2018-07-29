@@ -60,6 +60,7 @@ Route::rule('admin/:version/wechat/detail', 'admin/:version.Wechat/getDetail', '
 Route::rule('admin/:version/wechat/getconf/:wx_id', 'admin/:version.Wechat/getConfig', 'GET');
 Route::rule('admin/:version/wechat/setconf/:wx_id', 'admin/:version.Wechat/setConfig', 'GET|POST');
 Route::rule('admin/:version/wechat/getsmartrule', 'admin/:version.Wechat/getSmartRule', 'GET');  // 关键字回复规则
+Route::rule('admin/:version/wechat/createmenu', 'admin/:version.Wechat/createMenu', 'POST'); // 自定义菜单
 
 
 
