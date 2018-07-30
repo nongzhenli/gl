@@ -1,27 +1,16 @@
 
 -------------------
-2018-07-04 15:20:18
+2018-07-30 16:54:34
 -------------------
-<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
-<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
-<CreateTime>1530688818</CreateTime>
+<xml><ToUserName><![CDATA[gh_6358eb2bc39f]]></ToUserName>
+<FromUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></FromUserName>
+<CreateTime>1532940874</CreateTime>
 <MsgType><![CDATA[text]]></MsgType>
-<Content><![CDATA[1]]></Content>
-<MsgId>6574258414108182521</MsgId>
+<Content><![CDATA[2]]></Content>
+<MsgId>6583930920975127617</MsgId>
 </xml>
 
 -------------------
-2018-07-04 15:20:23
+2018-07-30 16:54:34
 -------------------
-<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
-<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
-<CreateTime>1530688823</CreateTime>
-<MsgType><![CDATA[event]]></MsgType>
-<Event><![CDATA[CLICK]]></Event>
-<EventKey><![CDATA[LOOK_MY_NUM]]></EventKey>
-</xml>
-
--------------------
-2018-07-04 15:20:23
--------------------
-<xml><ToUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></ToUserName><FromUserName><![CDATA[gh_c59aebcd38af]]></FromUserName><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[您还没有朋友支持哦，加油~]]></Content><CreateTime><![CDATA[1530688823]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+<xml><ToUserName><![CDATA[oMGUmwBCoSJ--lzk3N4I-faG0Tdc]]></ToUserName><FromUserName><![CDATA[gh_6358eb2bc39f]]></FromUserName><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[xxx]]></Content><CreateTime><![CDATA[1532940874]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>

@@ -29,8 +29,11 @@ export default {
         };
     },
     created() {
-        this.getUserInfo();
+        // this.getUserInfo();
         // console.log(this.$route.params)
+    },
+    beforeMount(){
+        this.getUserInfo();
     },
     components: { LotteryRotate },
     methods: {

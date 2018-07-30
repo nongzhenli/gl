@@ -29,9 +29,7 @@ Route::get('api/:version/lottery/prize/info', 'api/:version.Lottery/getAllPrizeI
 Route::post('api/:version/lottery/user/sign', 'api/:version.Lottery/sign');
 Route::post('api/:version/lottery/user/get', 'api/:version.Lottery/get');
 Route::post('api/:version/lottery/user/prize', 'api/:version.Lottery/getPrizeIndex');
-// 模拟抽奖测试
-Route::get('api/:version/lottery/prize/test', 'api/:version.Lottery/test');
-
+Route::get('api/:version/lottery/prize/test', 'api/:version.Lottery/test'); // 模拟抽奖测试
 
 // Wxcaht
 Route::rule('api/:version/wechat/wx', 'api/:version.Wechat/wx', 'GET|POST');
@@ -45,15 +43,12 @@ Route::rule('api/:version/wechat/test', 'api/:version.Wechat/test', 'GET|POST');
 /**
  * Admin后台管理 API数据接口
  */
-
 Route::rule('admin/:version/user/login', 'admin/:version.User/login', 'POST');
 Route::rule('admin/:version/user/logout', 'admin/:version.User/logout', 'POST');
 Route::rule('admin/:version/user/info', 'admin/:version.User/info', 'GET');
-
 Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList', 'GET');
 Route::rule('admin/:version/marketing/get/fans', 'admin/:version.Marketing/getFansById', 'GET');    // 公众号吸粉类活动详情
 Route::rule('admin/:version/marketing/get/lottery', 'admin/:version.Marketing/getLotteryById', 'GET'); // 抽奖类活动详情
-
 // 公众号
 Route::rule('admin/:version/wechat/list', 'admin/:version.Wechat/getList', 'GET');
 Route::rule('admin/:version/wechat/detail', 'admin/:version.Wechat/getDetail', 'GET');

@@ -51,6 +51,7 @@ export default [
                 name: 'ActionLottery',
                 meta: {
                     title: "点点按钮，抽取大奖",
+                    aid: 1,
                 },
                 // 路由组件懒加载
                 // component: ActionLottery
@@ -61,11 +62,20 @@ export default [
                 name: 'ActionWechatForm',
                 meta: {
                     title: "填写领取联系信息",
+                    aid: 2,
                 },
                 // 路由组件懒加载
                 // component: ActionWechatForm
                 component: resolve => require(['@/components/component/ActionWechatForm'], resolve),//懒加载
-
+            },
+            {
+                path: 'aid/3',
+                name: 'ActionWechatForm',
+                meta: {
+                    title: "填写领取联系信息",
+                    aid: 3,
+                },
+                component: resolve => require(['@/components/component/ActionWechatForm'], resolve),//懒加载
             }
         ]
     },

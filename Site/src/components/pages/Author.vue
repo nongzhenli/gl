@@ -21,7 +21,7 @@ export default {
                 // 判断URL是否存在code参数
                 if (this.getUrlParam("code")) {
                     axios.post("http://gl.gxqqbaby.cn/api/v1/token/user",{
-                        "code": this.getUrlParam("code")
+                        "code": this.getUrlParam("code"),
                     }).then(response => {
                         // 客户端存储token
                         this.utils.VueCookie.set("loginToken", response.data.token);

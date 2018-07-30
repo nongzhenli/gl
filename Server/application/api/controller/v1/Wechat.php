@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-21 15:27:31
+ * @Last Modified time: 2018-07-30 16:35:02
  */
 namespace app\api\controller\v1;
 
@@ -96,5 +96,11 @@ class Wechat
             'background' => PUBLIC_PATH . '/src/img/3/poster_bg.jpg',
         );
         posterImages($config);
+
+        //【redis 测试】
+        // $redis = new \Redis();
+        // $redis->connect('127.0.0.1', 6379);
+        // $wxFUNameCTimeKey = ($redis->lRange('wxFUNameCTimeKey', 0, -1));
+        // var_dump($wxFUNameCTimeKey);
     }
 }

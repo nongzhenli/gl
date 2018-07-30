@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-28 14:23:08
+ * @Last Modified time: 2018-07-30 17:33:32
  */
 namespace app\admin\service;
 
@@ -70,7 +70,7 @@ class Wechat extends BaseWechat
         // 公众号规则处理
         switch ($type) {
             case WechatSdk::MSGTYPE_TEXT:
-                self::handleTextMessage($wxSDKObj);
+                self::handleTextMessage();
                 break;
             case WechatSdk::MSGTYPE_EVENT:
                 self::handleEventMessage($wxSDKObj);
@@ -348,11 +348,9 @@ class Wechat extends BaseWechat
         }
     }
     // 文本消息推送集中处理方法
-    public static function handleTextMessage($wxSDKObj)
+    public static function handleTextMessage()
     {
-        // $wxUserInfoArr = self::$base_wxSDKObj->getUserInfo(self::$openid);
-        // $wxSDKObj->text($wxUserInfoArr['headimgurl'])->reply();
-        exit();
+        self::$base_wxSDKObj->text("http://gl.gxqqbaby.cn/#/action/aid/" . self::$base_act_id)->reply();
     }
 
     /**

@@ -27,6 +27,7 @@ router.beforeEach((to, from, next) => {
     if (!utils.VueCookie.get("loginToken") && to.path != '/author') {  // 情形1、 当 不存在token且不在author页面
         // 第一次访问
         utils.VueCookie.set('beforeLoginUrl', to.fullPath) // 保存用户进入的url
+        utils.VueCookie.set('aid', to.meta.aid) // 保存aid
         next('/author');
         return false;
     } else if (utils.VueCookie.get("loginToken")) {  // 情形2、当存在tokne且直接进入授权页面author或刷新时
