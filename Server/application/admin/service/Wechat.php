@@ -13,6 +13,7 @@ use app\admin\model\Wechat as WechatModel;
 use app\api\model\FansRecord as FansRecordModel;
 use app\api\model\User as UserModel;
 use WechatSdk\Wechat as WechatSdk;
+use think\Cache;
 
 class Wechat extends BaseWechat
 {
@@ -88,6 +89,17 @@ class Wechat extends BaseWechat
 
         // 普通关注事件、未关注扫描带参数二维码事件
         if ($event == "subscribe") {
+            // 防止微信响应三次，使用redis缓存设置key判断
+            $wxFUName = self::$base_wxSDKObj->getRev()->getRevFrom();
+            $wxCtime = self::$base_wxSDKObj->getRev()->getRevCtime();
+            $hasWxFCKey = Cache::store('redis')->get($wxCtime.$wxFUName);
+            if(!$hasWxFCKey) {
+                // 不存在则设置并且继续执行代码
+                Cache::store('redis')->set($wxCtime.$wxFUName, 1, 30);
+            }else {
+                // 存在则中断，防止微信服务响应三次
+                return;
+            }
             // ****************************共用区域*************************************
             // 发送客服消息，提醒作用
             $customArr = array(
@@ -119,9 +131,9 @@ class Wechat extends BaseWechat
             }
             // ****************************共用区域 end**********************************
             // 判断该微信用户是否存在未关注记录（表示该用户曾经关注过此公众号）
-            $fansRecor = FansRecordModel::getByUserId($uid);
+            $fansRecor = FansRecordModel::getByUserId($uid, self::$base_act_id);
             // 如果存在记录，且字段parent_id大于0
-            if ($fansRecor['parent_id'] && $fansRecor['parent_id'] > 0) {
+            if ($fansRecor && $fansRecor['parent_id'] > 0) {
                 $parent_id = $fansRecor['parent_id'];
             } else {
                 // 如果不存在记录或字段parent_id等于0
@@ -133,9 +145,8 @@ class Wechat extends BaseWechat
             // 自定义一个局部媒体id变量
             $media_id = "";
             if (!$fansRecor) {
-
                 // *********** 1、生成二维码图片 *******************************
-                // $scene_id = $uid; // 参数可以是推荐人id
+                // $uid; // 参数可以是推荐人id
                 $type = 0; // 临时二维码
                 $expire = 2592000; // 二维码有效期时长
                 $getQRcodeInfo = self::getQRcodeInfo($uid, $type, $expire);
@@ -147,15 +158,15 @@ class Wechat extends BaseWechat
                     // 文字
                     'text' => array(
                         // 微信昵称
-                        // array(
-                        //     'text' => $user['nickname'],
-                        //     'left' => 360,
-                        //     'top' => 56,
-                        //     'fontPath' => APP_PATH . 'fonst/simkai.ttf', //字体文件
-                        //     'fontSize' => 14, //字号
-                        //     'fontColor' => '255,0,0', //字体颜色
-                        //     'angle' => 0,
-                        // ),
+                        array(
+                            'text' => $user['nickname'],
+                            'left' => 360,
+                            'top' => 56,
+                            'fontPath' => APP_PATH . 'fonst/simkai.ttf', //字体文件
+                            'fontSize' => 14, //字号
+                            'fontColor' => '255,0,0', //字体颜色
+                            'angle' => 0,
+                        ),
                     ),
                     'image' => array(
                         // 二维码
@@ -171,18 +182,18 @@ class Wechat extends BaseWechat
                             'opacity' => 100,
                         ),
                         // // 微信头像
-                        // array(
-                        //     'url' => $wxUserInfoArr['headimgurl'],
-                        //     'left' => 300,
-                        //     'top' => 20,
-                        //     'right' => 0,
-                        //     'stream' => 0,
-                        //     'bottom' => 0,
-                        //     'width' => 46,
-                        //     'height' => 46,
-                        //     'opacity' => 100,
-                        //     'circ' => false,    // 暂时关闭圆形头像裁剪，因为时间太久，还没有找到解决排重的问题
-                        // ),
+                        array(
+                            'url' => $wxUserInfoArr['headimgurl'],
+                            'left' => 300,
+                            'top' => 20,
+                            'right' => 0,
+                            'stream' => 0,
+                            'bottom' => 0,
+                            'width' => 46,
+                            'height' => 46,
+                            'opacity' => 100,
+                            'circ' => true,    // 暂时关闭圆形头像裁剪，因为时间太久，还没有找到解决排重的问题
+                        ),
                     ),
                     'background' => $posterBackground,
                 );
@@ -208,8 +219,10 @@ class Wechat extends BaseWechat
                      */
 
                     $images_record = CommonImagesModel::insertCommonImages(self::$base_act_id, $uid, $relative_filename, $media_id);
+                    self::$base_wxSDKObj->sendCustomMessage($customArr);
                     if (!$images_record) {
-                        throw new Exception('推广海报图片资源入库失败');
+                        // TODO
+                        // throw new Exception('推广海报图片资源入库失败');
                     } else {
                         // 新增记录
                         $status = 1; // 1已关注
@@ -217,7 +230,8 @@ class Wechat extends BaseWechat
 
                         $record = FansRecordModel::insertFansRecord($uid, self::$openid, $status = 1, $poster_id, $parent_id, self::$base_act_id);
                         if (!$record) {
-                            throw new Exception('微信公众号吸粉入库失败');
+                            // TODO
+                            // throw new Exception('微信公众号吸粉入库失败');
                         }
                     }
                 }
@@ -267,10 +281,11 @@ class Wechat extends BaseWechat
                                 $media_id = $imagesRecor['media_id'];
                             }
                         } else {
-                            throw new Exception('找不到推广海报记录');
+                            // TODO 此处应该做插入海报记录
+                            // throw new Exception('找不到推广海报记录');
                         }
                     } else {
-                        throw new Exception('用户非首次关注发生异常');
+                        // throw new Exception('用户非首次关注发生异常');
                     }
                 }
             }
@@ -337,7 +352,7 @@ class Wechat extends BaseWechat
                 ]);
                 return $result;
             }
-            $this->wechatSDK->text('用户取消关注')->reply();
+            self::$base_wxSDKObj->text('用户取消关注')->reply();
             return;
         }
 

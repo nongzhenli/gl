@@ -151,10 +151,10 @@ function createPoster($config = array(), $filename = "")
     $backgroundHeight = imagesy($background); //背景高度
     $imageRes = imageCreatetruecolor($backgroundWidth, $backgroundHeight);
     // 原来的解决方案【但是无效，待研究】
-    $color = imagecolorallocate($imageRes, 0, 0, 0);
-    imageColorTransparent($imageRes, $color);  //颜色透明
+    // $color = imagecolorallocate($imageRes, 0, 0, 0);
+    // imageColorTransparent($imageRes, $color);  //颜色透明
     // 【简单暴力，设置相似颜色】
-    // $color = imagecolorallocatealpha($imageRes, 222, 248, 221, 127);
+    $color = imagecolorallocatealpha($imageRes, 222, 248, 221, 127);
     imagefill($imageRes, 0, 0, $color);
     imagecopyresampled($imageRes, $background, 0, 0, 0, 0, imagesx($background), imagesy($background), imagesx($background), imagesy($background));
     //处理了图片
@@ -169,9 +169,9 @@ function createPoster($config = array(), $filename = "")
             }
             $res = $function($val['url']);
             // 是否裁剪成圆形（建议微信头像适用）
-            // if ($val['circ'] == true) {
-            //     $res = circImages($val['url']);
-            // }
+            if ($val['circ'] == true) {
+                $res = circImages($val['url']);
+            }
             $resWidth = $info[0];
             $resHeight = $info[1];
             //建立画板 ，缩放图片至指定尺寸

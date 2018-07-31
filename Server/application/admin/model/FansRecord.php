@@ -26,19 +26,29 @@ class FansRecord extends BaseModel
      * @param int       $poster_id      海报图id
      * @param int       $parent_id      推荐人id，没有默认0
      */
-    public static function insertFansRecord($user_id, $open_id, $status = 1, $poster_id, $parent_id = 0, $act_id = 2)
+    public static function insertFansRecord($user_id, $open_id, $status = 1, $poster_id, $parent_id = 0, $act_id = 0)
     {
-        $result_record = self::create([
-            'user_id' => $user_id,
-            'open_id' => $open_id,
-            'status' => $status,
-            'poster_id' => $poster_id,
-            'parent_id' => $parent_id,
-            'act_id' => $act_id,
-            'last_follow_unfollow_time' => time(),
-            'create_time' => time(),
-        ]);
-        return $result_record;
+        // 判断是否存在
+        $getFansResult =FansRecord::where([
+            'user_id' =>  $user_id,
+            'act_id' =>  $act_id,
+            'poster_id' =>  $poster_id
+        ])->find();
+        if(!$getFansResult){
+            $result_record = self::create([
+                'user_id' => $user_id,
+                'open_id' => $open_id,
+                'status' => $status,
+                'poster_id' => $poster_id,
+                'parent_id' => $parent_id,
+                'act_id' => $act_id,
+                'last_follow_unfollow_time' => time(),
+                'create_time' => time(),
+            ]);
+            return $result_record;
+        }
+        return false;
+        
     }
 
     /**
@@ -52,12 +62,17 @@ class FansRecord extends BaseModel
     }
 
     /**
-     * 检查这条图片资源是否存在__通过 user_id
+     * 检查这条记录是否存在__通过 
      * 存在返回uid，不存在返回0
+     * @param $uid      用户id
+     * @param $act_id   所属活动id
      */
-    public static function getByUserId($uid)
+    public static function getByUserId($uid, $act_id)
     {
-        $userInfo = FansRecord::where('user_id', '=', $uid)->find();
+        $userInfo = FansRecord::where([
+            'user_id' =>  $uid,
+            'act_id' =>  $act_id
+        ])->find();
         return $userInfo;
     }
 

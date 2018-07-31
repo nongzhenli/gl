@@ -6,6 +6,7 @@
  * @Last Modified time: 2018-06-16 11:19:08
  */
 namespace app\admin\model;
+use think\Db;
 use think\Model;
 
 class CommonImages extends BaseModel
@@ -29,18 +30,22 @@ class CommonImages extends BaseModel
             // 临时素材媒体id 最大有效期3天
             $media_expire_time = time() + 259200;
         }
-        $images = CommonImages::create([
-            'act_id' => $act_id,
-            'user_id' => $user_id,
-            'name' => $name,
-            'images_url' => $images_url,
-            'url_type' => $url_type,
-            'media_id' => $media_id,
-            'media_expire_time' => $media_expire_time,
-            'create_time' => time(),
-        ]);
-        
-        return $images;
+        // 判断是否存在
+        $getPosterResult = self::getByUserId($user_id, $act_id);
+        if(!$getPosterResult){
+            $images = CommonImages::create([
+                'act_id' => $act_id,
+                'user_id' => $user_id,
+                'name' => $name,
+                'images_url' => $images_url,
+                'url_type' => $url_type,
+                'media_id' => $media_id,
+                'media_expire_time' => $media_expire_time,
+                'create_time' => time(),
+            ]);
+            return $images;
+        }
+        return false;
     }
 
 
@@ -58,9 +63,12 @@ class CommonImages extends BaseModel
      * 检查这条图片资源是否存在__通过 user_id
      * 存在返回uid，不存在返回0
      */
-    public static function getByUserId($uid)
+    public static function getByUserId($uid , $act_id)
     {
-        $images = CommonImages::where('uid', '=', $uid)->find();
+        $images = CommonImages::where([
+            'user_id' =>  $uid,
+            'act_id' =>  $act_id,
+        ])->find();
         return $images;
     }
 
