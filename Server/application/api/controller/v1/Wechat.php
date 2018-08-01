@@ -103,15 +103,14 @@ class Wechat
         // var_dump($hasWxFCKey);
 
         $p = new PictureSDK(PUBLIC_PATH . '/src/img/3/poster_bg.jpg');
-        // var_dump($p);
         $image = array(
-            array(
-                'start_x' => 165, //图片摆放横坐标
-                'start_y' => -165, //纵坐标
-                'width' => 165,
-                'height' => 165,
-                'path' => 'https://qr.api.cli.im/qr?data=http%253A%252F%252Fbaidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=d44c420220c50c0a9fbbb91ddb1a769e', //路径
-            ),
+            // array(
+            //     'start_x' => 135, //图片摆放横坐标
+            //     'start_y' => -650, //纵坐标
+            //     'width' => 165,
+            //     'height' => 165,
+            //     'path' => 'https://qr.api.cli.im/qr?data=http%253A%252F%252Fbaidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=d44c420220c50c0a9fbbb91ddb1a769e', //路径
+            // ),
             array(
                 'start_x' => 300, //图片摆放横坐标
                 'start_y' => 20, //纵坐标
@@ -130,7 +129,7 @@ class Wechat
             'angle' => 0,
             'color' => 'black',
         );
-        // $p->combineImg($image);
+        $p->combineImg($image);
         // $p->createString($str);
         $p->show();
         exit();

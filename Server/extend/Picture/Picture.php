@@ -25,16 +25,12 @@ class Picture
     {
         // list() 用于一次给一组变量赋值
         list($imgWidth, $imgHight) = getimagesize($backgroup);
-        var_dump(getimagesize($backgroup));
-        var_dump($imgWidth);
-        var_dump($imgHight);
-        exit();
         $resource = $this->getExt($backgroup);
+        // imagecreatetruecolor() 创建一个真彩色图像，返回一个黑色图像。imagesx()取得图像的宽度，imagesy()取得图像的高度
         $this->background = imagecreatetruecolor(imagesx($resource), imagesy($resource)); // 背景图片
         $color = imagecolorallocate($this->background, 202, 201, 201); // 为真彩色画布创建白色背景，再设置为透明
-        imagefill($this->background, 0, 0, $color);
+        imagefill($this->background, 0, 0, $color); // 创建画布
         imageColorTransparent($this->background, $color);
-
         imagecopyresized($this->background, $resource, 0, 0, 0, 0, $imgWidth, $imgHight, imagesx($resource), imagesy($resource));
         imagedestroy($resource);
 
@@ -50,12 +46,21 @@ class Picture
     {
         // list($imgWidth, $imgHight, $imgType) = getimagesize($png);
         $imgType = pathinfo($png);
+        //  微信头像图像信息不存在extension
+        if (!array_key_exists('extension', $imgType)) {
+            // 还是很慢，网络查询得知，使用file_get_contents 导致速度很慢???????? 推荐替换curl 
+            // 参考文章：https://blog.csdn.net/shu102ming/article/details/70787836?utm_source=itdadao&utm_medium=referral
+            // 或替换掉 gd库，使用imagick库
+            $createType = imagecreatefromstring(file_get_contents($png));
+            return $createType;
+        }
         switch (strtolower($imgType['extension'])) {
-
             case 'jpg':
             case 'jpeg':
+                // ImageCreateFromJpeg 由文件或 URL 创建一个新图象
                 $createType = @ImageCreateFromJpeg($png);
                 if (!$createType) {
+                    // imagecreatefromstring() 从字符串中的图像流新建一图像
                     $createType = imagecreatefromstring(file_get_contents($png));
                 }
                 // $createType    = imagecreatefromjpeg($png);
@@ -66,11 +71,14 @@ class Picture
             case 'gif':
 
             default:
-                $png = base64_decode($png);
-                $createType = imagecreatefromstring($png);
+                if (base64_decode($png)) {
+                    $createType = imagecreatefromstring($png);
+                } else {
+                    // imagecreatefromstring() 从字符串中的图像流新建一图像。 file_get_contents() 将整个文件读入一个字符串
+                    $createType = imagecreatefromstring(file_get_contents($png));
+                }
                 break;
         }
-
         return $createType;
     }
 
@@ -89,16 +97,12 @@ class Picture
      */
     public function combineImg($pngArr = array())
     {
-
         foreach ($pngArr as $png) {
             $resource = $this->getExt($png['path']);
-            //  list($pic_w,$pic_h)=getimagesize($png['path']);
+            $png['start_y'] = $png['start_y'] < 0 ? $png['height'] - $png['start_y'] : $png['start_y'];
             imagecopyresized($this->background, $resource, $png['start_x'], $png['start_y'], 0, 0, $png['width'], $png['height'], imagesx($resource), imagesy($resource));
             imagedestroy($resource);
-            //合成图片
-            //imagecopyresized( resource $dst_im , resource $src_im , int $dst_x , int $dst_y , int $src_x , int $src_y , int $src_w , int $src_h )---拷贝并合并图像的一部分，将 src_im 图像中坐标从 src_x，src_y 开始，宽度为 src_w，高度为 src_h 的一部分拷贝到 dst_im 图像中坐标为 dst_x 和 dst_y 的位置上。
         }
-
     }
 
     /**
