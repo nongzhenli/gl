@@ -50,6 +50,7 @@ class Picture
         if (!array_key_exists('extension', $imgType)) {
             // 还是很慢，网络查询得知，使用file_get_contents 导致速度很慢???????? 推荐替换curl 
             // 参考文章：https://blog.csdn.net/shu102ming/article/details/70787836?utm_source=itdadao&utm_medium=referral
+            //          https://blog.csdn.net/gaoxuaiguoyi/article/details/47973229
             // 或替换掉 gd库，使用imagick库
             $createType = imagecreatefromstring(file_get_contents($png));
             return $createType;
