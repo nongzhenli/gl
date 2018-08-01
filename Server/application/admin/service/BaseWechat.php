@@ -10,6 +10,7 @@ namespace app\admin\service;
 use app\admin\model\User as UserModel;
 use app\admin\model\WxUser as WxUserModel;
 use thikn\Exception;
+use think\Cache;
 
 class BaseWechat
 {
@@ -212,5 +213,4 @@ class BaseWechat
         );
         self::$base_wxSDKObj->sendTemplateMessage($data);
     }
-
 }

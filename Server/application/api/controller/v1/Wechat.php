@@ -3,13 +3,13 @@
  * @Author: big黑钦
  * @Date: 2018-05-23 09:16:28
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-30 16:35:02
+ * @Last Modified time: 2018-08-01 17:01:17
  */
 namespace app\api\controller\v1;
 
 use app\api\model\FansRecord as FansRecordModel;
 use app\api\service\Wechat as WechatService;
-use think\Cache;
+use Picture\Picture as PictureSDK;
 
 class Wechat
 {
@@ -81,30 +81,58 @@ class Wechat
         //             'opacity' => 100,
         //         ),
         //         // 微信头像
-        //         array(
-        //             'url' => 'https://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eofD96opK97RXwM179G9IJytIgqXod8jH9icFf6Cia6sJ0fxeILLMLf0dVviaF3SnibxtrFaVO3c8Ria2w/0',
-        //             'left' => 300,
-        //             'top' => 20,
-        //             'right' => 0,
-        //             'stream' => 0,
-        //             'bottom' => 0,
-        //             'width' => 46,
-        //             'height' => 46,
-        //             'opacity' => 100,
-        //             'circ' => true
-        //         ),
+        //         // array(
+        //         //     'url' => 'http://thirdwx.qlogo.cn/mmopen/yCIMP5iaBvmBqGcVRp8Qnknpx2TfDdiabef9ialQypNIia3icTzvicvyWTyh0uooLZyaVzHxrUnahZvpFc1Uq3usbe1x5KQHGdY39N/132',
+        //         //     'left' => 300,
+        //         //     'top' => 20,
+        //         //     'right' => 0,
+        //         //     'stream' => 0,
+        //         //     'bottom' => 0,
+        //         //     'width' => 46,
+        //         //     'height' => 46,
+        //         //     'opacity' => 100,
+        //         //     'circ' => true
+        //         // ),
         //     ),
         //     'background' => PUBLIC_PATH . '/src/img/3/poster_bg.jpg',
         // );
         // posterImages($config);
 
-        // 【redis 测试】
-        // $redis = new \Redis();
-        // $redis->connect('127.0.0.1', 6379);
-        // $wxFUNameCTimeKey = ($redis->lRange('wxFUNameCTimeKey', 0, -1));
-        // var_dump($wxFUNameCTimeKey);
-        Cache::store('redis')->set('keyTest', 1, 30);
-        $hasWxFCKey = Cache::store('redis')->get('keyTest');
-        var_dump($hasWxFCKey);
+        // Cache::store('redis')->set('keyTest', 1, 60);
+        // $hasWxFCKey = Cache::store('redis')->get('key_test');
+        // var_dump($hasWxFCKey);
+
+        $p = new PictureSDK(PUBLIC_PATH . '/src/img/3/poster_bg.jpg');
+        // var_dump($p);
+        $image = array(
+            array(
+                'start_x' => 165, //图片摆放横坐标
+                'start_y' => -165, //纵坐标
+                'width' => 165,
+                'height' => 165,
+                'path' => 'https://qr.api.cli.im/qr?data=http%253A%252F%252Fbaidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=d44c420220c50c0a9fbbb91ddb1a769e', //路径
+            ),
+            array(
+                'start_x' => 300, //图片摆放横坐标
+                'start_y' => 20, //纵坐标
+                'width' => 46,
+                'height' => 46,
+                'path' => 'http://thirdwx.qlogo.cn/mmopen/yCIMP5iaBvmBqGcVRp8Qnknpx2TfDdiabef9ialQypNIia3icTzvicvyWTyh0uooLZyaVzHxrUnahZvpFc1Uq3usbe1x5KQHGdY39N/132', //路径
+            ),
+        );
+
+        $str = array(
+            'str' => '这是什么鬼啊啊',
+            'fontPath' => APP_PATH . 'fonst/simkai.ttf',
+            'x' => 300,
+            'y' => 20,
+            'fontSize' => 14,
+            'angle' => 0,
+            'color' => 'black',
+        );
+        // $p->combineImg($image);
+        // $p->createString($str);
+        $p->show();
+        exit();
     }
 }

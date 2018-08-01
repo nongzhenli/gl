@@ -92,16 +92,15 @@ class Wechat extends BaseWechat
             // 防止微信响应三次，使用redis缓存设置key判断
             $wxFUName = self::$base_wxSDKObj->getRev()->getRevFrom();
             $wxCtime = self::$base_wxSDKObj->getRev()->getRevCtime();
-            $hasWxFCKey = Cache::store('redis')->get($wxCtime.$wxFUName);
+            $hasWxFCKey = Cache::store('redis')->has($wxCtime.$wxFUName);
             if(!$hasWxFCKey) {
                 // 不存在则设置并且继续执行代码
-                Cache::store('redis')->set($wxCtime.$wxFUName, 1, 30);
+                $reuslt = Cache::store('redis')->set($wxCtime.$wxFUName, 1, 40);
             }else {
-                // 存在则中断，防止微信服务响应三次
-                return;
+                exit();
             }
             // ****************************共用区域*************************************
-            // 发送客服消息，提醒作用
+            // 关注自动回复消息
             $customArr = array(
                 "touser" => self::$openid,
                 "msgtype" => "text",
@@ -155,45 +154,41 @@ class Wechat extends BaseWechat
                 // *********** 生成二维码图片 end *****************************
                 // *********** 2、海报生成，并返回服务器保存地址 *******************************
                 $config = array(
-                    // 文字
                     'text' => array(
-                        // 微信昵称
                         array(
                             'text' => $user['nickname'],
                             'left' => 360,
                             'top' => 56,
-                            'fontPath' => APP_PATH . 'fonst/simkai.ttf', //字体文件
-                            'fontSize' => 14, //字号
-                            'fontColor' => '255,0,0', //字体颜色
+                            'fontPath' => APP_PATH . 'fonst/simkai.ttf',
+                            'fontSize' => 14,
+                            'fontColor' => '255,0,0',
                             'angle' => 0,
                         ),
                     ),
                     'image' => array(
-                        // 二维码
                         array(
                             'url' => $getQRcodeInfo['QRurl'],
                             'left' => 135,
                             'top' => -165,
-                            'stream' => 0, //图片资源是否是字符串图像流
+                            'stream' => 0,
                             'right' => 0,
                             'bottom' => 0,
                             'width' => 165,
                             'height' => 165,
                             'opacity' => 100,
                         ),
-                        // // 微信头像
-                        array(
-                            'url' => $wxUserInfoArr['headimgurl'],
-                            'left' => 300,
-                            'top' => 20,
-                            'right' => 0,
-                            'stream' => 0,
-                            'bottom' => 0,
-                            'width' => 46,
-                            'height' => 46,
-                            'opacity' => 100,
-                            'circ' => true,    // 暂时关闭圆形头像裁剪，因为时间太久，还没有找到解决排重的问题
-                        ),
+                        // array(
+                        //     'url' => $wxUserInfoArr['headimgurl'],
+                        //     'left' => 300,
+                        //     'top' => 20,
+                        //     'right' => 0,
+                        //     'stream' => 0,
+                        //     'bottom' => 0,
+                        //     'width' => 46,
+                        //     'height' => 46,
+                        //     'opacity' => 100,
+                        //     'circ' => true,
+                        // ),
                     ),
                     'background' => $posterBackground,
                 );
@@ -219,7 +214,6 @@ class Wechat extends BaseWechat
                      */
 
                     $images_record = CommonImagesModel::insertCommonImages(self::$base_act_id, $uid, $relative_filename, $media_id);
-                    self::$base_wxSDKObj->sendCustomMessage($customArr);
                     if (!$images_record) {
                         // TODO
                         // throw new Exception('推广海报图片资源入库失败');
