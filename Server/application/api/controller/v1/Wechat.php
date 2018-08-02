@@ -81,18 +81,18 @@ class Wechat
         //             'opacity' => 100,
         //         ),
         //         // 微信头像
-        //         // array(
-        //         //     'url' => 'http://thirdwx.qlogo.cn/mmopen/yCIMP5iaBvmBqGcVRp8Qnknpx2TfDdiabef9ialQypNIia3icTzvicvyWTyh0uooLZyaVzHxrUnahZvpFc1Uq3usbe1x5KQHGdY39N/132',
-        //         //     'left' => 300,
-        //         //     'top' => 20,
-        //         //     'right' => 0,
-        //         //     'stream' => 0,
-        //         //     'bottom' => 0,
-        //         //     'width' => 46,
-        //         //     'height' => 46,
-        //         //     'opacity' => 100,
-        //         //     'circ' => true
-        //         // ),
+        //         array(
+        //             'url' => 'http://thirdwx.qlogo.cn/mmopen/yCIMP5iaBvmBqGcVRp8Qnknpx2TfDdiabef9ialQypNIia3icTzvicvyWTyh0uooLZyaVzHxrUnahZvpFc1Uq3usbe1x5KQHGdY39N/132',
+        //             'left' => 300,
+        //             'top' => 20,
+        //             'right' => 0,
+        //             'stream' => 0,
+        //             'bottom' => 0,
+        //             'width' => 46,
+        //             'height' => 46,
+        //             'opacity' => 100,
+        //             'circ' => true
+        //         ),
         //     ),
         //     'background' => PUBLIC_PATH . '/src/img/3/poster_bg.jpg',
         // );
@@ -101,37 +101,38 @@ class Wechat
         // Cache::store('redis')->set('keyTest', 1, 60);
         // $hasWxFCKey = Cache::store('redis')->get('key_test');
         // var_dump($hasWxFCKey);
-
-        $p = new PictureSDK(PUBLIC_PATH . '/src/img/3/poster_bg.jpg');
-        $image = array(
-            // array(
-            //     'start_x' => 135, //图片摆放横坐标
-            //     'start_y' => -650, //纵坐标
-            //     'width' => 165,
-            //     'height' => 165,
-            //     'path' => 'https://qr.api.cli.im/qr?data=http%253A%252F%252Fbaidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=d44c420220c50c0a9fbbb91ddb1a769e', //路径
-            // ),
-            array(
-                'start_x' => 300, //图片摆放横坐标
-                'start_y' => 20, //纵坐标
-                'width' => 46,
-                'height' => 46,
-                'path' => 'http://thirdwx.qlogo.cn/mmopen/yCIMP5iaBvmBqGcVRp8Qnknpx2TfDdiabef9ialQypNIia3icTzvicvyWTyh0uooLZyaVzHxrUnahZvpFc1Uq3usbe1x5KQHGdY39N/132', //路径
+        $config = array(
+            'image' => array(
+                array(
+                    'start_x' => 135, //图片摆放横坐标
+                    'start_y' => -650, //纵坐标
+                    'width' => 165,
+                    'height' => 165,
+                    'path' => 'https://qr.api.cli.im/qr?data=http%253A%252F%252Fbaidu.com&level=H&transparent=false&bgcolor=%23ffffff&forecolor=%23000000&blockpixel=12&marginblock=1&logourl=&size=280&kid=cliim&key=d44c420220c50c0a9fbbb91ddb1a769e',
+                ),
+                array(
+                    'start_x' => 300, //图片摆放横坐标
+                    'start_y' => 20, //纵坐标
+                    'width' => 46,
+                    'height' => 46,
+                    'path' => 'http://thirdwx.qlogo.cn/mmopen/yCIMP5iaBvmBqGcVRp8Qnknpx2TfDdiabef9ialQypNIia3icTzvicvyWTyh0uooLZyaVzHxrUnahZvpFc1Uq3usbe1x5KQHGdY39N/132',
+                    'circ' => true
+                ),
             ),
+            'text' => array(
+                // 微信昵称
+                array(
+                    'str' => '这是什么鬼啊啊',
+                    'fontPath' => APP_PATH . 'fonst/simkai.ttf',
+                    'x' => 360,
+                    'y' => 52,
+                    'fontSize' => 14,
+                    'fontColor' => '51,51,51',
+                    'angle' => 0,
+                ),
+            ),
+            'background' => PUBLIC_PATH . '/src/img/3/poster_bg.jpg',
         );
-
-        $str = array(
-            'str' => '这是什么鬼啊啊',
-            'fontPath' => APP_PATH . 'fonst/simkai.ttf',
-            'x' => 300,
-            'y' => 20,
-            'fontSize' => 14,
-            'angle' => 0,
-            'color' => 'black',
-        );
-        $p->combineImg($image);
-        // $p->createString($str);
-        $p->show();
-        exit();
+        createPoster($config, PUBLIC_PATH.'/src/img/3/qrcode/1.jpg');
     }
 }

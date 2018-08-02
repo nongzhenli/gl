@@ -60,7 +60,7 @@ class Wechat extends BaseWechat
         $wxSDKObj->valid();
         // 设置全局继承基础类变量$base_wxSDKObj
         self::$base_wxSDKObj = $wxSDKObj;
-        // 当前微信号最新活动记录
+        // 当前微信号最新活动记录【待解决，如果一个公众号多个同类活动进行中??????怎么操作??????】
         $wxNewMarketing = MarketingModel::getByWxId($wx_id);
         self::$base_act_id = $wxNewMarketing['id'];
         // 获取微信服务器返回类型
@@ -105,7 +105,7 @@ class Wechat extends BaseWechat
                 "touser" => self::$openid,
                 "msgtype" => "text",
                 "text" => array(
-                    "content" => "感谢您对麦琪儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值49元的智能酸奶机（限宝妈领取哟）\n--------\n第一步：点击保存二维码海报\n第二步：分享给10位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！全自动智能酸奶机等着你！\n\n感谢您对麦琪儿童摄影的支持！",
+                    "content" => "感谢您对麦琪儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值49元的智能酸奶机（限宝妈领取哟）\n--------\n第一步：点击保存二维码海报\n第二步：分享给10位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-3秒\n\n快去邀请好友吧！全自动智能酸奶机等着你！\n\n感谢您对麦琪儿童摄影的支持！",
                 ),
             );
             self::$base_wxSDKObj->sendCustomMessage($customArr);
@@ -153,45 +153,42 @@ class Wechat extends BaseWechat
                 $posterBackground = PUBLIC_PATH . '/src/img/' . self::$base_act_id . '/poster_bg.jpg';
                 // *********** 生成二维码图片 end *****************************
                 // *********** 2、海报生成，并返回服务器保存地址 *******************************
+                // 海报合成配置
                 $config = array(
                     'text' => array(
+                        // 微信昵称
                         array(
-                            'text' => $user['nickname'],
-                            'left' => 360,
-                            'top' => 56,
+                            'str' => $user['nickname'],
+                            'x' => 360,
+                            'y' => 50,
                             'fontPath' => APP_PATH . 'fonst/simkai.ttf',
                             'fontSize' => 14,
-                            'fontColor' => '255,0,0',
+                            'fontColor' => '51,51,51',
                             'angle' => 0,
                         ),
                     ),
                     'image' => array(
+                        // 二维码
                         array(
-                            'url' => $getQRcodeInfo['QRurl'],
-                            'left' => 135,
-                            'top' => -165,
-                            'stream' => 0,
-                            'right' => 0,
-                            'bottom' => 0,
+                            'path' =>  $getQRcodeInfo['QRurl'],
+                            'start_x' => 135,
+                            'start_y' => -650,
                             'width' => 165,
                             'height' => 165,
-                            'opacity' => 100,
                         ),
-                        // array(
-                        //     'url' => $wxUserInfoArr['headimgurl'],
-                        //     'left' => 300,
-                        //     'top' => 20,
-                        //     'right' => 0,
-                        //     'stream' => 0,
-                        //     'bottom' => 0,
-                        //     'width' => 46,
-                        //     'height' => 46,
-                        //     'opacity' => 100,
-                        //     'circ' => true,
-                        // ),
+                        // 微信头像
+                        array(
+                            'path' => $wxUserInfoArr['headimgurl'],
+                            'start_x' => 300,
+                            'start_y' => 20,
+                            'width' => 46,
+                            'height' => 46,
+                            'circ' => true
+                        ),
                     ),
                     'background' => $posterBackground,
                 );
+
                 // 海报相对路径（存放数据库，站点静态资源访问）
                 $relative_filename = '/src/img/' . self::$base_act_id . '/qrcode/qrcode_' . self::$base_act_id . '_' . $uid . '.jpg';
                 // 海报保存路径（绝对路径，用作上传媒体文件）

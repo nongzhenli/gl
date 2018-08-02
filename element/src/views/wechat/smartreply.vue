@@ -51,10 +51,7 @@
                                         <i class="keywords_name_status">(半匹配)</i>
                                     </el-form-item>
                                     <el-form-item label="回复内容">
-                                        <div class="keywords_reply_item">
-                                            感谢您对麦琪儿童摄影的支持！<br><br>【参与方式】 <br>1、保存下方海报至手机相册<br>2、发送图片给好友，好友长按二维码识别<br>3、邀请10位好友扫码支持，即可获得蜂胶黄金磁疗能量枕一个！ <br>快去邀请好友吧！<br>蜂胶黄金磁疗能量枕等着你！
-                                        </div>
-                                        <div class="keywords_reply_item">{{ props.row.desc }}</div>
+                                        <div class="keywords_reply_item" v-for="send of props.row.send_content" v-html="send.json_str" ></div>
                                     </el-form-item>
                                 </el-form>
                             </template>
@@ -67,8 +64,10 @@
                                 <span v-for="keywords of props.row.keywords">{{ keywords.key_name }}、</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="回复内容"
-                            prop="desc">
+                        <el-table-column label="回复内容">
+                            <template slot-scope="props">
+                                文本1，图文2，语音1
+                            </template>
                         </el-table-column>
                         <el-table-column label="操作"
                             header-align="right"
@@ -166,45 +165,9 @@ import { getWxSmartReply } from '@/api/wechat'
 export default {
     data() {
         return {
-            tableData5: [
-                {
-                    id: '12987122',
-                    name: '投票',
-                    keywords: '江浙小吃、小吃零食',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    address: '上海市普陀区真北路',
-                    shop: '王小虎夫妻店',
-                    shopId: '10333'
-                }, {
-                    id: '12987123',
-                    name: '免费',
-                    keywords: '江浙小吃、小吃零食',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    address: '上海市普陀区真北路',
-                    shop: '王小虎夫妻店',
-                    shopId: '10333'
-                }, {
-                    id: '12987125',
-                    name: '宝宝照	',
-                    keywords: '江浙小吃、小吃零食',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    address: '上海市普陀区真北路',
-                    shop: '王小虎夫妻店',
-                    shopId: '10333'
-                }, {
-                    id: '12987126',
-                    name: '孕妇照',
-                    keywords: '江浙小吃、小吃零食',
-                    desc: '荷兰优质淡奶，奶香浓而不腻',
-                    address: '上海市普陀区真北路',
-                    shop: '王小虎夫妻店',
-                    shopId: '10333'
-                }
-            ],
             smartReplyList: [],
             is_rule_add: false,
             is_msg_send_button: true,
-            
             rule_data: {
                 name: '',
                 keywords: [
@@ -383,6 +346,12 @@ export default {
             overflow: hidden;
             padding-top: 12px;
             line-height: 1.6;
+        }
+
+        .rule-add {
+            background-color: rgb(250, 251, 253);
+            padding: 15px;
+            border: 1px solid rgb(228, 231, 237);
         }
         .rule-add .el-form-item__content {
             display: block;
