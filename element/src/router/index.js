@@ -117,7 +117,7 @@ export const constantRouterMap = [
                         meta: { 
                             title: '公众号自定义菜单', 
                             // 填写完整的路由地址
-                            page: 'menu', parent: "/wecaht/detail/:id"
+                            page: 'menu', parent: "/wechat/detail/:id"
                         }
                     },
                     {   // 公共号关键词回复
@@ -127,7 +127,7 @@ export const constantRouterMap = [
                         component: () => import('@/views/wechat/smartreply'),
                         meta: { 
                             title: '关键词回复规则', 
-                            page: 'smartreply', parent: "/wecaht/detail/:id"
+                            page: 'smartreply', parent: "/wechat/detail/:id"
                         }
                     },
                     {   // 公共号收到消息回复
@@ -137,7 +137,7 @@ export const constantRouterMap = [
                         component: () => import('@/views/wechat/menu'),
                         meta: { 
                             title: '收到消息回复规则', 
-                            page: 'autoreply', parent: "/wecaht/detail/:id"
+                            page: 'autoreply', parent: "/wechat/detail/:id"
                         }
                     },
                     {   // 公共号被关注回复
@@ -147,7 +147,7 @@ export const constantRouterMap = [
                         component: () => import('@/views/wechat/menu'),
                         meta: { 
                             title: '被关注回复规则', 
-                            page: 'followreply', parent: "/wecaht/detail/:id"
+                            page: 'followreply', parent: "/wechat/detail/:id"
                         }
                     },
                 ]

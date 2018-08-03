@@ -37,19 +37,16 @@ export default {
             if (first && first.name !== "dashboard") {
                 matched = [ { path: "/dashboard", meta: { title: "起始页" } }].concat(matched);
             }
-
             // 针对兄弟路由地址，B兄弟路由面包屑导航在A后面。例如： 面包屑 A/B
             if ($_thisRoute.meta.parent) {
                 // 2018/07/22 自定义面包屑导航【path 不够灵活，待拓展】
                 let $_thisRoutePath = $_thisRoute.meta.parent.replace(/:id/, $_thisRoute.params.id);
-                console.log($_thisRoutePath);
                 matched.splice(2, 0, {
-                    path: "/wechat/detail/1",
+                    path: $_thisRoutePath,
                     meta: { title: "详情" }
                 });
                 // end
             }
-
             this.levelList = matched;
         }
     }

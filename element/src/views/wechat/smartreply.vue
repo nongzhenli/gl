@@ -47,11 +47,13 @@
                                     inline
                                     class="demo-table-expand">
                                     <el-form-item label="关键词">
-                                        <span v-for="keywords of props.row.keywords">{{ keywords.key_name }}、</span>
-                                        <i class="keywords_name_status">(半匹配)</i>
+                                        <span v-for="keywords of props.row.keywords">{{ keywords.key_name }} <template v-if="keywords.key_type == 1">(半匹配)</template><template v-else-if="keywords.key_type == 2">(全匹配)</template>、</span>
+                                        <i class="keywords_name_status"></i>
                                     </el-form-item>
                                     <el-form-item label="回复内容">
-                                        <div class="keywords_reply_item" v-for="send of props.row.send_content" v-html="send.json_str" ></div>
+                                        <div class="keywords_reply_item"
+                                            v-for="send of props.row.send_content"
+                                            v-html="send.json_str"></div>
                                     </el-form-item>
                                 </el-form>
                             </template>
@@ -165,6 +167,7 @@ import { getWxSmartReply } from '@/api/wechat'
 export default {
     data() {
         return {
+            listLoading: true,
             smartReplyList: [],
             is_rule_add: false,
             is_msg_send_button: true,
@@ -196,7 +199,9 @@ export default {
             this.listLoading = true
             getWxSmartReply({ wx_id: this.$route.params.id }).then(response => {
                 this.smartReplyList = response.data
-                this.listLoading = false
+                this.$nextTick(function () {
+                    this.listLoading = false
+                });
             })
         },
         // 规则弹层集中处理函数
