@@ -47,7 +47,11 @@
                                     inline
                                     class="demo-table-expand">
                                     <el-form-item label="关键词">
-                                        <span v-for="keywords of props.row.keywords">{{ keywords.key_name }} <template v-if="keywords.key_type == 1">(半匹配)</template><template v-else-if="keywords.key_type == 2">(全匹配)</template>、</span>
+                                        <span v-for="keywords of props.row.keywords">{{ keywords.key_name }}
+                                            <i class="keywords_name_status"
+                                                v-if="keywords.key_type == 1">(半匹配)</i>
+                                            <i class="keywords_name_status"
+                                                v-else-if="keywords.key_type == 2">(全匹配)</i>、</span>
                                         <i class="keywords_name_status"></i>
                                     </el-form-item>
                                     <el-form-item label="回复内容">
@@ -68,7 +72,8 @@
                         </el-table-column>
                         <el-table-column label="回复内容">
                             <template slot-scope="props">
-                                文本1，图文2，语音1
+                                <span>{{ sendTypeNumFilter(props.row.send_content) }}</span>
+                                <!-- <span v-for="send_content in sendTypeFilter(props.row.send_content)">{{ send_content.num }}</span> -->
                             </template>
                         </el-table-column>
                         <el-table-column label="操作"
@@ -194,6 +199,12 @@ export default {
     created() {
         this.fetchData();
     },
+    // 过滤器
+    filters: {
+    },
+    // 计算属性
+    computed: {
+    },
     methods: {
         fetchData() {
             this.listLoading = true
@@ -214,6 +225,71 @@ export default {
         // 创建规则请求
         createRulePost() {
             console.log('xxx')
+        },
+        // 发送内容类型数量事件过滤器
+        sendTypeNumFilter(data) {
+            let sendTypeTotal = {
+                "1": {
+                    "text": "文本",
+                    "num": 0,
+                },
+                "2": {
+                    "text": "图片",
+                    "num": 0,
+                },
+                "3": {
+                    "text": "语音",
+                    "num": 0,
+                },
+                "4": {
+                    "text": "视频",
+                    "num": 0,
+                },
+                "5": {
+                    "text": "图文",
+                    "num": 0,
+                },
+                "6": {
+                    "text": "图文（链）",
+                    "num": 0,
+                },
+                "7": {
+                    "text": "音乐",
+                    "num": 0,
+                },
+                "8": {
+                    "text": "卡卷",
+                    "num": 0,
+                },
+                "9": {
+                    "text": "小程序",
+                    "num": 0,
+                },
+                "10": {
+                    "text": "其他",
+                    "num": 0,
+                },
+            };
+            for (let item of data) {
+                ++sendTypeTotal[item.send_type].num
+            }
+
+            // 对象排序
+            let sortkey = Object.keys(sendTypeTotal).sort((a, b) => {
+                return sendTypeTotal[b].num - sendTypeTotal[a].num;
+            })
+
+            let str = "";
+            // 重构数组
+            for (let idx of sortkey) {
+                if (sendTypeTotal[idx].num <= 0) {
+                    break;
+                }
+                str += sendTypeTotal[idx].text + sendTypeTotal[idx].num + "，";
+            }
+            // \u3001 正则匹配 、
+            // \uff0c 正则匹配 ，
+            return str.replace(/([\uff0c|\u3001]*$)/g, "");
         }
 
     },
@@ -288,7 +364,6 @@ export default {
                     color: #9a9a9a;
                     margin-left: 3px;
                     font-style: normal;
-                    margin-right: 40px;
                 }
                 .keywords_reply_item {
                     display: block;

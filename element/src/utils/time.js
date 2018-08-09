@@ -17,7 +17,6 @@ export function formatDate(data, fmt) {
     // 遍历这个对象
     for (let k in o) {
         if (new RegExp(`(${k})`).test(fmt)) {
-            // console.log(`${k}`)
             console.log(RegExp.$1)
             let str = o[k] + '';
             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str));

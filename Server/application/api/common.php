@@ -105,24 +105,7 @@ function createPoster($config = array(), $filename = '')
     if (empty($filename)) {
         header('Content-Type:image/jpg');
     }
-
-    $imageDefault = array(
-        'start_x' => 0,
-        'start_y' => 0,
-        'width' => 100,
-        'height' => 100,
-        'circ' => false
-    );
-    $textDefault = array(
-        'str' => '',
-        'x' => 0,
-        'y' => 0,
-        'fontSize' => 32, //字号
-        'fontColor' => '51,51,51', //字体颜色
-        'angle' => 0,
-    );
     $background = $config['background']; //海报最底层得背景
-    
     // 初始化
     $imageRes = new PictureSDK($background);
     // 合成图片

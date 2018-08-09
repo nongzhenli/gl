@@ -55,7 +55,7 @@ class Wechat extends BaseWechat
             // ->field('rule_id', true)
             ->select();
         $rule_replys = Db::view('wechat_rule', ['id'=>'rule_id'])
-            ->view('wechat_replys', 'id,type,json_str', 'wechat_replys.rule_id=wechat_rule.id')
+            ->view('wechat_replys', 'id,send_type,json_str', 'wechat_replys.rule_id=wechat_rule.id')
             ->where('wx_id', '=', $wx_id)
             ->select();
         $rule_find = Db('wechat_rule')->where('wx_id', '=', $wx_id)->field('last_time, delete_time, create_by', true)->find();

@@ -3,11 +3,11 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-25 15:39:56
+ * @Last Modified time: 2018-08-09 17:55:21
  */
 namespace app\api\service;
 
-use app\admin\model\CommonImages as CommonImagesModel;
+use app\api\model\CommonImages as CommonImagesModel;
 use app\api\model\FansRecord as FansRecordModel;
 use app\api\model\User as UserModel;
 use app\api\model\WxUser as WxUserModel;
@@ -90,8 +90,7 @@ class Wechat
     // 处理文本消息
     public function handleTextMessage()
     {
-        // $result = $this->wechatSDK->deleteMenu();
-        // $this->getPosterImageMessage();
+        // $this->wechatSDK->text('ccc')->reply();
     }
 
     // 处理事件消息
@@ -115,7 +114,8 @@ class Wechat
         if ($event == "subscribe") {
             // ****************************共用区域*************************************
             // 获取用户详细信息
-            $wxUserInfoJson = json_encode($this->wechatSDK->getUserInfo($openid), JSON_UNESCAPED_UNICODE);
+            $wxUserInfoArr = $this->wechatSDK->getUserInfo($openid);
+            $wxUserInfoJson = json_encode($wxUserInfoArr, JSON_UNESCAPED_UNICODE);
             /**
              * 验证用户表是否存在该用户
              * 1.如果存在，返回用户uid
@@ -127,15 +127,17 @@ class Wechat
                  * 创建新用户，并添加活动记录
                  * @param string    $wxUserInfoJson 微信用户信息
                  */
-                $uid = $this->newUser($wxUserInfoJson);
+                $user = $this->newUser($wxUserInfoJson);
+                $uid = $user->id;
             } else {
                 $uid = $user->id;
             }
+            
             // ****************************共用区域 end**********************************
             // 判断该微信用户是否存在未关注记录（表示该用户曾经关注过此公众号）
-            $fansRecor = FansRecordModel::getByUserId($uid);
+            $fansRecor = FansRecordModel::getByUserId($uid, $act_id);
             // 如果存在记录，且字段parent_id大于0
-            if ($fansRecor['parent_id'] && $fansRecor['parent_id'] > 0) {
+            if ($fansRecor && $fansRecor['parent_id'] > 0) {
                 $parent_id = $fansRecor['parent_id'];
             } else {
                 // 如果不存在记录或字段parent_id等于0
@@ -152,8 +154,10 @@ class Wechat
                 $type = 0; // 临时二维码
                 $expire = 2592000; // 二维码有效期时长
                 $getQRcodeInfo = $this->getQRcodeInfo($uid, $type, $expire);
+                // $this->wechatSDK->text(json_encode($getQRcodeInfo, JSON_UNESCAPED_UNICODE))->reply();
                 // 海报背景图
                 $posterBackground = PUBLIC_PATH . '/src/img/2/poster_bg.jpg';
+               
                 // *********** 生成二维码图片 end *****************************
                 // *********** 2、海报生成，并返回服务器保存地址 *******************************
                 $config = array(
@@ -162,15 +166,11 @@ class Wechat
                     'image' => array(
                         // 二维码
                         array(
-                            'url' => $getQRcodeInfo['QRurl'],
-                            'left' => 135,
-                            'top' => -165,
-                            'stream' => 0, //图片资源是否是字符串图像流
-                            'right' => 0,
-                            'bottom' => 0,
+                            'path' =>  $getQRcodeInfo['QRurl'],
+                            'start_x' => 135,
+                            'start_y' => -650,
                             'width' => 165,
                             'height' => 165,
-                            'opacity' => 100,
                         ),
                     ),
                     'background' => $posterBackground,
@@ -186,6 +186,8 @@ class Wechat
                 $data['media'] = '@' . $poster_url;
                 $mediaInfo = $this->wechatSDK->uploadMedia($data, "image");
                 $media_id = $mediaInfo['media_id'];
+                // $this->wechatSDK->text(json_encode($media_id, JSON_UNESCAPED_UNICODE))->reply();
+                // exit();
                 if ($media_id) {
                     /** 添加海报图片记录
                      * @param  int       $act_id            活动id
@@ -197,7 +199,8 @@ class Wechat
                      */
                     $images_record = CommonImagesModel::insertCommonImages($act_id, $uid, $relative_filename, $media_id);
                     if (!$images_record) {
-                        throw new Exception('推广海报图片资源入库失败');
+                        // $this->wechatSDK->text("数据异常1")->reply();
+                        // throw new Exception('推广海报图片资源入库失败');
                     } else {
                         // 新增记录
                         $status = 1; // 1已关注
@@ -205,7 +208,8 @@ class Wechat
 
                         $record = FansRecordModel::insertFansRecord($uid, $openid, $status = 1, $poster_id, $parent_id, $act_id);
                         if (!$record) {
-                            throw new Exception('微信公众号吸粉入库失败');
+                            // $this->wechatSDK->text("数据异常2")->reply();
+                            // throw new Exception('微信公众号吸粉入库失败');
                         }
                     }
                 }
@@ -241,9 +245,6 @@ class Wechat
                                 // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
                                 $data['media'] = '@' . PUBLIC_PATH . $imagesRecor['images_url'];
                                 $mediaInfo = $this->wechatSDK->uploadMedia($data, "image");
-                                // $mediaInfo = json_encode($mediaInfo);
-                                // $this->wechatSDK->text($mediaInfo)->reply();
-                                // exit();
 
                                 // 重新更新 媒体id
                                 (new CommonImagesModel())->save([
@@ -349,7 +350,8 @@ class Wechat
             if($getRevEvent['key'] == "LOOK_MY_NUM"){
                 $this->getCurrentUserPNum($openid, $act_id);
             }elseif($getRevEvent['key'] == "GET_POSTER_IMAGES"){ // 获取推广海报
-                $this->getPosterImageMessage($openid);
+                // $this->wechatSDK->text($openid)->reply();
+                $this->getPosterImageMessage($openid, $act_id);
             }
             return;
         }
@@ -405,7 +407,7 @@ class Wechat
                 'source_actid' => 2,
             ]);
             // 会员id
-            return $user->id;
+            return $user;
         }
     }
 
@@ -535,7 +537,7 @@ class Wechat
      * getPosterImageMessage 获取推广海报图片消息
      * @param string    $openid 用户openid
      */
-    public function getPosterImageMessage($openid)
+    public function getPosterImageMessage($openid, $act_id=2)
     {
         // 获取用户信息
         $user = UserModel::getByOpenID($openid);
@@ -543,7 +545,9 @@ class Wechat
             $this->wechatSDK->text('找不到当前用户信息')->reply();
         }else {
             // 查询粉丝关注记录详情
-            $fansRecor = FansRecordModel::getByUserId($user->id);
+            $fansRecor = FansRecordModel::getByUserId($user->id, $act_id);
+            // $this->wechatSDK->text( json_encode($fansRecor, JSON_UNESCAPED_UNICODE))->reply();
+            // exit();
             // 查询对应图片资源记录
             $imagesRecor = CommonImagesModel::getById($fansRecor['poster_id']);
             if ($imagesRecor) {
