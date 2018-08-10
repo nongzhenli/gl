@@ -34,40 +34,6 @@ class Wechat
         // token检验
         $this->wechatSDK->valid();
 
-        // 获取菜单
-        // $menu = $weObj->getMenu();
-        // // 自定义菜单栏设置
-        // $newmenu = array(
-        //     "button" => array(
-        //         0 => array(
-        //             "type" => "view",
-        //             "name" => "幸运抽奖",
-        //             "url" => "http://gl.gxqqbaby.cn/#/action/aid/1",
-        //         ),
-        //         1 => array(
-        //             "name" => "人气值",
-        //             "sub_button" => array(
-        //                 0 => array(
-        //                     "type" => "click",
-        //                     "name" => "查看我的人气",
-        //                     "key" => "LOOK_MY_NUM",
-        //                 ),
-        //                 1 => array(
-        //                     "type" => "click",
-        //                     "name" => "获取推广海报",
-        //                     "key" => "GET_POSTER_IMAGES",
-        //                 ),
-        //                 2 => array(
-        //                     "type" => "view",
-        //                     "name" => "填写领取信息",
-        //                     "url" => "http://gl.gxqqbaby.cn/#/action/aid/2",
-        //                 ),
-        //             ),
-        //         ),
-        //     ),
-        // );
-        // $newmenu_result = $this->wechatSDK->createMenu($newmenu);
-
         // 获取微信服务器返回类型
         $type = $this->wechatSDK->getRev()->getRevType();
 
@@ -90,7 +56,50 @@ class Wechat
     // 处理文本消息
     public function handleTextMessage()
     {
-        // $this->wechatSDK->text('ccc')->reply();
+        // $openid = $this->wechatSDK->getRev()->getRevFrom();
+        // $wxUserInfoArr = $this->wechatSDK->getUserInfo($openid);
+        // $tmpStr = userTextEncode($wxUserInfoArr['nickname']);
+        // $tmpStr = userTextDecode($tmpStr);
+        // $this->wechatSDK->text($tmpStr)->reply();
+        // $openid = $this->wechatSDK->getRev()->getRevFrom();
+        // $user = (new UserModel())->getByOpenID($openid);
+        // $tmpStr = userTextDecode($user->nickname);
+        // $this->wechatSDK->text($tmpStr)->reply();
+
+        // 获取菜单
+        // $menu = $this->wechatSDK->getMenu();
+        // // 自定义菜单栏设置
+        // $newmenu = array(
+        //     "button" => array(
+        //         // 0 => array(
+        //         //     "type" => "view",
+        //         //     "name" => "幸运抽奖",
+        //         //     "url" => "http://gl.gxqqbaby.cn/#/action/aid/1",
+        //         // ),
+        //         0 => array(
+        //             "name" => "近期活动",
+        //             "sub_button" => array(
+        //                 0 => array(
+        //                     "type" => "click",
+        //                     "name" => "查看我的人气",
+        //                     "key" => "LOOK_MY_NUM",
+        //                 ),
+        //                 1 => array(
+        //                     "type" => "click",
+        //                     "name" => "获取推广海报",
+        //                     "key" => "GET_POSTER_IMAGES",
+        //                 ),
+        //                 2 => array(
+        //                     "type" => "view",
+        //                     "name" => "填写领取信息",
+        //                     "url" => "http://gl.gxqqbaby.cn/#/action/aid/2",
+        //                 ),
+        //             ),
+        //         ),
+        //     ),
+        // );
+        // $newmenu_result = $this->wechatSDK->createMenu($newmenu);
+        // $this->wechatSDK->text($newmenu_result)->reply();
     }
 
     // 处理事件消息
@@ -127,7 +136,7 @@ class Wechat
                  * 创建新用户，并添加活动记录
                  * @param string    $wxUserInfoJson 微信用户信息
                  */
-                $user = $this->newUser($wxUserInfoJson);
+                $user = $this->newUser($openid, $wxUserInfoArr['nickname'], $wxUserInfoJson);
                 $uid = $user->id;
             } else {
                 $uid = $user->id;
@@ -283,7 +292,7 @@ class Wechat
 
             // **************************** 推荐拉人模板消息 **********************************
             // 用户每次关注，都对上级推广人的数据进行统计、消息推送
-            $where_count = 28; // 完成条件
+            $where_count = 10; // 完成条件
             if($parent_id != 0){
                 $parent_count = FansRecordModel::where([
                     'parent_id' => $parent_id,
@@ -312,6 +321,7 @@ class Wechat
                 $this->sendReachSupporterTel($parent_user['openid'], $url, $complete_time);
 
             } elseif ($parent_count > 0) { // 好友助力通知
+                // $this->sendSupporterTel($user['nickname'], $parent_user['nickname'], $openid, $where_count - $parent_count);
                 $this->sendSupporterTel($user['nickname'], $parent_user['nickname'], $parent_user['openid'], $where_count - $parent_count);
             }
             // **************************** 推荐拉人模板消息 end ********************************
@@ -368,7 +378,7 @@ class Wechat
     }
 
     // 创建新用户
-    private function newUser($wxResult)
+    private function newUser($openid, $nickName='', $wxResult)
     {
         // 有可能会有异常，如果没有特别处理
         // 这里不需要try——catch
@@ -376,13 +386,18 @@ class Wechat
         // 并且这样的异常属于服务器异常
         // 也不应该定义BaseException返回到客户端
 
-        // $wxUserInfo_str = WxUser::getWxUserInfo($wxResult['access_token'], $wxResult['openid']);
-        // 转成数组
+        // 微信昵称emoji字符转码处理
         $wxUserInfo = json_decode($wxResult, true);
-
+        // if(!empty($nickName)){
+        //     $nickName = userTextEncode($nickName);
+        // }else {
+        //     throw new Exception('获取用户微信昵称异常');
+        // }
+        
         // 在微信信息表创建一个微信记录
         $wx_user = WxUserModel::create([
-            'openid' => $wxUserInfo['openid'],
+            'openid' => $openid,
+            // 'nickname' => $nickName,
             'nickname' => $wxUserInfo['nickname'],
             'wx_info' => $wxResult,
             'last_update_time' => time(),
@@ -400,7 +415,8 @@ class Wechat
             // 暂时将活动标记2
             // 创建成功，对照生成会员信息
             $user = UserModel::create([
-                'openid' => $wxUserInfo['openid'],
+                'openid' => $openid,
+                // 'nickname' => $nickName,
                 'nickname' => $wxUserInfo['nickname'],
                 'last_update_time' => time(),
                 'create_time' => time(),
@@ -464,6 +480,7 @@ class Wechat
                     "color" => "#333",
                 ),
                 "keyword1" => array(
+                    // "value" => userTextDecode($name),
                     "value" => $name,
                     "color" => "#333",
                 ),
