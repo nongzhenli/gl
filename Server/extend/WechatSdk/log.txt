@@ -1,0 +1,21 @@
+-------------------
+2018-08-11 23:47:07
+-------------------
+{"touser":"oc5301RvDlrwZeaGG5Mi-BN0Oyxc","template_id":"I3caJoSngdTHWByuHgZ5r-NoFVYXJxZMusit7n_z-As","url":"","data":{"first":{"value":"您有一位新朋友支持你啦！","color":"#f44336"},"keyword1":{"value":"big黑钦👪 👏"},"keyword2":{"value":"big黑钦👪 👏"},"keyword3":{"value":"2018年08月11日 23:47:07"},"remark":{"value":"您还差1位小伙伴的支持可获得儿童卡通不锈钢套碗一份，快快喊上你的好友来为你助力吧！","color":"#f44336"}}}
+
+-------------------
+2018-08-11 23:47:07
+-------------------
+<xml><ToUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></ToUserName><FromUserName><![CDATA[gh_c59aebcd38af]]></FromUserName><MsgType><![CDATA[text]]></MsgType><Content><![CDATA[big黑钦👪 👏]]></Content><CreateTime><![CDATA[1534002427]]></CreateTime><FuncFlag><![CDATA[0]]></FuncFlag></xml>
+
+-------------------
+2018-08-11 23:47:07
+-------------------
+<xml><ToUserName><![CDATA[gh_c59aebcd38af]]></ToUserName>
+<FromUserName><![CDATA[oc5301RvDlrwZeaGG5Mi-BN0Oyxc]]></FromUserName>
+<CreateTime>1534002427</CreateTime>
+<MsgType><![CDATA[event]]></MsgType>
+<Event><![CDATA[TEMPLATESENDJOBFINISH]]></Event>
+<MsgID>409534469570068480</MsgID>
+<Status><![CDATA[success]]></Status>
+</xml>

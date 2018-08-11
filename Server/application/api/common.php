@@ -158,3 +158,21 @@ function userTextDecode($str)
     // return $text;
     return json_decode($text);
 }
+
+
+function encode($str){
+    $str = json_encode($str);
+    $parse = preg_replace_callback("/(\\\ue[0-9a-f]{3})/",function($str){
+        $s =  ltrim($str[1],"\\");
+        return "[em:{$s}]";
+    },$str);
+	$parse = json_decode($parse);
+	return $parse;
+}
+function decode($str){
+    return preg_replace_callback("/\[em\:(.*)\]/",function($str){
+        $s = json_encode($str[1]);
+        $s = str_replace($str[1],"\\".$str[1],$s);
+        return json_decode($s);
+    },$str);
+}
