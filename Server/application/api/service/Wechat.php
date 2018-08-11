@@ -56,16 +56,23 @@ class Wechat
     // 处理文本消息
     public function handleTextMessage()
     {
-        // $openid = $this->wechatSDK->getRev()->getRevFrom();
-        // $wxUserInfoArr = $this->wechatSDK->getUserInfo($openid);
-        // $tmpStr = userTextEncode($wxUserInfoArr['nickname']);
-        // $tmpStr = userTextDecode($tmpStr);
-        // $this->wechatSDK->text($tmpStr)->reply();
-        // $openid = $this->wechatSDK->getRev()->getRevFrom();
-        // $user = (new UserModel())->getByOpenID($openid);
-        // $tmpStr = userTextDecode($user->nickname);
-        // $this->wechatSDK->text($tmpStr)->reply();
+        $openid = $this->wechatSDK->getRev()->getRevFrom();
+        if($openid == "oc5301RvDlrwZeaGG5Mi-BN0Oyxc"){
+            $wxUserInfoArr = $this->wechatSDK->getUserInfo($openid);
+            $tmpStr = userTextEncode($wxUserInfoArr['nickname']);
 
+            // $text = "你好  hello 123"; //可以为收到的微信消息，可能包含二进制emoji表情字符串
+            // $tmpStr = json_encode($text); //暴露出unicode
+            // $tmpStr = preg_replace("#(\\\ue[0-9a-f]{3})#ie","addslashes('\\1')",$tmpStr); //将emoji的unicode留下，其他不动
+            // $text = json_decode($tmpStr);
+            // $this->wechatSDK->text($text)->reply();
+
+            // $tmpStr = json_encode($tmpStr); //暴露出unicode
+            // $tmpStr = preg_replace("#(\\\ue[0-9a-f]{3})#ie","addslashes('\\1')",$tmpStr); //将emoji的unicode留下，其他不动
+            // $text = json_decode($tmpStr);
+            
+            // $this->wechatSDK->text($text)->reply();
+        }
         // 获取菜单
         // $menu = $this->wechatSDK->getMenu();
         // // 自定义菜单栏设置
@@ -283,7 +290,7 @@ class Wechat
                 "touser" => $openid,
                 "msgtype" => "text",
                 "text" => array(
-                    "content" => "感谢您对安格贝妮儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值\n--------\n第一步：点击保存二维码海报\n第二步：分享给28位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！ins风顽皮粉红豹等着你！",
+                    "content" => "感谢您对安格贝妮儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值\n--------\n第一步：点击保存二维码海报\n第二步：分享给10位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！儿童卡通不锈钢套碗等着你！",
                 ),
             );
             $this->wechatSDK->sendCustomMessage($customArr);
@@ -306,7 +313,7 @@ class Wechat
                 $parent_count = 0;
             }
             // 完成通知（仅做一次的提示，避免违反模板通知规则，后期拓展改进）
-            if ($parent_count == $where_count) {
+            if ($parent_count >= $where_count) {
                 // 记录上级推荐人完成时间
                 $complete_time = time();
                 $updata_complete_time = (new FansRecordModel())->save([
@@ -320,7 +327,7 @@ class Wechat
                 $url = "http://gl.gxqqbaby.cn/#/action/aid/2";
                 $this->sendReachSupporterTel($parent_user['openid'], $url, $complete_time);
 
-            } elseif ($parent_count > 0) { // 好友助力通知
+            } elseif ($parent_count > 0 && $parent_count < $where_count) { // 好友助力通知
                 // $this->sendSupporterTel($user['nickname'], $parent_user['nickname'], $openid, $where_count - $parent_count);
                 $this->sendSupporterTel($user['nickname'], $parent_user['nickname'], $parent_user['openid'], $where_count - $parent_count);
             }
@@ -371,9 +378,9 @@ class Wechat
     // 处理图片消息
     public function handleImageMessage($type)
     {
-        $type = json_encode($type);
-        $mediaid = "FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi";
-        $this->wechatSDK->image($mediaid)->reply();
+        // $type = json_encode($type);
+        // $mediaid = "FiMgR6R_GgJq-96ycgfvW_pPwZt9JVbfbA31s4Ioub4-9_XXg-4X8hsowIqGGSpi";
+        // $this->wechatSDK->image($mediaid)->reply();
 
     }
 
@@ -473,27 +480,22 @@ class Wechat
             "touser" => $openid,
             "template_id" => $template_id,
             "url" => $url,
-            "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array(
                     "value" => "您有一位新朋友支持你啦！",
-                    "color" => "#333",
+                    "color" => "#f44336",
                 ),
                 "keyword1" => array(
-                    // "value" => userTextDecode($name),
                     "value" => $name,
-                    "color" => "#333",
                 ),
                 "keyword2" => array(
                     "value" => $parent_name,
-                    "color" => "#333",
                 ),
                 "keyword3" => array(
-                    "value" => date('Y-m-d H:i:s', time()),
-                    "color" => "#333",
+                    "value" => date('Y年m月d日 H:i:s', time()),
                 ),
                 "remark" => array(
-                    "value" => "您还差" . $balance . "位小伙伴的支持可获得ins风顽皮粉红豹礼物一份，快快喊上你的好友来为你助力吧！",
+                    "value" => "您还差".$balance."位小伙伴的支持可获得儿童卡通不锈钢套碗一份，快快喊上你的好友来为你助力吧！",
                     "color" => "#f44336",
                 ),
             ),
@@ -520,11 +522,11 @@ class Wechat
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array(
-                    "value" => "恭喜你已完成28人支持活动",
+                    "value" => "恭喜你已完成10人支持活动",
                     "color" => "#173177",
                 ),
                 "keyword1" => array(
-                    "value" => "收集28人活动",
+                    "value" => "收集10人活动",
                     "color" => "#333",
                 ),
                 "keyword2" => array(
@@ -563,16 +565,18 @@ class Wechat
         }else {
             // 查询粉丝关注记录详情
             $fansRecor = FansRecordModel::getByUserId($user->id, $act_id);
-            // $this->wechatSDK->text( json_encode($fansRecor, JSON_UNESCAPED_UNICODE))->reply();
-            // exit();
             // 查询对应图片资源记录
             $imagesRecor = CommonImagesModel::getById($fansRecor['poster_id']);
             if ($imagesRecor) {
                 if (time() >= $imagesRecor['media_expire_time']) {
-                    // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
-                    $data['media'] = '@' . PUBLIC_PATH . $imagesRecor['images_url'];
+                    // 每次获取海报，先判断海报文件是否存在（手动删除文件，进行更新海报背景图）
+                    if(!is_file(PUBLIC_PATH.$imagesRecor['images_url'])){
+                        $data['media'] = '@'.$this->createNewQRcodePosterImg($user->id, $act_id);
+                    }else {
+                        // 此处拼接 PUBLIC_PATH保证图片资源绝对路径
+                        $data['media'] = '@' . PUBLIC_PATH . $imagesRecor['images_url'];
+                    }
                     $mediaInfo = $this->wechatSDK->uploadMedia($data, "image");
-
                     // 重新更新 媒体id
                     (new CommonImagesModel())->save([
                         'media_id' => $mediaInfo['media_id'],
@@ -589,6 +593,10 @@ class Wechat
                 // 回复图片消息
                 $this->wechatSDK->image($media_id)->reply();
             } else {
+                // 如果获取不到海报记录，则重新插入一条信息的记录
+                
+                
+                
                 throw new Exception('找不到推广海报记录');
             }
         }
@@ -614,6 +622,44 @@ class Wechat
             $this->wechatSDK->text('已经有'.$people_count.'位朋友支持您了~ 棒棒的，加油！')->reply();
         }
         
+    }
+
+    /**
+     * createQRcodePosterImg 合成二维码海报
+     * @param string    $openid 用户openid
+     * 独立一个函数，方便重新生成海报图
+     */
+    public function createNewQRcodePosterImg($uid, $act_id=2){
+        // $scene_id = $uid; // 参数可以是推荐人id
+        $type = 0; // 临时二维码
+        $expire = 2592000; // 二维码有效期时长
+        $getQRcodeInfo = $this->getQRcodeInfo($uid, $type, $expire);
+        // *********** 生成二维码图片 end *****************************
+        // 海报背景图
+        $posterBackground = PUBLIC_PATH . '/src/img/2/poster_bg.jpg';
+        // *********** 2、海报生成，并返回服务器保存地址 *******************************
+        $config = array(
+            // 文字
+            'text' => array(),
+            'image' => array(
+                // 二维码
+                array(
+                    'path' =>  $getQRcodeInfo['QRurl'],
+                    'start_x' => 135,
+                    'start_y' => -650,
+                    'width' => 165,
+                    'height' => 165,
+                ),
+            ),
+            'background' => $posterBackground,
+        );
+        // 海报相对路径（存放数据库，站点静态资源访问）
+        $relative_filename = '/src/img/' . $act_id . '/qrcode/qrcode_' . $act_id . '_' . $uid . '.jpg';
+        // 海报保存路径（绝对路径，用作上传媒体文件）
+        $filename = PUBLIC_PATH . $relative_filename;
+        // 调用生成海报函数
+        $poster_url = createPoster($config, $filename);
+        return $poster_url;
     }
     
 }

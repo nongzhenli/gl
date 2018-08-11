@@ -1,6 +1,5 @@
 <?php
 namespace WechatSdk;
-
 use think\Cache;
 /**
  *	微信公众平台PHP-SDK, 官方API部分
