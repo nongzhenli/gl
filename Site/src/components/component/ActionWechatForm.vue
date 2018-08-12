@@ -23,13 +23,20 @@
                 <button type="button" class="submit-btn" @click="submitLogin">确认提交</button>
             </div>
         </div>
-        <!-- 已经到店领取了 -->
-        <div v-if="status ==3">
-            <p class="text-tip">您已经已经到店领取礼品了呢！</p>
-        </div>
         <!-- 已提交信息 -->
         <div v-if="status ==4">
             <p class="text-tip">您已提交过联系信息，请您耐心等待客服通知，即可来店领取。</p>
+        </div>
+
+        <!-- 待领取礼品 -->
+        <div v-if="status ==5" class="text-tip">
+            <p>恭喜您获取礼品领取资格！点击“立即领取”按钮后，请与现场工作人员核对！</p>
+            <button @click="userGetGood()" class="getBtn">立即领取</button>
+        </div>
+
+        <!-- 已经到店领取了 -->
+        <div v-if="status ==3">
+            <p class="text-tip">您已经已经到店领取礼品了呢！</p>
         </div>
 
     </div>
@@ -50,8 +57,9 @@ export default {
     created() {
         this.isUserGet(this.getUrlParam('aid'));
     },
+    mounted(){
+    },
     methods: {
-
         // 获取url参数
         // 拆分标识符 /
         getUrlParam: function (name) {
@@ -73,15 +81,17 @@ export default {
                 }
             }).then(response => {
                 console.log(response);
-                // status 粉丝状态，0取消关注，1关注，2已完成，3已领取，4填写联系信息时间
+                // status 粉丝状态，0取消关注，1关注，2已完成，4填写联系信息时间，5待领取礼品，3已领取
                 if(response.data.status){
                     this.status =  response.data.status;
+                    if(response.data.status == 4 && this.$route.query.statu == "ok"){
+                        this.status = 5;
+                    }
                 }
             }).catch(error => {
                 console.log(error);
             });
         },
-
         // 提交
         submitLogin(){
             let reg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
@@ -122,6 +132,26 @@ export default {
                 console.log(error);
             });
 
+        },
+        // 用户获取礼品按钮
+        userGetGood(){
+            var act_id = this.getUrlParam('aid');
+            axios({
+                url: "http://gl.gxqqbaby.cn/api/v1/wechat/updataUserGood",
+                headers: { 'token': this.utils.VueCookie.get("loginToken") },
+                method: "POST",
+                data: {
+                    "act_id": act_id,
+                }
+            }).then(response => {
+                console.log(response);
+                if(response.data.status == 3){
+                    this.$router.go(0);
+                }
+                // response.data.status
+            }).catch(error => {
+                console.log(error);
+            });
         }
     },
 }
@@ -171,6 +201,13 @@ export default {
         font-size: 0.4rem;
         text-align: left;
         padding: 0.3rem;
+    }
+    .getBtn {
+        width: 100%;
+        height: 36px;
+        line-height: 36px;
+        margin: 30px auto;
+        display: block;
     }
 }
 </style>

@@ -35,6 +35,7 @@ Route::get('api/:version/lottery/prize/test', 'api/:version.Lottery/test'); // �
 Route::rule('api/:version/wechat/wx', 'api/:version.Wechat/wx', 'GET|POST');
 Route::rule('api/:version/wechat/verifyUser', 'api/:version.Wechat/verifyUser', 'POST');
 Route::rule('api/:version/wechat/updataNameMobile', 'api/:version.Wechat/updataNameMobile', 'POST');
+Route::rule('api/:version/wechat/updataUserGood', 'api/:version.Wechat/updataUserGood', 'POST');
 
 Route::rule('api/:version/wechat/test', 'api/:version.Wechat/test', 'GET|POST');    // 测试
 

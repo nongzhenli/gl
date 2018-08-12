@@ -51,6 +51,23 @@ class Wechat
         }
     }
 
+    /**
+     * 更新领取礼品状态
+     */
+    public function updataUserGood()
+    {
+        // 活动id
+        $act_id = input('post.act_id');
+        $userGoodInfo = FansRecordModel::updataUserGood($act_id);
+        if (!$userGoodInfo) {
+            throw new Exception('请求错误');
+        } else {
+            return $userGoodInfo;
+        }
+    }
+
+
+
     // 海报图生成
     public function test()
     {

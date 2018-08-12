@@ -111,4 +111,22 @@ class FansRecord extends BaseModel
         return $record;
     }
 
+    /**
+     * 活动到店领取礼品更新状态
+     * @param data|Array 更新数据
+     */
+    public static function updataUserGood($act_id)
+    {
+        $uid = Token::getCurrentUid();
+        // 额外定义 $record 好处是可以返回被更新的数据，否则仅返回1或 0
+        $record = new FansRecord;
+        $data['status'] = 3;
+        $data['get_time'] = time();
+        $record->save($data, [
+            'user_id' => $uid,
+            'act_id' => $act_id
+        ]);
+        return $record;
+    }
+
 }
