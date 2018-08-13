@@ -304,7 +304,7 @@ class Wechat
                 $parent_count = 0;
             }
             // 完成通知（仅做一次的提示，避免违反模板通知规则，后期拓展改进）
-            if ($parent_count >= $where_count) {
+            if ($parent_count == $where_count) {
                 // 记录上级推荐人完成时间
                 $complete_time = time();
                 $updata_complete_time = (new FansRecordModel())->save([

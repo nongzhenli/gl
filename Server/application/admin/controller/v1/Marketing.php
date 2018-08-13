@@ -34,6 +34,17 @@ class Marketing
         return $data;
     }
 
+    /** 导出数据吸粉活动数据明细
+     * @param expTitle| String      文件标题
+     * @param expCellName| Array    表格单元格标题
+     * @param expTableData| Array   表格单元格内容
+     */
+    public function fansDataExcel(){
+
+    }
+
+
+
     /**
      * 获取指定的marketing信息
      * @param id    marketing的id号

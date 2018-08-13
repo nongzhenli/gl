@@ -41,7 +41,7 @@ class Marketing extends Model
             ->paginate($pageCount, false, [
                 "page" => $p
             ])->each(function($item, $key){
-                $item['people'] = Db::table('fans_record')->where("parent_id", $item['id'])->count();
+                $item['people'] = Db::table('fans_record')->where("parent_id", $item['user_id'])->count();
                 return $item;
             });
         return $data;
