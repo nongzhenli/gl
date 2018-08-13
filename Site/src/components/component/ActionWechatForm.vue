@@ -146,6 +146,7 @@ export default {
             }).then(response => {
                 console.log(response);
                 if(response.data.status == 3){
+                    alert('领取成功，请与现场工作人员核对！');
                     this.$router.go(0);
                 }
                 // response.data.status

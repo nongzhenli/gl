@@ -1,6 +1,6 @@
 <template>
     <div class="app-container view-marketing-activity">
-        <el-table :data="list"
+        <el-table :data="list.data"
             v-loading.body="listLoading"
             element-loading-text="Loading"
             stripe
@@ -12,7 +12,7 @@
                 label='序号'
                 width="80">
                 <template slot-scope="scope">
-                    {{scope.$index}}
+                    {{scope.row.id}}
                 </template>
             </el-table-column>
             <el-table-column label="姓名"
@@ -47,14 +47,14 @@
             <el-table-column label="支持人数"
                 max-width="160"
                 align="left">
-                <template slot-scope="scope">0</template>
+                <template slot-scope="scope">{{scope.row.people}}</template>
             </el-table-column>
             <el-table-column align="left"
                 prop="last_follow_unfollow_time"
                 label="关注/取消时间"
                 width="150">
                 <template slot-scope="scope">
-                    <span  v-html="isEmptyFilter(scope.row.last_follow_unfollow_time)"></span>
+                    <span v-html="isEmptyFilter(scope.row.last_follow_unfollow_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
@@ -62,7 +62,7 @@
                 prop="complete_time"
                 label="完成时间">
                 <template slot-scope="scope">
-                    <span  v-html="isEmptyFilter(scope.row.complete_time)"></span>
+                    <span v-html="isEmptyFilter(scope.row.complete_time)"></span>
                 </template>
             </el-table-column>
             <el-table-column align="left"
@@ -91,6 +91,15 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination background
+            layout="prev, pager, next"
+            :total="list.total"
+            prev-text="上一页"
+            next-text="下一页"
+            class="marketing-activity__page-list"
+            @current-change="pageDataGet"
+            >
+        </el-pagination>
     </div>
 </template>
 
@@ -100,14 +109,15 @@ import { formatTime } from '@/utils/index'
 export default {
     data() {
         return {
-            list: null,
-            listLoading: true
+            list: {
+                data: [],
+                total: 0,
+            },
+            listLoading: true,
         }
     },
     created() {
         this.fetchData();
-        // 获取路由信息
-        console.log(this.$route);
     },
     computed: {
     },
@@ -146,17 +156,43 @@ export default {
         fetchData() {
             this.listLoading = true
             getMarktingGetFans({ id: this.$route.params.id }).then(response => {
-                this.list = response.data.items
+                this.list.data = response.data.data
+                this.list.total = response.data.total
                 this.listLoading = false
             })
         },
         // 过滤单元格空数据 【无法通过过滤器、计算器实现，替换methods方法使用，OK】
         isEmptyFilter(data) {
             return formatTime(data, true, "{y}-{m}-{d} {h}:{i}") || `<i style='color: #bbb;'>NULL</i>`;
+        },
+        // 分页
+        pageDataGet(pageIdx){
+            this.listLoading = true
+            getMarktingGetFans({ 
+                id: this.$route.params.id,
+                p: pageIdx
+            }).then(response => {
+                this.list.data = response.data.data
+                this.list.total = response.data.total
+                this.listLoading = false
+            })
         }
     },
 }
 </script>
 <style lang="less">
+.marketing-activity__page-list {
+    margin: 30px 0;
+
+    &.el-pagination.is-background button.btn-prev,
+    &.el-pagination.is-background button.btn-next {
+        padding: 0 8px;
+
+        &:not([disabled='disabled']):hover {
+            background-color: #409eff;
+            color: #fff;
+        }
+    }
+}
 </style>
  

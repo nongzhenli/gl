@@ -24,14 +24,12 @@ class Marketing
      * @http        GET
      * @type        Fans 公众号吸粉活动
      */
-    public function getFansById($id)
+    public function getFansById($id, $p=1)
     {
-        $result = MarketingModel::getFansById($id);
+        $result = MarketingModel::getFansById($id, $p);
         $data = array(
             "code" => 20000,
-            "data" => array(
-                "items" => $result,
-            ),
+            "data" => $result
         );
         return $data;
     }
