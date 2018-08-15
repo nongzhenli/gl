@@ -65,7 +65,7 @@ class FansRecord extends BaseModel
             array('status','状态'),
             array('user_id','用户id'),
             array('parent_id','推荐人id'),
-            // array('people','支持人数'),
+            array('people','支持人数'),
             array('act_id','活动id'),
             array('poster_id','宣传海报id'),
             array('last_follow_unfollow_time','关注/取消时间'),
@@ -74,28 +74,20 @@ class FansRecord extends BaseModel
             array('get_time','领取时间'),
             array('create_time','创建记录时间'),
         );
-        // $xlsData = Db::table('fans_record')->where('act_id',$id)
-        //     ->field('id,custname,mobile,status,user_id,parent_id,act_id,poster_id,last_follow_unfollow_time,complete_time,sign_time,get_time,create_time')
-        //     ->order("id DESC")
-        //     ->chunk(100, function(){
-        //     }, 'id')
-        //     ->select();
-        $xlsData = Db::table('fans_record')->chunk(100, function($data) {
-            // 处理结果集...
-            foreach ($data as $item) {
-                var_dump($item);
-            }
-        });
-        // foreach ($xlsData as $key => $value) {
-        //     $xlsData[$key]['people'] = Db::table('fans_record')->where("parent_id", $value['user_id'])->count();
-        //     $xlsData[$key]['last_follow_unfollow_time'] = timeFormat($value['last_follow_unfollow_time'], "Y-m-d H:i:s");
-        //     $xlsData[$key]['complete_time'] = timeFormat($value['complete_time'], "Y-m-d H:i:s");
-        //     $xlsData[$key]['sign_time'] = timeFormat($value['sign_time'], "Y-m-d H:i:s");
-        //     $xlsData[$key]['get_time'] = timeFormat($value['get_time'], "Y-m-d H:i:s");
-        //     $xlsData[$key]['create_time'] = timeFormat($value['create_time'], "Y-m-d H:i:s");
-        // }
+        $xlsData = Db::table('fans_record')->where('act_id',$id)
+            ->field('id,custname,mobile,status,user_id,parent_id,act_id,poster_id,last_follow_unfollow_time,complete_time,sign_time,get_time,create_time')
+            ->order("id DESC")
+            ->select();
+        foreach ($xlsData as $key => $value) {
+            $xlsData[$key]['people'] = Db::table('fans_record')->where("parent_id", $value['user_id'])->count();
+            $xlsData[$key]['last_follow_unfollow_time'] = timeFormat($value['last_follow_unfollow_time'], "Y-m-d H:i:s");
+            $xlsData[$key]['complete_time'] = timeFormat($value['complete_time'], "Y-m-d H:i:s");
+            $xlsData[$key]['sign_time'] = timeFormat($value['sign_time'], "Y-m-d H:i:s");
+            $xlsData[$key]['get_time'] = timeFormat($value['get_time'], "Y-m-d H:i:s");
+            $xlsData[$key]['create_time'] = timeFormat($value['create_time'], "Y-m-d H:i:s");
+        }
 
-        // ExcelService::exportExcel($xlsName,$xlsCell,$xlsData);
+        ExcelService::exportExcel($xlsName,$xlsCell,$xlsData);
     }
 
     /**
