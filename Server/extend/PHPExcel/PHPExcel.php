@@ -1,6 +1,5 @@
 <?php
 
-namespace PHPExcel;
 /** PHPExcel root directory */
 if (!defined('PHPEXCEL_ROOT')) {
     define('PHPEXCEL_ROOT', dirname(__FILE__) . '/');

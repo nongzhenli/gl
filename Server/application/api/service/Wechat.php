@@ -58,46 +58,51 @@ class Wechat
     {
         $openid = $this->wechatSDK->getRev()->getRevFrom();
         if($openid == "oc5301RvDlrwZeaGG5Mi-BN0Oyxc"){
-            $wxUserInfoArr = $this->wechatSDK->getUserInfo($openid);
-            $tmpStr = userTextEncode($wxUserInfoArr['nickname']);
+            // $wxUserInfoArr = $this->wechatSDK->getUserInfo($openid);
+            // $tmpStr = userTextEncode($wxUserInfoArr['nickname']);
 
-            $this->sendSupporterTel(userTextDecode($tmpStr), userTextDecode($tmpStr), $openid, 1);
-            $this->wechatSDK->text(userTextDecode($tmpStr."\ue419"))->reply();
+            // $this->sendSupporterTel(userTextDecode($tmpStr), userTextDecode($tmpStr), $openid, 1);
+            // $this->wechatSDK->text(userTextDecode($tmpStr."\ue419"))->reply();
+
+            // 自定义菜单栏设置
+            // $newmenu = array(
+            //     "button" => array(
+            //         0 => array(
+            //             "name" => "拍照优惠",
+            //             "sub_button" => array(
+            //                 0 => array(
+            //                     "type" => "view",
+            //                     "name" => "拍一送一底片全送",
+            //                     "url" => "https://jinshuju.net/f/F2aunC",
+            //                 ),
+            //             )
+            //         ),
+            //         1 => array(
+            //             "name" => "领取活动",
+            //             "sub_button" => array(
+            //                 0 => array(
+            //                     "type" => "click",
+            //                     "name" => "查看我的人气",
+            //                     "key" => "LOOK_MY_NUM",
+            //                 ),
+            //                 1 => array(
+            //                     "type" => "click",
+            //                     "name" => "生成朋友圈海报",
+            //                     "key" => "GET_POSTER_IMAGES",
+            //                 ),
+            //                 2 => array(
+            //                     "type" => "view",
+            //                     "name" => "填写领取信息",
+            //                     "url" => "http://gl.gxqqbaby.cn/#/action/aid/2",
+            //                 ),
+            //             ),
+            //         ),
+            //     ),
+            // );
+            // $newmenu_result = $this->wechatSDK->createMenu($newmenu);
+            // $this->wechatSDK->text($newmenu_result)->reply();
         }
-        // 获取菜单
-        // $menu = $this->wechatSDK->getMenu();
-        // // 自定义菜单栏设置
-        // $newmenu = array(
-        //     "button" => array(
-        //         // 0 => array(
-        //         //     "type" => "view",
-        //         //     "name" => "幸运抽奖",
-        //         //     "url" => "http://gl.gxqqbaby.cn/#/action/aid/1",
-        //         // ),
-        //         0 => array(
-        //             "name" => "近期活动",
-        //             "sub_button" => array(
-        //                 0 => array(
-        //                     "type" => "click",
-        //                     "name" => "查看我的人气",
-        //                     "key" => "LOOK_MY_NUM",
-        //                 ),
-        //                 1 => array(
-        //                     "type" => "click",
-        //                     "name" => "获取推广海报",
-        //                     "key" => "GET_POSTER_IMAGES",
-        //                 ),
-        //                 2 => array(
-        //                     "type" => "view",
-        //                     "name" => "填写领取信息",
-        //                     "url" => "http://gl.gxqqbaby.cn/#/action/aid/2",
-        //                 ),
-        //             ),
-        //         ),
-        //     ),
-        // );
-        // $newmenu_result = $this->wechatSDK->createMenu($newmenu);
-        // $this->wechatSDK->text($newmenu_result)->reply();
+        
     }
 
     // 处理事件消息
@@ -275,15 +280,23 @@ class Wechat
                     }
                 }
             }
-
+            // 发送客服消息，提醒作用
+            $customArr_msg2 = array(
+                "touser" => $openid,
+                "msgtype" => "text",
+                "text" => array(
+                    "content" => "Hi，亲爱的辣妈宝爸，欢迎关注安格贝妮儿童摄影桂林店！\n\n新馆开业！【拍一送一，底片全送】\n <a href=\"https://jinshuju.net/f/F2aunC\">点击查看优惠</a>\n\n我们用镜头进入孩子的世界\n专注服务0-12岁宝贝\n用影像承载记忆的开始\n用心刻画美好的童年",
+                ),
+            );
             // 发送客服消息，提醒作用
             $customArr = array(
                 "touser" => $openid,
                 "msgtype" => "text",
                 "text" => array(
-                    "content" => "感谢您对安格贝妮儿童摄影的支持！\n\n完成以下4步操作\n即可免费领走价值\n--------\n第一步：点击保存二维码海报\n第二步：分享给10位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！儿童卡通不锈钢套碗等着你！",
+                    "content" => "感谢您对安格贝妮儿童摄影的支持！\n\n完成以下4步操作\n即可免费领取精美礼品\n--------\n第一步：点击保存二维码海报\n第二步：分享给10位好友进行扫码关注\n第三步：完成任务后【点击详情】提交联系方式\n第四步：耐心等待客服通知，即可来店领取\n--------\n海报生成中，请等待1-2秒\n\n快去邀请好友吧！儿童卡通不锈钢套碗等着你！",
                 ),
             );
+            $this->wechatSDK->sendCustomMessage($customArr_msg2);
             $this->wechatSDK->sendCustomMessage($customArr);
             // 推送海报图片消息
             $this->wechatSDK->image($media_id)->reply();

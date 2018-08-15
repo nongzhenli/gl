@@ -162,3 +162,15 @@ function createPoster($config = array(), $filename = "")
         exit();
     }
 }
+
+/**
+ * 时间格式化
+ * @param time      时间戳
+ * @param format    转换格式
+ */
+function timeFormat($time, $format="Y-m-d H:i:s"){
+    if(!empty($time)){
+        return date($format, $time);
+    }
+    return $time;
+}

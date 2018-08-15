@@ -20,6 +20,14 @@ export function getMarktingGetFans(params) {
         params
     })
 }
+// 导出吸粉数据
+export function exportExcelFansDataApi(params) {
+    return request({
+        url: '/marketing/fans/export-exce',
+        method: 'post',
+        data: params
+    })
+}
 
 
 /**

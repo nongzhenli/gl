@@ -3,11 +3,13 @@
  * @Author: big黑钦
  * @Date: 2018-06-04 13:44:19
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-06-21 15:27:44
+ * @Last Modified time: 2018-08-14 17:10:54
  */
 namespace app\admin\model;
 use think\Model;
 use think\Exception;
+use think\Db;
+use app\admin\service\Excel as ExcelService;
 
 
 // public 表示全局，类内部外部子类都可以访问；
@@ -49,6 +51,51 @@ class FansRecord extends BaseModel
         }
         return false;
         
+    }
+
+    /**
+     * 查询数据表导出Excel
+     */
+    public static function exportExcel($id, $xlsName="导出数据"){
+
+        $xlsCell  = array(
+            array('id','编号'),
+            array('custname','姓名'),
+            array('mobile','手机号码'),
+            array('status','状态'),
+            array('user_id','用户id'),
+            array('parent_id','推荐人id'),
+            // array('people','支持人数'),
+            array('act_id','活动id'),
+            array('poster_id','宣传海报id'),
+            array('last_follow_unfollow_time','关注/取消时间'),
+            array('complete_time','完成时间'),
+            array('sign_time','填表时间'),
+            array('get_time','领取时间'),
+            array('create_time','创建记录时间'),
+        );
+        // $xlsData = Db::table('fans_record')->where('act_id',$id)
+        //     ->field('id,custname,mobile,status,user_id,parent_id,act_id,poster_id,last_follow_unfollow_time,complete_time,sign_time,get_time,create_time')
+        //     ->order("id DESC")
+        //     ->chunk(100, function(){
+        //     }, 'id')
+        //     ->select();
+        $xlsData = Db::table('fans_record')->chunk(100, function($data) {
+            // 处理结果集...
+            foreach ($data as $item) {
+                var_dump($item);
+            }
+        });
+        // foreach ($xlsData as $key => $value) {
+        //     $xlsData[$key]['people'] = Db::table('fans_record')->where("parent_id", $value['user_id'])->count();
+        //     $xlsData[$key]['last_follow_unfollow_time'] = timeFormat($value['last_follow_unfollow_time'], "Y-m-d H:i:s");
+        //     $xlsData[$key]['complete_time'] = timeFormat($value['complete_time'], "Y-m-d H:i:s");
+        //     $xlsData[$key]['sign_time'] = timeFormat($value['sign_time'], "Y-m-d H:i:s");
+        //     $xlsData[$key]['get_time'] = timeFormat($value['get_time'], "Y-m-d H:i:s");
+        //     $xlsData[$key]['create_time'] = timeFormat($value['create_time'], "Y-m-d H:i:s");
+        // }
+
+        // ExcelService::exportExcel($xlsName,$xlsCell,$xlsData);
     }
 
     /**
