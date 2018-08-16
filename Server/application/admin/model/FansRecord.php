@@ -6,11 +6,11 @@
  * @Last Modified time: 2018-08-14 17:10:54
  */
 namespace app\admin\model;
-use think\Model;
-use think\Exception;
-use think\Db;
-use app\admin\service\Excel as ExcelService;
 
+use app\admin\service\Excel as ExcelService;
+use think\Db;
+use think\Exception;
+use think\Model;
 
 // public 表示全局，类内部外部子类都可以访问；
 // private 表示私有的，只有本类内部可以使用；
@@ -18,6 +18,9 @@ use app\admin\service\Excel as ExcelService;
 
 class FansRecord extends BaseModel
 {
+    // 定义时间戳字段名
+    // protected $createTime = 'create_time';
+    // protected $updateTime = 'last_follow_unfollow_time';
 
     /**
      * insertFansRecord() 微信公众号关注吸粉活动记录入库
@@ -31,12 +34,12 @@ class FansRecord extends BaseModel
     public static function insertFansRecord($user_id, $open_id, $status = 1, $poster_id, $parent_id = 0, $act_id = 0)
     {
         // 判断是否存在
-        $getFansResult =FansRecord::where([
-            'user_id' =>  $user_id,
-            'act_id' =>  $act_id,
-            'poster_id' =>  $poster_id
+        $getFansResult = FansRecord::where([
+            'user_id' => $user_id,
+            'act_id' => $act_id,
+            'poster_id' => $poster_id,
         ])->find();
-        if(!$getFansResult){
+        if (!$getFansResult) {
             $result_record = self::create([
                 'user_id' => $user_id,
                 'open_id' => $open_id,
@@ -50,44 +53,55 @@ class FansRecord extends BaseModel
             return $result_record;
         }
         return false;
-        
+
     }
 
     /**
      * 查询数据表导出Excel
      */
-    public static function exportExcel($id, $xlsName="导出数据"){
+    public static function exportExcel($id, $xlsName = "导出数据")
+    {
 
-        $xlsCell  = array(
-            array('id','编号'),
-            array('custname','姓名'),
-            array('mobile','手机号码'),
-            array('status','状态'),
-            array('user_id','用户id'),
-            array('parent_id','推荐人id'),
+        $xlsCell = array(
+            array('id', '编号'),
+            array('custname', '姓名'),
+            array('mobile', '手机号码'),
+            array('status', '状态'),
+            array('user_id', '用户id'),
+            array('parent_id', '推荐人id'),
             array('people','支持人数'),
-            array('act_id','活动id'),
-            array('poster_id','宣传海报id'),
-            array('last_follow_unfollow_time','关注/取消时间'),
-            array('complete_time','完成时间'),
-            array('sign_time','填表时间'),
-            array('get_time','领取时间'),
-            array('create_time','创建记录时间'),
+            array('act_id', '活动id'),
+            array('poster_id', '宣传海报id'),
+            array('last_follow_unfollow_time', '关注/取消时间'),
+            array('complete_time', '完成时间'),
+            array('sign_time', '填表时间'),
+            array('get_time', '领取时间'),
+            array('create_time', '创建记录时间'),
         );
-        $xlsData = Db::table('fans_record')->where('act_id',$id)
-            ->field('id,custname,mobile,status,user_id,parent_id,act_id,poster_id,last_follow_unfollow_time,complete_time,sign_time,get_time,create_time')
-            ->order("id DESC")
-            ->select();
+        $xlsData = Db::query("SELECT 
+            `id`,
+            `custname`,
+            `mobile`,
+            `status`,
+            `user_id`,
+            `parent_id`,
+            `act_id`,
+            `poster_id`,
+            FROM_UNIXTIME(`last_follow_unfollow_time`) AS `last_follow_unfollow_time`,
+            FROM_UNIXTIME(`complete_time`) AS `complete_time`,
+            FROM_UNIXTIME(`sign_time`) AS `sign_time`,
+            FROM_UNIXTIME(`get_time`) AS `get_time`,
+            FROM_UNIXTIME(`create_time`) AS `create_time` 
+            FROM `fans_record` WHERE `act_id` = $id");
+        // $xlsData = FansRecord::where('act_id',$id)
+        //     ->field('id,custname,mobile,status,user_id,parent_id,act_id,poster_id,last_follow_unfollow_time,complete_time,sign_time,get_time,create_time')
+        //     ->order("id DESC")
+        //     ->select();
         foreach ($xlsData as $key => $value) {
             $xlsData[$key]['people'] = Db::table('fans_record')->where("parent_id", $value['user_id'])->count();
-            $xlsData[$key]['last_follow_unfollow_time'] = timeFormat($value['last_follow_unfollow_time'], "Y-m-d H:i:s");
-            $xlsData[$key]['complete_time'] = timeFormat($value['complete_time'], "Y-m-d H:i:s");
-            $xlsData[$key]['sign_time'] = timeFormat($value['sign_time'], "Y-m-d H:i:s");
-            $xlsData[$key]['get_time'] = timeFormat($value['get_time'], "Y-m-d H:i:s");
-            $xlsData[$key]['create_time'] = timeFormat($value['create_time'], "Y-m-d H:i:s");
         }
 
-        ExcelService::exportExcel($xlsName,$xlsCell,$xlsData);
+        ExcelService::exportExcel($xlsName, $xlsCell, $xlsData);
     }
 
     /**
@@ -101,7 +115,7 @@ class FansRecord extends BaseModel
     }
 
     /**
-     * 检查这条记录是否存在__通过 
+     * 检查这条记录是否存在__通过
      * 存在返回uid，不存在返回0
      * @param $uid      用户id
      * @param $act_id   所属活动id
@@ -109,8 +123,8 @@ class FansRecord extends BaseModel
     public static function getByUserId($uid, $act_id)
     {
         $userInfo = FansRecord::where([
-            'user_id' =>  $uid,
-            'act_id' =>  $act_id
+            'user_id' => $uid,
+            'act_id' => $act_id,
         ])->find();
         return $userInfo;
     }
@@ -119,15 +133,16 @@ class FansRecord extends BaseModel
      * 检查用户状态
      * @param int   $act_id    活动id
      */
-    public static function getUserStatu($act_id){
+    public static function getUserStatu($act_id)
+    {
         $uid = Token::getCurrentUid();
         $user = FansRecord::where([
             'user_id' => $uid,
-            'act_id' => $act_id
+            'act_id' => $act_id,
         ])->field('open_id', true)->find();
-        if(!$user){
+        if (!$user) {
             throw new Exception('用户不存在');
-        }else {
+        } else {
             return $user;
         }
     }

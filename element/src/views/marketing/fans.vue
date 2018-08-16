@@ -3,7 +3,7 @@
         <!-- 操作行 -->
         <header class="top-form-area">
             <el-row class="row">
-                <a href="http://localhost:9528/v1/marketing/fans/export-exce?id=2"  class="down-exce-btn">
+                <a href="http://gl.gxqqbaby.cn/admin/v1/marketing/fans/export-exce?id=2"  class="down-exce-btn">
                     <el-button size="medium"icon="el-icon-tickets">导出数据</el-button>
                 </a>
             </el-row>
@@ -61,14 +61,6 @@
                     <template slot-scope="scope">{{scope.row.people}}</template>
                 </el-table-column>
                 <el-table-column align="left"
-                    prop="last_follow_unfollow_time"
-                    label="关注/取消时间"
-                    width="150">
-                    <template slot-scope="scope">
-                        <span v-html="isEmptyFilter(scope.row.last_follow_unfollow_time)"></span>
-                    </template>
-                </el-table-column>
-                <el-table-column align="left"
                     width="150"
                     prop="complete_time"
                     label="完成时间">
@@ -91,6 +83,14 @@
                     width="150">
                     <template slot-scope="scope">
                         <span v-html="isEmptyFilter(scope.row.get_time)"></span>
+                    </template>
+                </el-table-column>
+                <el-table-column align="left"
+                    prop="last_follow_unfollow_time"
+                    label="关注/取消时间"
+                    width="150">
+                    <template slot-scope="scope">
+                        <span v-html="isEmptyFilter(scope.row.last_follow_unfollow_time)"></span>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column align="left"

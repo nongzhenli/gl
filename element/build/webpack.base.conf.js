@@ -37,8 +37,8 @@ module.exports = {
         'element-ui': 'ELEMENT',
         echarts: 'echarts',
         axios: 'axios',
+        // vuex: 'vuex',
         // 'vue-router': 'vue-router',
-        // vuex: 'vuex'
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
