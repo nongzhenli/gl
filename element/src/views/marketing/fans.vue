@@ -102,10 +102,10 @@
                     </template>
                 </el-table-column> -->
             </el-table>
-            <el-pagination layout="total, prev, pager, next"
+            <el-pagination layout="total, prev, pager, next, jumper"
                 @current-change="pageDataGet"
                 background
-                :pager-count="11"
+                :pager-count="7"
                 :total="list.total"
                 prev-text="上一页"
                 next-text="下一页"

@@ -20,61 +20,7 @@
                                     <i class="icon14_menu_add"></i>
                                     <span class="js_l1Title">添加菜单</span>
                                 </a>
-                                <!-- <div class="sub_pre_menu_box js_l2TitleBox"
-                                    style="">
-                                    <ul class="sub_pre_menu_list">
-                                        <li id="subMenu_menu_0_0"
-                                            class="jslevel2 current selected">
-                                            <a href="javascript:void(0);"
-                                                class="jsSubView"
-                                                draggable="false">
-                                                <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
-                                                    <i class="icon20_common sort_gray"></i>
-                                                    <span class="js_l2Title">图片测试</span>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li id="subMenu_menu_0_1"
-                                            class="jslevel2">
-                                            <a href="javascript:void(0);"
-                                                class="jsSubView"
-                                                draggable="false">
-                                                <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
-                                                    <i class="icon20_common sort_gray"></i>
-                                                    <span class="js_l2Title">小程序</span>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li id="subMenu_menu_0_2"
-                                            class="jslevel2">
-                                            <a href="javascript:void(0);"
-                                                class="jsSubView"
-                                                draggable="false">
-                                                <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
-                                                    <i class="icon20_common sort_gray"></i>
-                                                    <span class="js_l2Title">跳转网页测试</span>
-                                                </span>
-                                            </a>
-                                        </li>
-
-                                        <li class="js_addMenuBox">
-                                            <a href="javascript:void(0);"
-                                                class="jsSubView js_addL2Btn"
-                                                title="最多添加5个子菜单"
-                                                draggable="false">
-                                                <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
-                                                    <i class="icon14_menu_add"></i>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <i class="arrow arrow_out"></i>
-                                    <i class="arrow arrow_in"></i>
-                                </div> -->
                             </li>
-
                             <template v-if="menuOptionsJson.length > 0">
                                 <li class="jsMenu pre_menu_item grid_item"
                                     v-for="(item, idx) in menuOptionsJson"
@@ -86,7 +32,7 @@
                                         draggable="false"
                                         @click.stop="menuTab(0, idx)">
                                         <i class="icon_menu_dot js_icon_menu_dot dn" v-show="menuOptionsJson[idx].sub_button_list.length > 0"></i>
-                                        <span class="js_l1Title">菜单名称</span>
+                                        <span class="js_l1Title">{{item.name}}</span>
                                     </a>
                                     <!-- 子菜单 -->
                                     <div class="sub_pre_menu_box js_l2TitleBox"
@@ -102,7 +48,7 @@
                                                     draggable="false"
                                                     @click="menuTab(1, sub_idx)">
                                                     <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
-                                                        <span class="js_l2Title">子菜单名称</span>
+                                                        <span class="js_l2Title">{{sub_item.name}}</span>
                                                     </span>
                                                 </a>
                                             </li>
@@ -143,7 +89,7 @@
             </div>
 
             <!-- 右侧内容 -->
-            <menu-right></menu-right>
+            <menu-right :current-menu-option.sync="currentMenuOption"></menu-right>
         </main>
     </div>
 </template>
@@ -163,16 +109,41 @@ export default {
             // 自定义菜单Json配置
             menuOptionsJson: [],
             currentIdx: -1,
-            subCurrentIdx: -1
+            subCurrentIdx: -1,
+            currentMenuOption: []
         }
     },
     components: {
         menuRight,
     },
     created() {
-        console.log(this.$route)
+        // console.log(this.$route)
     },
     mounted() {
+    },
+    watch: {
+        currentIdx(newValue, oldValue) {
+            // 返回当前顶级菜单配置，顶级菜单存在子菜单时，将子配置清空
+            this.currentMenuOption = this.menuOptionsJson[newValue];
+            if(this.menuOptionsJson[newValue].sub_button_list.length > 1){
+                this.currentMenuOption.sub_button_list = [];
+            }
+        },
+        subCurrentIdx(newValue, oldValue) {
+            if(newValue < 0 ) {
+                this.currentMenuOption = [];
+                return false;
+            }
+            // 返回当前子菜单配置
+            this.currentMenuOption = this.menuOptionsJson[this.currentIdx].sub_button_list[newValue];
+        },
+        menuOptionsJson: {
+            handler(newValue, oldValue){
+                // console.log("菜单配置项",newValue);
+                console.log(this.menuOptionsJson)
+            },
+            deep:true
+        },
     },
     methods: {
         // 判断是否当前选中
@@ -182,7 +153,7 @@ export default {
             }
             return false;
         },
-        // 子菜单判断当前 【待优化】
+        // 子菜单判断当前
         subIsCurrent(idx) {
             if (idx == this.subCurrentIdx) {
                 return true;
@@ -207,7 +178,7 @@ export default {
                 this.menuOptionsJson.push(addOption);
                 this.currentIdx++
             } else if (_type === 1) {
-                console.log()
+                // 子菜单添加
                 this.menuOptionsJson[_idx].type = 0;
                 let sub_button_option = {
                     "name": "子菜单名称",
@@ -218,11 +189,16 @@ export default {
                 this.menuOptionsJson[_idx].sub_button_list.push(sub_button_option);
                 this.subCurrentIdx++
             }
+
+            // console.log(this.menuOptionsJson);
         },
         // 菜单切换
         menuTab(typeIdx, _idx) {
+            // 先清空
+            this.currentMenuOption = [];
             if (typeIdx == 0) {
                 this.currentIdx = _idx;
+                this.subCurrentIdx = -1; // 父级菜单切换，子菜单不被选中
             } else if (typeIdx == 1) {
                 this.subCurrentIdx = _idx;
             }
@@ -334,6 +310,7 @@ export default {
                 .pre_menu_link {
                     border-left: 1px solid #e7e7eb;
                     font-size: 14px;
+                    min-height: 50px;
                 }
                 &:first-child .pre_menu_link {
                     border-left-width: 0;

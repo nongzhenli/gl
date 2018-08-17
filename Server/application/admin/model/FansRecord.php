@@ -69,7 +69,7 @@ class FansRecord extends BaseModel
             array('status', '状态'),
             array('user_id', '用户id'),
             array('parent_id', '推荐人id'),
-            array('people','支持人数'),
+            // array('people','支持人数'),
             array('act_id', '活动id'),
             array('poster_id', '宣传海报id'),
             array('last_follow_unfollow_time', '关注/取消时间'),
@@ -97,9 +97,9 @@ class FansRecord extends BaseModel
         //     ->field('id,custname,mobile,status,user_id,parent_id,act_id,poster_id,last_follow_unfollow_time,complete_time,sign_time,get_time,create_time')
         //     ->order("id DESC")
         //     ->select();
-        foreach ($xlsData as $key => $value) {
-            $xlsData[$key]['people'] = Db::table('fans_record')->where("parent_id", $value['user_id'])->count();
-        }
+        // foreach ($xlsData as $key => $value) {
+        //     $xlsData[$key]['people'] = Db::table('fans_record')->where("parent_id", $value['user_id'])->count();
+        // }
 
         ExcelService::exportExcel($xlsName, $xlsCell, $xlsData);
     }
