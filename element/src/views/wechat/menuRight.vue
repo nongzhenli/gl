@@ -67,7 +67,209 @@
                         </div>
                     </div>
 
-                    {{currentMenuOption}}
+                    <!-- 选择素材内容 -->
+                    <div class="menu_content_container">
+                        <!-- 发送消息 -->
+                        <div class="menu_content send jsMain">
+                            <!-- 发送消息容器 -->
+                            <div class="msg_sender">
+                                <!-- TAG切换 -->
+                                <div class="msg_tab">
+                                    <!-- 顶部TAG切换 -->
+                                    <div class="tab_navs_panel">
+                                        <div class="tab_navs_wrp">
+                                            <ul class="tab_navs js_tab_navs">
+                                                <!-- 发送图文 tag -->
+                                                <li class="tab_nav tab_appmsg width4"
+                                                    data-type="10"
+                                                    data-tab=".js_appmsgArea"
+                                                    data-tooltip="图文消息">
+                                                    <a href="javascript:void(0);"
+                                                        onclick="return false;">
+                                                        <i class="icon_msg_sender"></i>
+                                                        <span class="msg_tab_title">图文消息</span>
+                                                    </a>
+                                                </li>
+                                                <!-- 发送图片 tag -->
+                                                <li class="tab_nav tab_img width4 selected"
+                                                    data-type="2"
+                                                    data-tab=".js_imgArea"
+                                                    data-tooltip="图片">
+                                                    <a href="javascript:void(0);"
+                                                        onclick="return false;">&nbsp;
+                                                        <i class="icon_msg_sender"></i>
+                                                        <span class="msg_tab_title">图片</span>
+                                                    </a>
+                                                </li>
+                                                <!-- 发送语音 tag -->
+                                                <li class="tab_nav tab_audio width4"
+                                                    data-type="3"
+                                                    data-tab=".js_audioArea"
+                                                    data-tooltip="语音">
+                                                    <a href="javascript:void(0);"
+                                                        onclick="return false;">&nbsp;
+                                                        <i class="icon_msg_sender"></i>
+                                                        <span class="msg_tab_title">语音</span>
+                                                    </a>
+                                                </li>
+                                                <!-- 发送视频 tag -->
+                                                <li class="tab_nav tab_video width4 no_extra"
+                                                    data-type="15"
+                                                    data-tab=".js_videoArea"
+                                                    data-tooltip="视频">
+                                                    <a href="javascript:void(0);"
+                                                        onclick="return false;">&nbsp;
+                                                        <i class="icon_msg_sender"></i>
+                                                        <span class="msg_tab_title">视频</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- 切换内容 -->
+                                    <div class="tab_panel">
+                                        <!-- 切换图文内容块 -->
+                                        <div class="tab_content">
+                                            <div class="js_appmsgArea inner ">
+                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
+                                                <div class="tab_cont_cover create-type__list jsMsgSendTab"
+                                                    data-index="0">
+                                                    <!-- 从素材库选择 -->
+                                                    <div class="create-type__item">
+                                                        <a href="javascript:;"
+                                                            class="create-type__link jsMsgSenderPopBt"
+                                                            data-type="10"
+                                                            data-index="0">
+                                                            <i class="create-type__icon file"></i>
+                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                        </a>
+                                                    </div>
+                                                    <!-- 自建图文 -->
+                                                    <div class="create-type__item">
+                                                        <a target="_blank"
+                                                            class="create-type__link">
+                                                            <i class="create-type__icon new"></i>
+                                                            <strong class="create-type__title">自建图文</strong>
+                                                        </a>
+                                                    </div>
+                                                    <!--  转载文章 -->
+                                                    <div class="create-type__item">
+                                                        <a target="_blank"
+                                                            class="create-type__link"
+                                                            data-type="10"
+                                                            data-index="0">
+                                                            <i class="create-type__icon share"></i>
+                                                            <strong class="create-type__title">转载文章</strong>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 切换图片内容块 -->
+                                        <div class="tab_content"
+                                            style="display: none;">
+                                            <div class="js_imgArea inner ">
+                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
+                                                <div class="tab_cont_cover create-type__list jsMsgSendTab"
+                                                    data-index="1"
+                                                    data-type="2">
+                                                    <div class="create-type__item">
+                                                        <a href="javascript:;"
+                                                            class="create-type__link jsMsgSenderPopBt"
+                                                            data-type="2"
+                                                            data-index="1">
+                                                            <i class="create-type__icon file"></i>
+                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                        </a>
+                                                    </div>
+                                                    <div class="create-type__item">
+                                                        <a href="javascript:;"
+                                                            id="msgSendImgUploadBt"
+                                                            class="create-type__link"
+                                                            data-type="2">
+                                                            <i class="create-type__icon pic"></i>
+                                                            <strong class="create-type__title">上传图片</strong>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <!-- 切换语音内容块 -->
+                                        <div class="tab_content"
+                                            style="display: none;">
+                                            <div class="js_audioArea inner ">
+                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
+
+                                                <div class="tab_cont_cover create-type__list jsMsgSendTab"
+                                                    data-index="2"
+                                                    data-type="3">
+                                                    <div class="create-type__item">
+                                                        <a href="javascript:;"
+                                                            class="create-type__link jsMsgSenderPopBt"
+                                                            data-type="3"
+                                                            data-index="2">
+                                                            <i class="create-type__icon file"></i>
+                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                        </a>
+                                                    </div>
+                                                    <div class="create-type__item">
+                                                        <a href="javascript:;"
+                                                            id="msgSendAudioUploadBt"
+                                                            class="create-type__link">
+                                                            <i class="create-type__icon voice"></i>
+                                                            <strong class="create-type__title">新建语音</strong>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 切换跳转小程序内容块 -->
+                                        <div class="tab_content"
+                                            style="display: none;">
+                                            <div class="js_videoArea inner ">
+                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
+                                                <div class="tab_cont_cover create-type__list jsMsgSendTab"
+                                                    data-index="3">
+                                                    <div class="create-type__item">
+                                                        <a href="javascript:;"
+                                                            class="create-type__link jsMsgSenderPopBt"
+                                                            data-type="15"
+                                                            data-index="3">
+                                                            <i class="create-type__icon file"></i>
+                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                        </a>
+                                                    </div>
+                                                    <div class="create-type__item">
+                                                        <a target="_blank"
+                                                            href="/cgi-bin/appmsg?t=media/videomsg_edit&amp;action=video_edit&amp;type=15&amp;lang=zh_CN&amp;token=1032462349"
+                                                            class="create-type__link">
+                                                            <i class="create-type__icon video"></i>
+                                                            <strong class="create-type__title">新建视频</strong>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 发送消息 -->
+                        <div class="menu_content url jsMain"
+                            style="display: none;"></div>
+                        <!-- 发送消息 -->
+                        <div class="menu_content weapp "
+                            style="display: none;"></div>
+
+                        <!-- 已经存在的配置 -->
+                        <div class="menu_content sended"
+                            style="display: none;">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
