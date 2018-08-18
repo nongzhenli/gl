@@ -32,15 +32,15 @@
                                         draggable="false"
                                         @click.stop="menuTab(0, idx)">
                                         <i class="icon_menu_dot js_icon_menu_dot dn" v-show="menuOptionsJson[idx].sub_button_list.length > 0"></i>
-                                        <span class="js_l1Title">{{item.name}}</span>
+                                        <span class="js_l1Title">{{item.name, "菜单名称" | menuNameIsEmpty}}</span>
                                     </a>
                                     <!-- 子菜单 -->
                                     <div class="sub_pre_menu_box js_l2TitleBox"
                                         v-show="isCurrent(idx)">
                                         <ul class="sub_pre_menu_list">
                                             <li class="js_addMenuBox"
-                                                :class="{current: subIsCurrent(sub_idx)}"
                                                 v-for="(sub_item, sub_idx) in menuOptionsJson[idx].sub_button_list"
+                                                :class="{current: subIsCurrent(sub_idx)}"
                                                 :key="sub_idx">
                                                 <a href="javascript:void(0);"
                                                     class="jsSubView js_addL2Btn"
@@ -48,7 +48,7 @@
                                                     draggable="false"
                                                     @click="menuTab(1, sub_idx)">
                                                     <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
-                                                        <span class="js_l2Title">{{sub_item.name}}</span>
+                                                        <span class="js_l2Title">{{sub_item.name, "子菜单名称" | menuNameIsEmpty}}</span>
                                                     </span>
                                                 </a>
                                             </li>
@@ -58,7 +58,7 @@
                                                     class="jsSubView js_addL2Btn"
                                                     title="最多添加5个子菜单"
                                                     draggable="false"
-                                                    @click.stop="menuAdd($event, 1, idx)">
+                                                    @click.stop="menuAdd(1, idx)">
                                                     <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
                                                         <i class="icon14_menu_add"></i>
                                                     </span>
@@ -76,7 +76,7 @@
                                     class="pre_menu_link js_addL1Btn"
                                     title="最多添加3个一级菜单"
                                     draggable="false"
-                                    @click.stop="menuAdd($event, 0)">
+                                    @click.stop="menuAdd(0)">
                                     <i class="icon14_menu_add"></i>
                                     <span class="js_l1Title"
                                         v-show="menuOptionsJson.length == 0">添加菜单</span>
@@ -87,7 +87,6 @@
                 </div>
                 <div class="sort_btn_wrp"></div>
             </div>
-
             <!-- 右侧内容 -->
             <menu-right :current-menu-option.sync="currentMenuOption"></menu-right>
         </main>
@@ -116,6 +115,14 @@ export default {
     components: {
         menuRight,
     },
+    filters: {
+        menuNameIsEmpty(data, type) {
+            if(!data || data == ""){
+                return type;
+            }
+            return data;
+        },
+    },
     created() {
         // console.log(this.$route)
     },
@@ -123,26 +130,22 @@ export default {
     },
     watch: {
         currentIdx(newValue, oldValue) {
-            // 返回当前顶级菜单配置，顶级菜单存在子菜单时，将子配置清空
+            // 先清空
+            this.currentMenuOption = [];
             this.currentMenuOption = this.menuOptionsJson[newValue];
-            if(this.menuOptionsJson[newValue].sub_button_list.length > 1){
-                this.currentMenuOption.sub_button_list = [];
-            }
         },
         subCurrentIdx(newValue, oldValue) {
             if(newValue < 0 ) {
-                this.currentMenuOption = [];
+                let parent_sort = this.currentMenuOption.parent_sort;
+                if(parent_sort == this.menuOptionsJson[this.currentIdx]['parent_sort']){
+                    this.currentMenuOption = this.menuOptionsJson[this.currentIdx];
+                    return false;
+                }
+                this.currentMenuOption.sub_button_list = [];
                 return false;
             }
             // 返回当前子菜单配置
             this.currentMenuOption = this.menuOptionsJson[this.currentIdx].sub_button_list[newValue];
-        },
-        menuOptionsJson: {
-            handler(newValue, oldValue){
-                // console.log("菜单配置项",newValue);
-                console.log(this.menuOptionsJson)
-            },
-            deep:true
         },
     },
     methods: {
@@ -161,48 +164,48 @@ export default {
             return false;
         },
         /** menuAdd 父级菜单被点击事件
-         * @param event 事件信息
          * @param _type 自定义事件点击类型，0父菜单添加，2子菜单添加
          * @param _idx 点击事件按钮idx索引
          */
-        menuAdd(event, _type, _idx) {
+        menuAdd(_type, _idx) {
             // 父菜单添加
             if (_type === 0) {
                 if (this.menuOptionsJson.length > 2) return false;
                 let addOption = {
                     "name": "菜单名称",
                     "type": 1,
+                    "parent_sort": this.menuOptionsJson.length + 1,
                     "act_list": [],
-                    "sub_button_list": []
+                    "sub_button_list": [],
                 }
                 this.menuOptionsJson.push(addOption);
-                this.currentIdx++
+                this.currentIdx = this.menuOptionsJson.length - 1
             } else if (_type === 1) {
                 // 子菜单添加
                 this.menuOptionsJson[_idx].type = 0;
                 let sub_button_option = {
                     "name": "子菜单名称",
                     "type": 1,
+                    "parent_sort": _idx + 1,
+                    "sort": this.menuOptionsJson[_idx].sub_button_list.length + 1,
                     "act_list": [],
                     "sub_button_list": []
                 }
                 this.menuOptionsJson[_idx].sub_button_list.push(sub_button_option);
-                this.subCurrentIdx++
+                this.subCurrentIdx = this.menuOptionsJson[_idx].sub_button_list.length - 1
             }
-
-            // console.log(this.menuOptionsJson);
         },
         // 菜单切换
         menuTab(typeIdx, _idx) {
-            // 先清空
-            this.currentMenuOption = [];
             if (typeIdx == 0) {
                 this.currentIdx = _idx;
-                this.subCurrentIdx = -1; // 父级菜单切换，子菜单不被选中
+                if(this.subCurrentIdx >= 0) {
+                    this.subCurrentIdx = -1; // 父级菜单切换，子菜单不被选中
+                }
             } else if (typeIdx == 1) {
                 this.subCurrentIdx = _idx;
             }
-        }
+        },
     },
 }
 </script>

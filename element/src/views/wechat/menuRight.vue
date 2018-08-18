@@ -6,15 +6,16 @@
         <div id="js_rightBox"
             class="portable_editor to_left">
             <!-- 修改信息 -->
-            <div class="editor_inner">
+            <div class="editor_inner" v-show="menuIsNullArray(menuOption)">
                 <!-- 头部 -->
                 <div class="global_mod float_layout menu_form_hd js_second_title_bar">
                     <h4 class="global_info">菜单名称</h4>
                     <div class="global_extra">
                         <a href="javascript:void(0);"
-                            id="jsDelBt">删除子菜单</a>
+                            id="jsDelBt" @click="menuDel()">删除子菜单</a>
                     </div>
                 </div>
+                <p style="margin-top: 10px; color: #8d8d8d;" v-show="!isCurrentIsEmpty(menuOption)">已为 “{{menuOption.name}}” 添加了{{isCurrentIsEmpty(menuOption, "length")}}个子菜单，无法设置其他内容。</p>
                 <!-- 主体内容 -->
                 <div class="menu_form_bd">
                     <!-- 已修改时提醒 -->
@@ -29,7 +30,8 @@
                         </label>
                         <div class="frm_controls">
                             <span class="frm_input_box with_counter counter_in append"> <input type="text"
-                                    class="frm_input js_menu_name" v-model="currentMenuOption.name"> </span>
+                                    class="frm_input js_menu_name"
+                                    v-model="menuOption.name"> </span>
                             <p class="frm_msg fail js_titleEorTips dn"
                                 style="display: none;">字数超过上限</p>
                             <p class="frm_msg fail js_titlenoTips dn"
@@ -39,7 +41,7 @@
                     </div>
 
                     <!-- 子菜单内容 -->
-                    <div class="frm_control_group"
+                    <div v-show="isCurrentIsEmpty(menuOption)" class="frm_control_group"
                         style="display: block;">
                         <label for=""
                             class="frm_label">
@@ -68,7 +70,7 @@
                     </div>
 
                     <!-- 选择素材内容 -->
-                    <div class="menu_content_container">
+                    <div v-show="isCurrentIsEmpty(menuOption)" class="menu_content_container">
                         <!-- 发送消息 -->
                         <div class="menu_content send jsMain">
                             <!-- 发送消息容器 -->
@@ -270,7 +272,11 @@
 
                         </div>
                     </div>
+
                 </div>
+            </div>
+            <div class="editor_inner" v-show="!menuIsNullArray(menuOption)">
+                <div class="menu-options__null">点击左侧菜单进行编辑操作</div>
             </div>
         </div>
     </div>
@@ -291,19 +297,49 @@ export default {
         }
     },
     created() {
-        console.log(this.currentMenuOption)
+        // console.log(this.menuOption)
+    },
+    filters: {
     },
     watch: {
         currentMenuOption: {
-            handler(newValue, oldValue){
+            handler(newValue, oldValue) {
+                this.menuOption = newValue;
                 this.$emit("update:currentMenuOption", newValue);
             },
-            deep:true
+            deep: true
         }
     },
     mounted() {
     },
     methods: {
+        // 判断当前配置
+        isCurrentIsEmpty(data, str) {
+            if(data.sub_button_list instanceof Array && data.sub_button_list.length > 0) {
+                if(str=="length") return data.sub_button_list.length;
+                return false;
+            }
+            return true;
+        },
+        // 判断配置是否为空数组
+        menuIsNullArray(data){
+            if(data instanceof Array && data.length == 0) return false;
+            return true;
+        },
+        /**
+         * 删除菜单
+         * @param parent_sort   父级序号
+         * @param sub_sort      序号
+         */
+        menuDel(){
+            // 子菜单删除
+            if(this.menuOption.sort){
+
+                return;
+            }else if(this.menuOption.parent_sort){ // 父菜单删除
+                
+            }
+        }
     },
 }
 </script>
@@ -322,6 +358,12 @@ export default {
     .editor_inner {
         min-height: 560px;
         padding-bottom: 20px !important;
+
+        .menu-options__null {
+            text-align: center;
+            padding-top: 200px;
+            color: #8d8d8d;
+        }
     }
 }
 .menu_initial_tips {
@@ -439,8 +481,7 @@ export default {
     width: auto;
 }
 .icon_radio {
-    background: url("../../../static/icon/wx_base_icon.png")
-        0 -140px no-repeat;
+    background: url("../../../static/icon/wx_base_icon.png") 0 -140px no-repeat;
     width: 16px;
     height: 16px;
     vertical-align: middle;
@@ -448,8 +489,7 @@ export default {
 }
 .icon_radio.selected,
 .selected .icon_radio {
-    background: url("../../../static/icon/wx_base_icon.png")
-        0 -160px no-repeat;
+    background: url("../../../static/icon/wx_base_icon.png") 0 -160px no-repeat;
 }
 .frm_radio,
 .frm_checkbox {
