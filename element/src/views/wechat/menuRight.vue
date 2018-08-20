@@ -6,16 +6,19 @@
         <div id="js_rightBox"
             class="portable_editor to_left">
             <!-- 修改信息 -->
-            <div class="editor_inner" v-show="menuIsNullArray(menuOption)">
+            <div class="editor_inner"
+                v-show="menuIsNullArray(menuOption)">
                 <!-- 头部 -->
                 <div class="global_mod float_layout menu_form_hd js_second_title_bar">
                     <h4 class="global_info">菜单名称</h4>
                     <div class="global_extra">
                         <a href="javascript:void(0);"
-                            id="jsDelBt" @click="menuDel()">删除子菜单</a>
+                            id="jsDelBt"
+                            @click="menuDel()">删除子菜单</a>
                     </div>
                 </div>
-                <p style="margin-top: 10px; color: #8d8d8d;" v-show="!isCurrentIsEmpty(menuOption)">已为 “{{menuOption.name}}” 添加了{{isCurrentIsEmpty(menuOption, "length")}}个子菜单，无法设置其他内容。</p>
+                <p style="margin-top: 10px; color: #8d8d8d;"
+                    v-show="!isCurrentIsEmpty(menuOption)">已为 “{{menuOption.name}}” 添加了{{isCurrentIsEmpty(menuOption, "length")}}个子菜单，无法设置其他内容。</p>
                 <!-- 主体内容 -->
                 <div class="menu_form_bd">
                     <!-- 已修改时提醒 -->
@@ -41,38 +44,40 @@
                     </div>
 
                     <!-- 子菜单内容 -->
-                    <div v-show="isCurrentIsEmpty(menuOption)" class="frm_control_group"
+                    <div v-show="isCurrentIsEmpty(menuOption)"
+                        class="frm_control_group"
                         style="display: block;">
                         <label for=""
                             class="frm_label">
                             <strong class="title js_menuContent">菜单内容</strong>
                         </label>
                         <div class="frm_controls frm_vertical_pt">
-                            <label class="frm_radio_label js_radio_sendMsg selected"
-                                data-editing="0">
+                            <label class="frm_radio_label js_radio_sendMsg "
+                                :class="{'selected': send_message.send_type == 0}">
                                 <i class="icon_radio"></i>
-                                <span class="lbl_content">发送消息</span> <input type="radio"
+                                <span class="lbl_content">发送消息</span> <input type="radio" value="0" v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
                             <label class="frm_radio_label js_radio_url"
-                                data-editing="0">
+                                :class="{'selected': send_message.send_type == 1}">
                                 <i class="icon_radio"></i>
-                                <span class="lbl_content">跳转网页</span> <input type="radio"
+                                <span class="lbl_content">跳转网页</span> <input type="radio" value="1" v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
                             <label class="frm_radio_label js_radio_weapp"
-                                data-editing="0">
+                                :class="{'selected': send_message.send_type == 2}">
                                 <i class="icon_radio"></i>
-                                <span class="lbl_content">跳转小程序</span> <input type="radio"
+                                <span class="lbl_content">跳转小程序</span> <input type="radio" value="2" v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
                         </div>
                     </div>
 
                     <!-- 选择素材内容 -->
-                    <div v-show="isCurrentIsEmpty(menuOption)" class="menu_content_container">
+                    <div v-show="isCurrentIsEmpty(menuOption)"
+                        class="menu_content_container">
                         <!-- 发送消息 -->
-                        <div class="menu_content send jsMain">
+                        <div class="menu_content send jsMain" v-show="send_message.send_type == 0">
                             <!-- 发送消息容器 -->
                             <div class="msg_sender">
                                 <!-- TAG切换 -->
@@ -259,12 +264,10 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- 发送消息 -->
-                        <div class="menu_content url jsMain"
-                            style="display: none;"></div>
-                        <!-- 发送消息 -->
-                        <div class="menu_content weapp "
-                            style="display: none;"></div>
+                        <!-- 跳转网页 -->
+                        <div class="menu_content url jsMain" v-show="send_message.send_type == 1"></div>
+                        <!-- 跳转小程序 -->
+                        <div class="menu_content weapp " v-show="send_message.send_type == 2"></div>
 
                         <!-- 已经存在的配置 -->
                         <div class="menu_content sended"
@@ -275,7 +278,8 @@
 
                 </div>
             </div>
-            <div class="editor_inner" v-show="!menuIsNullArray(menuOption)">
+            <div class="editor_inner"
+                v-show="!menuIsNullArray(menuOption)">
                 <div class="menu-options__null">点击左侧菜单进行编辑操作</div>
             </div>
         </div>
@@ -290,10 +294,14 @@ export default {
     //         default: 
     //     },
     // },
-    props: ['currentMenuOption'],
+    props: ['currentMenuOption', 'delMenuBySort'],
     data() {
         return {
-            menuOption: this.currentMenuOption
+            menuOption: this.currentMenuOption,
+            send_message: {
+                "send_type": 0,
+                "send_context": {}
+            }
         }
     },
     created() {
@@ -308,46 +316,93 @@ export default {
                 this.$emit("update:currentMenuOption", newValue);
             },
             deep: true
+        },
+        // "send_message.send_type"(newValue, oldValue) {
+        //     console.log(newValue)
+        // },
+        send_message: {
+            handler(newValue, oldValue) {
+                console.log(newValue)
+            },
+            deep: true
         }
+
+    },
+    computed: {
     },
     mounted() {
     },
     methods: {
         // 判断当前配置
         isCurrentIsEmpty(data, str) {
-            if(data.sub_button_list instanceof Array && data.sub_button_list.length > 0) {
-                if(str=="length") return data.sub_button_list.length;
+            if (data.sub_button_list instanceof Array && data.sub_button_list.length > 0) {
+                if (str == "length") return data.sub_button_list.length;
                 return false;
             }
             return true;
         },
         // 判断配置是否为空数组
-        menuIsNullArray(data){
-            if(data instanceof Array && data.length == 0) return false;
+        menuIsNullArray(data) {
+            if (data instanceof Array && data.length == 0) return false;
             return true;
         },
-        /**
-         * 删除菜单
-         * @param parent_sort   父级序号
-         * @param sub_sort      序号
-         */
-        menuDel(){
-            // 子菜单删除
-            if(this.menuOption.sort){
+        // 删除菜单
+        menuDel() {
+            const h = this.$createElement;
+            this.$msgbox({
+                title: '提示',
+                message: h('div', null, [
+                    h('p', null, '删除确定 '),
+                    h('p', null, '删除后“'+this.currentMenuOption.name+'”菜单下设置的内容将被删除')
+                ]),
+                showCancelButton: true,
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+                customClass: 'menu-message__delete',
+            }).then(() => {
+                if (this.menuOption.parent_sort >= 0) {
+                    this.$emit("update:delMenuBySort", {
+                        "parent_sort": this.menuOption.parent_sort,
+                        "sort": this.menuOption.sort
+                    });
+                } else if (this.menuOption.sort >= 0) { // 父菜单删除
+                    this.$emit("update:delMenuBySort", {
+                        "sort": this.menuOption.sort
+                    });
+                }
+                this.menuOption = [];
 
-                return;
-            }else if(this.menuOption.parent_sort){ // 父菜单删除
-                
-            }
+                this.$message({
+                    type: 'success',
+                    message: '删除成功！'
+                });
+            }).catch(() => {
+                // this.$message({
+                //     type: 'info',
+                //     message: '已取消删除'
+                // });
+            });
         }
     },
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
+.menu-message__delete {
+    width: 520px;
+    .el-message-box__content {
+        padding: 60px 40px
+    }
+    .el-message-box__status {
+        font-size: 48px !important;
+    }
+    .el-message-box__message {
+        padding-left: 62px;
+    }
+}
 // 右侧
 .menu_form_area {
-    // display: table-cell;
     display: block;
     vertical-align: top;
     float: none;

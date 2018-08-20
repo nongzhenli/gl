@@ -46,7 +46,7 @@
                                                     class="jsSubView js_addL2Btn"
                                                     title="最多添加5个子菜单"
                                                     draggable="false"
-                                                    @click="menuTab(1, sub_idx)">
+                                                    @click.stop="menuTab(1, sub_idx)">
                                                     <span class="sub_pre_menu_inner js_sub_pre_menu_inner">
                                                         <span class="js_l2Title">{{sub_item.name, "子菜单名称" | menuNameIsEmpty}}</span>
                                                     </span>
@@ -88,7 +88,7 @@
                 <div class="sort_btn_wrp"></div>
             </div>
             <!-- 右侧内容 -->
-            <menu-right :current-menu-option.sync="currentMenuOption"></menu-right>
+            <menu-right :current-menu-option.sync="currentMenuOption" :del-menu-by-sort.sync="delMenuBySort"></menu-right>
         </main>
     </div>
 </template>
@@ -109,7 +109,11 @@ export default {
             menuOptionsJson: [],
             currentIdx: -1,
             subCurrentIdx: -1,
-            currentMenuOption: []
+            currentMenuOption: [],
+            delMenuBySort: {
+                "parent_sort": -1,
+                "sort": -1,
+            }
         }
     },
     components: {
@@ -132,21 +136,50 @@ export default {
         currentIdx(newValue, oldValue) {
             // 先清空
             this.currentMenuOption = [];
+            if(newValue < 0){
+                return false;
+            }
             this.currentMenuOption = this.menuOptionsJson[newValue];
         },
         subCurrentIdx(newValue, oldValue) {
             if(newValue < 0 ) {
                 let parent_sort = this.currentMenuOption.parent_sort;
-                if(parent_sort == this.menuOptionsJson[this.currentIdx]['parent_sort']){
+                if(parent_sort == this.menuOptionsJson[this.currentIdx]['sort']){
                     this.currentMenuOption = this.menuOptionsJson[this.currentIdx];
-                    return false;
                 }
-                this.currentMenuOption.sub_button_list = [];
+                // this.currentMenuOption.sub_button_list = [];
                 return false;
             }
             // 返回当前子菜单配置
             this.currentMenuOption = this.menuOptionsJson[this.currentIdx].sub_button_list[newValue];
         },
+        // 删除菜单通过sort排序
+        delMenuBySort(newValue, oldValue){
+            // 子菜单删除
+            if(newValue.parent_sort >= 0){
+                this.menuOptionsJson[newValue.parent_sort].sub_button_list.splice((newValue.sort), 1);
+                this.menuOptionsJson[newValue.parent_sort].sub_button_list.forEach(function(item, index, array){
+                    // 大于被删除数组元素索引的其它元素进行sort重构
+                    if(index >= newValue.sort){
+                        array[index].sort = index;
+                    }
+                });
+                this.subCurrentIdx = -1
+            }else if(newValue.sort >= 0){ // 父菜单删除
+                this.menuOptionsJson.splice((newValue.sort), 1)
+                this.menuOptionsJson.forEach(function(item, index, array){
+                    if(index >= newValue.sort){
+                        array[index].sort = index;
+                        // 子菜单parent_sort重构
+                        item.sub_button_list.forEach(function(sub_item, sub_index, sub_array){
+                            sub_array[sub_index].parent_sort = index;
+                        });
+                    }
+                });
+                this.currentIdx = -1
+                this.subCurrentIdx = -1
+            }
+        }
     },
     methods: {
         // 判断是否当前选中
@@ -171,29 +204,42 @@ export default {
             // 父菜单添加
             if (_type === 0) {
                 if (this.menuOptionsJson.length > 2) return false;
+                // 直接先赋值了（不先经过push略有些不妥..原本写法见作用域底部注释）
+                this.currentIdx = this.menuOptionsJson.length;
                 let addOption = {
                     "name": "菜单名称",
-                    "type": 1,
-                    "parent_sort": this.menuOptionsJson.length + 1,
+                    "type": 0,
+                    "send_message": {
+                        "send_type": 0,
+                        "send_context": {}
+                    },
+                    "sort": this.currentIdx,
                     "act_list": [],
                     "sub_button_list": [],
                 }
                 this.menuOptionsJson.push(addOption);
-                this.currentIdx = this.menuOptionsJson.length - 1
+                // this.currentIdx = this.menuOptionsJson.length - 1;
+
             } else if (_type === 1) {
                 // 子菜单添加
-                this.menuOptionsJson[_idx].type = 0;
+                // 直接先赋值了（不先经过push略有些不妥..原本写法见作用域底部注释）
+                this.subCurrentIdx = this.menuOptionsJson[_idx].sub_button_list.length;
                 let sub_button_option = {
                     "name": "子菜单名称",
                     "type": 1,
-                    "parent_sort": _idx + 1,
-                    "sort": this.menuOptionsJson[_idx].sub_button_list.length + 1,
+                    "send_message": {
+                        "send_type": 2,
+                        "send_context": {}
+                    },
+                    "parent_sort": _idx,
+                    "sort": this.subCurrentIdx,
                     "act_list": [],
                     "sub_button_list": []
                 }
                 this.menuOptionsJson[_idx].sub_button_list.push(sub_button_option);
-                this.subCurrentIdx = this.menuOptionsJson[_idx].sub_button_list.length - 1
+                // this.subCurrentIdx = this.menuOptionsJson[_idx].sub_button_list.length - 1
             }
+
         },
         // 菜单切换
         menuTab(typeIdx, _idx) {
