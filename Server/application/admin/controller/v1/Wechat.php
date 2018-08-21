@@ -85,4 +85,24 @@ class Wechat
         }
         return $result;
     }
+
+    /**
+     * 创建自定义菜单
+     * @param   wx_id|number
+     * @param   options|Array  前端传递菜单JSON配置数据
+     * @author  bigheiqin
+     */
+    public function createMenuCustom($wx_id=0, $options=[]){
+        if (!$wx_id) {
+            throw new Exception('公众号不存在！');
+        }
+        // $result = (new WechatService())->createMenu($wx_id);
+        
+        // $data = array(
+        //     "code" => 20000,
+        //     "data" => array($result)
+        // );
+        // return $result;
+    }
+    
 }

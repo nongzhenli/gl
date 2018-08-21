@@ -48,20 +48,23 @@ Route::rule('admin/:version/user/login', 'admin/:version.User/login', 'POST');
 Route::rule('admin/:version/user/logout', 'admin/:version.User/logout', 'POST');
 Route::rule('admin/:version/user/info', 'admin/:version.User/info', 'GET');
 Route::rule('admin/:version/marketing/list', 'admin/:version.Marketing/getList', 'GET');
-// 抽奖活动
+// -抽奖活动
 Route::rule('admin/:version/marketing/get/lottery', 'admin/:version.Marketing/getLotteryById', 'GET'); // 抽奖类活动详情
-// 吸粉活动
+// -吸粉活动
 Route::rule('admin/:version/marketing/get/fans', 'admin/:version.Marketing/getFansById', 'GET');    // 公众号吸粉类活动详情
 Route::rule('admin/:version/marketing/fans/export-exce', 'admin/:version.Marketing/fansDataExcel', 'GET');
 
 
-// 公众号
+// -公众号
 Route::rule('admin/:version/wechat/list', 'admin/:version.Wechat/getList', 'GET');
 Route::rule('admin/:version/wechat/detail', 'admin/:version.Wechat/getDetail', 'GET');
 Route::rule('admin/:version/wechat/getconf/:wx_id', 'admin/:version.Wechat/getConfig', 'GET');
 Route::rule('admin/:version/wechat/setconf/:wx_id', 'admin/:version.Wechat/setConfig', 'GET|POST');
+// --关键字回复
 Route::rule('admin/:version/wechat/getsmartrule', 'admin/:version.Wechat/getSmartRule', 'GET');  // 关键字回复规则
 Route::rule('admin/:version/wechat/createmenu', 'admin/:version.Wechat/createMenu', 'POST'); // 自定义菜单
+// --自定义菜单
+Route::rule('admin/:version/wechat/menu/create', 'admin/:version.Wechat/createMenuCustom', 'POST'); // 创建自定义菜单
 
 
 /**

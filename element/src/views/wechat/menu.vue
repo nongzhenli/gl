@@ -3,6 +3,7 @@
         <div class="wechat-menu__header">
             <p class="title">自定义菜单</p>
             <span class="sub-text">若近期开启过吸粉活动，请确认吸粉活动已经结束，否则切勿修改菜单，以免影响吸粉活动进行。</span>
+            <div style="display: none">{{menuOptionsJson}}</div>
         </div>
         <main class="wechat-menu__body">
             <div class="menu_preview_area">
@@ -90,6 +91,15 @@
             <!-- 右侧内容 -->
             <menu-right :current-menu-option.sync="currentMenuOption" :del-menu-by-sort.sync="delMenuBySort"></menu-right>
         </main>
+        <footer class="wechat-menu__footer clearfix">
+            <div class="wechat-menu__sort">
+                <el-button type="info" plain size="medium " native-type="button">菜单排序</el-button>
+            </div>
+            <div class="wechat-menu__form-submit">
+                <el-button type="success" size="medium " native-type="button" @click="createMenuSubmit()">保存并发布</el-button>
+                <el-button type="info" plain size="medium " native-type="button">预览</el-button>
+            </div>
+        </footer>
     </div>
 </template>
 
@@ -252,6 +262,11 @@ export default {
                 this.subCurrentIdx = _idx;
             }
         },
+        // 创建菜单
+        createMenuSubmit(){
+            console.log()
+        }
+
     },
 }
 </script>
@@ -298,6 +313,20 @@ export default {
 .wechat-menu__body {
     margin-top: 30px;
 }
+// 底部
+.wechat-menu__footer {
+    margin-top: 40px;
+    padding-bottom: 50px;
+    text-align: center;
+
+    .wechat-menu__sort {
+        position: relative;
+        float: left;
+        margin-right: 12px;
+        width: 320px;
+    }
+}
+
 // 左侧
 .menu_preview_area {
     position: relative;
@@ -306,7 +335,7 @@ export default {
     .mobile_menu_preview {
         position: relative;
         width: 320px;
-        height: 580px;
+        height: 560px;
         background: transparent
             url("https://res.wx.qq.com/mpres/htmledition/images/bg/bg_mobile_head_default3a7b38.png")
             no-repeat 0 0;

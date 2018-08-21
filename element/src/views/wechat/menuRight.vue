@@ -265,7 +265,9 @@
                             </div>
                         </div>
                         <!-- 跳转网页 -->
-                        <div class="menu_content url jsMain" v-show="send_message.send_type == 1"></div>
+                        <div class="menu_content url jsMain" v-show="send_message.send_type == 1">
+
+                        </div>
                         <!-- 跳转小程序 -->
                         <div class="menu_content weapp " v-show="send_message.send_type == 2"></div>
 
