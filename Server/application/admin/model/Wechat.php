@@ -36,7 +36,7 @@ class Wechat extends BaseWechat
     {
         $data = Db::table('wechat')->where("id", "=", $id)->find();
         if (!$data) {
-            throw new Exception('查找不到该公众号配置');
+            throw new \Exception('查找不到该公众号配置');
         } else {
             return $data;
         }
@@ -48,13 +48,13 @@ class Wechat extends BaseWechat
      */
     public static function getWechatSmartRule($wx_id = "")
     {
-            
-        $rule_keywords = Db::view('wechat_rule', ['id'=>'rule_id'])
+
+        $rule_keywords = Db::view('wechat_rule', ['id' => 'rule_id'])
             ->view('wechat_keywords', 'id,key_name, key_type', 'wechat_keywords.rule_id=wechat_rule.id')
             ->where('wechat_rule.wx_id', '=', $wx_id)
-            // ->field('rule_id', true)
+        // ->field('rule_id', true)
             ->select();
-        $rule_replys = Db::view('wechat_rule', ['id'=>'rule_id'])
+        $rule_replys = Db::view('wechat_rule', ['id' => 'rule_id'])
             ->view('wechat_replys', 'id,send_type,json_str', 'wechat_replys.rule_id=wechat_rule.id')
             ->where('wx_id', '=', $wx_id)
             ->select();

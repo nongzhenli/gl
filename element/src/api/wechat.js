@@ -42,3 +42,20 @@ export function getWxFollowReply(params) {
         params
     })
 }
+
+// 自定义菜单配置获取
+export function getWxMenuCustom(params) {
+    return request({
+        url: '/wechat/menu/get',
+        method: 'get',
+        params
+    })
+}
+// 自定义菜单创建
+export function createWxMenuCustom(params) {
+    return request({
+        url: '/wechat/menu/create',
+        method: 'post',
+        data: params
+    })
+}

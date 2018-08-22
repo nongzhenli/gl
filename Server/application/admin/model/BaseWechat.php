@@ -8,6 +8,7 @@
 namespace app\admin\model;
 
 use think\Model;
+use think\Exception;
 
 class BaseWechat extends Model
 {

@@ -17,7 +17,6 @@ use think\Cache;
 
 class Wechat extends BaseWechat
 {
-
     /**
      * 获取公众号配置
      * @param   $wx_id   公众号id，非app_id

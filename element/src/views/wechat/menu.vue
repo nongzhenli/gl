@@ -104,6 +104,9 @@
 </template>
 
 <script>
+import { createWxMenuCustom } from '@/api/wechat'
+import { getWxMenuCustom } from '@/api/wechat'
+
 import menuRight from '@/views/wechat/menuRight';
 export default {
     /**
@@ -138,7 +141,8 @@ export default {
         },
     },
     created() {
-        // console.log(this.$route)
+        console.log(this.$route)
+        this.getWxMenuCustomOption();
     },
     mounted() {
     },
@@ -206,6 +210,16 @@ export default {
             }
             return false;
         },
+        // 获取公众号菜单配置
+        getWxMenuCustomOption(){
+            getWxMenuCustom({
+                "wx_id": this.$route.params.id,
+            }).then(response => {
+                console.log(response);
+                this.menuOptionsJson = response.data.data
+            })
+            
+        },
         /** menuAdd 父级菜单被点击事件
          * @param _type 自定义事件点击类型，0父菜单添加，2子菜单添加
          * @param _idx 点击事件按钮idx索引
@@ -214,8 +228,6 @@ export default {
             // 父菜单添加
             if (_type === 0) {
                 if (this.menuOptionsJson.length > 2) return false;
-                // 直接先赋值了（不先经过push略有些不妥..原本写法见作用域底部注释）
-                this.currentIdx = this.menuOptionsJson.length;
                 let addOption = {
                     "name": "菜单名称",
                     "type": 0,
@@ -223,11 +235,20 @@ export default {
                         "send_type": 0,
                         "send_context": {}
                     },
-                    "sort": this.currentIdx,
+                    "sort": this.menuOptionsJson.length,
                     "act_list": [],
                     "sub_button_list": [],
                 }
-                this.menuOptionsJson.push(addOption);
+                wxCreateMenuCustom({
+                    "wx_id": this.$route.params.id,
+                    "type": 0,
+                    "options": JSON.stringify(addOption)
+                }).then(response => {
+                    console.log(response);
+                    this.currentIdx = addOption.sort;
+                    this.menuOptionsJson.push(addOption);
+                })
+
                 // this.currentIdx = this.menuOptionsJson.length - 1;
 
             } else if (_type === 1) {
@@ -264,7 +285,12 @@ export default {
         },
         // 创建菜单
         createMenuSubmit(){
-            console.log()
+            createWxMenuCustom({
+                "wx_id": this.$route.params.id,
+                "options": this.menuOptionsJson
+            }).then(response => {
+                console.log(response);
+            })
         }
 
     },

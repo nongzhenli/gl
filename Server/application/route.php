@@ -65,6 +65,7 @@ Route::rule('admin/:version/wechat/getsmartrule', 'admin/:version.Wechat/getSmar
 Route::rule('admin/:version/wechat/createmenu', 'admin/:version.Wechat/createMenu', 'POST'); // 自定义菜单
 // --自定义菜单
 Route::rule('admin/:version/wechat/menu/create', 'admin/:version.Wechat/createMenuCustom', 'POST'); // 创建自定义菜单
+Route::rule('admin/:version/wechat/menu/get', 'admin/:version.Wechat/getMenuCustom', 'GET'); // 获取菜单
 
 
 /**

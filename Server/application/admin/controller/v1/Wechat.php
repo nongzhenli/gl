@@ -2,7 +2,9 @@
 namespace app\admin\controller\v1;
 
 use app\admin\model\Wechat as WechatModel;
+use app\admin\model\WechatMenu as WechatMenuModel;
 use app\admin\service\Wechat as WechatService;
+use app\admin\service\WechatMenu as WechatMenuService;
 use think\Exception;
 
 class Wechat
@@ -42,7 +44,7 @@ class Wechat
         $result = WechatModel::getWechatSmartRule($wx_id);
         $data = array(
             "code" => 20000,
-            "data" => array($result)
+            "data" => array($result),
         );
         return $data;
     }
@@ -88,21 +90,43 @@ class Wechat
 
     /**
      * 创建自定义菜单
-     * @param   wx_id|number
-     * @param   options|Array  前端传递菜单JSON配置数据
+     * @param   wx_id|Number
+     * @param   options|String  前端传递菜单JSON配置数据
      * @author  bigheiqin
      */
-    public function createMenuCustom($wx_id=0, $options=[]){
-        if (!$wx_id) {
+    public function createMenuCustom($wx_id = 0, $type, $options)
+    {
+        if (empty($wx_id)) {
             throw new Exception('公众号不存在！');
         }
-        // $result = (new WechatService())->createMenu($wx_id);
-        
-        // $data = array(
-        //     "code" => 20000,
-        //     "data" => array($result)
-        // );
-        // return $result;
+        // 转数组
+        $options = json_decode($options, true);
+        $result = (new WechatMenuService())->wxCreateMenuCustom($wx_id, $type, $options);
+        $data = array(
+            "code" => 20000,
+            "data" => $result,
+        );
+        return $data;
     }
-    
+
+    /**
+     * 获取自定义菜单
+     * @param   wx_id|Number
+     * @author  bigheiqin
+     */
+    public function getMenuCustom($wx_id)
+    {
+        if (empty($wx_id)) {
+            throw new Exception('公众号不存在！');
+        }
+        // 转数组
+        $options = json_decode($options, true);
+        $result = WechatMenuModel::getWxMenuOptionAll($wx_id);
+        $data = array(
+            "code" => 20000,
+            "data" => $result,
+        );
+        return $data;
+    }
+
 }
