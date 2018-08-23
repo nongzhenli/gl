@@ -43,8 +43,8 @@ export function getWxFollowReply(params) {
     })
 }
 
-// 自定义菜单配置获取
-export function getWxMenuCustom(params) {
+// 自定义菜单配置获取全部
+export function getWxMenuCustomAll(params) {
     return request({
         url: '/wechat/menu/get',
         method: 'get',
@@ -52,9 +52,17 @@ export function getWxMenuCustom(params) {
     })
 }
 // 自定义菜单创建
-export function createWxMenuCustom(params) {
+export function createWxMenuCustomItem(params) {
     return request({
         url: '/wechat/menu/create',
+        method: 'post',
+        data: params
+    })
+}
+// 自定义菜单更新
+export function updataWxMenuCustomItem(params) {
+    return request({
+        url: '/wechat/menu/updata',
         method: 'post',
         data: params
     })

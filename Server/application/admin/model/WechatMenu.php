@@ -5,6 +5,9 @@ use think\Model;
 
 class WechatMenu extends BaseModel
 {
+    // tp5 [模型]->[数据访问和转换]章节提到，解决模型查询toArray()方法报错
+    protected $resultSetType = 'collection'; 
+
     /**
      * 判断该是自定义菜单配置项是否存在
      * @param wx_id|Number  微信id
@@ -39,14 +42,32 @@ class WechatMenu extends BaseModel
         return $result;
     }
 
+    /**
+     * 更新微信配置项
+     * @param change_type|String    更新配置类型
+     * @param options|Array         更新配置项
+     */
+    public static function updataWxMenuOptionItem($change_type, $options)
+    {
+        
+        // return $result;
+    }
 
     /**
-     * 获取微信配置项
+     * 获取微信公众号菜单所有配置项
      * @param wx_id|Number      微信id
      */
     public static function getWxMenuOptionAll($wx_id)
     {
-        // self::where()
-        return "未做查询";
+        $parent_menu = WechatMenu::where("wechat_id=$wx_id AND type=0")
+            ->field('id, name, type, jsonstr AS send_message, sort, last_time, create_time')
+            ->select()
+            ->toArray();
+        foreach ($parent_menu as $key => $value) {
+            $parent_menu[$key]['send_message'] = json_decode($value['send_message'], true);
+            $parent_menu[$key]['sub_button_list'] = [];
+        }
+        return $parent_menu;
+        // return "未做查询";
     }
 }

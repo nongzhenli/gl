@@ -94,7 +94,7 @@ class Wechat
      * @param   options|String  前端传递菜单JSON配置数据
      * @author  bigheiqin
      */
-    public function createMenuCustom($wx_id = 0, $type, $options)
+    public function createMenuCustomItem($wx_id = 0, $type, $options)
     {
         if (empty($wx_id)) {
             throw new Exception('公众号不存在！');
@@ -110,17 +110,38 @@ class Wechat
     }
 
     /**
-     * 获取自定义菜单
-     * @param   wx_id|Number
-     * @author  bigheiqin
+     * 更新自定义菜单
+     * @param   wx_id|Number    公众号Id
+     * @param   options|Number  菜单类型 0,1
+     * @param   options|Number  排序sort
+     * @param   options|String  菜单配置项JSON
      */
-    public function getMenuCustom($wx_id)
+    public function updataMenuCustomItem($change_type, $options)
     {
         if (empty($wx_id)) {
             throw new Exception('公众号不存在！');
         }
         // 转数组
         $options = json_decode($options, true);
+        $result = WechatMenuModel::updataWxMenuOptionItem($change_type, $options);
+        $data = array(
+            "code" => 20000,
+            "data" => $result,
+        );
+        return $data;
+    }
+
+    /**
+     * 获取全部自定义菜单
+     * @param   wx_id|Number
+     * @author  bigheiqin
+     */
+    public function getMenuCustomAll($wx_id)
+    {
+        if (empty($wx_id)) {
+            throw new Exception('公众号不存在！');
+        }
+        // 转数组
         $result = WechatMenuModel::getWxMenuOptionAll($wx_id);
         $data = array(
             "code" => 20000,

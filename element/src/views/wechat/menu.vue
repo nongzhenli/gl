@@ -104,8 +104,7 @@
 </template>
 
 <script>
-import { createWxMenuCustom } from '@/api/wechat'
-import { getWxMenuCustom } from '@/api/wechat'
+import { getWxMenuCustomAll, createWxMenuCustomItem, updataWxMenuCustomItem } from '@/api/wechat'
 
 import menuRight from '@/views/wechat/menuRight';
 export default {
@@ -142,7 +141,9 @@ export default {
     },
     created() {
         console.log(this.$route)
-        this.getWxMenuCustomOption();
+        this.getWxMenuCustomAllOption();
+    },
+    beforeMount(){
     },
     mounted() {
     },
@@ -193,7 +194,7 @@ export default {
                 this.currentIdx = -1
                 this.subCurrentIdx = -1
             }
-        }
+        },
     },
     methods: {
         // 判断是否当前选中
@@ -211,14 +212,12 @@ export default {
             return false;
         },
         // 获取公众号菜单配置
-        getWxMenuCustomOption(){
-            getWxMenuCustom({
+        getWxMenuCustomAllOption(){
+            getWxMenuCustomAll({
                 "wx_id": this.$route.params.id,
             }).then(response => {
-                console.log(response);
-                this.menuOptionsJson = response.data.data
+                this.menuOptionsJson = response.data
             })
-            
         },
         /** menuAdd 父级菜单被点击事件
          * @param _type 自定义事件点击类型，0父菜单添加，2子菜单添加
@@ -239,12 +238,11 @@ export default {
                     "act_list": [],
                     "sub_button_list": [],
                 }
-                wxCreateMenuCustom({
+                createWxMenuCustomItem({
                     "wx_id": this.$route.params.id,
                     "type": 0,
                     "options": JSON.stringify(addOption)
                 }).then(response => {
-                    console.log(response);
                     this.currentIdx = addOption.sort;
                     this.menuOptionsJson.push(addOption);
                 })
@@ -285,7 +283,7 @@ export default {
         },
         // 创建菜单
         createMenuSubmit(){
-            createWxMenuCustom({
+            createWxMenuCustomItem({
                 "wx_id": this.$route.params.id,
                 "options": this.menuOptionsJson
             }).then(response => {

@@ -14,7 +14,7 @@
                     <div class="global_extra">
                         <a href="javascript:void(0);"
                             id="jsDelBt"
-                            @click="menuDel()">删除子菜单</a>
+                            @click="menuDel()">删除菜单</a>
                     </div>
                 </div>
                 <p style="margin-top: 10px; color: #8d8d8d;"
@@ -33,8 +33,10 @@
                         </label>
                         <div class="frm_controls">
                             <span class="frm_input_box with_counter counter_in append"> <input type="text"
-                                    class="frm_input js_menu_name"
-                                    v-model="menuOption.name"> </span>
+                                    @change="updataWxMenuCustomItemOption($event, 'name')"
+                                    ref="name"
+                                    :value="menuOption.name"
+                                    class="frm_input js_menu_name"> </span>
                             <p class="frm_msg fail js_titleEorTips dn"
                                 style="display: none;">字数超过上限</p>
                             <p class="frm_msg fail js_titlenoTips dn"
@@ -289,6 +291,7 @@
 </template>
 
 <script>
+import { updataWxMenuCustomItem } from '@/api/wechat'
 export default {
     // props: {
     //     propName: {
@@ -385,7 +388,20 @@ export default {
                 //     message: '已取消删除'
                 // });
             });
-        }
+        },
+        /**
+         * 更新菜单
+         * @param  change_type|String  更新数据类型
+         */
+        updataWxMenuCustomItemOption(event, change_type){
+            updataWxMenuCustomItem({
+                "change_type": change_type,
+                "options": JSON.stringify(this.menuOption)
+            }).then(response => {
+                console.log(response)
+            })
+            // this.menuOption.name = this.$refs[key].value;
+        },
     },
 }
 </script>
