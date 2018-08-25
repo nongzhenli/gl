@@ -116,14 +116,14 @@ class Wechat
      * @param   options|Number  排序sort
      * @param   options|String  菜单配置项JSON
      */
-    public function updataMenuCustomItem($change_type, $options)
+    public function updataMenuCustomItem($wx_id, $options)
     {
         if (empty($wx_id)) {
             throw new Exception('公众号不存在！');
         }
         // 转数组
         $options = json_decode($options, true);
-        $result = WechatMenuModel::updataWxMenuOptionItem($change_type, $options);
+        $result = WechatMenuModel::updataWxMenuOptionItem($options);
         $data = array(
             "code" => 20000,
             "data" => $result,

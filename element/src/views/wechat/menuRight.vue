@@ -33,14 +33,15 @@
                         </label>
                         <div class="frm_controls">
                             <span class="frm_input_box with_counter counter_in append"> <input type="text"
-                                    @change="updataWxMenuCustomItemOption($event, 'name')"
                                     ref="name"
                                     :value="menuOption.name"
+                                    @change="updataWxMenuCustomItemOption($event, 'name')"
+                                    @input="watchInputRefValue('name')"
                                     class="frm_input js_menu_name"> </span>
                             <p class="frm_msg fail js_titleEorTips dn"
                                 style="display: none;">字数超过上限</p>
-                            <p class="frm_msg fail js_titlenoTips dn"
-                                style="display: none;">请输入菜单名称</p>
+                            <p class="frm_msg fail js_titlenoTips dn" style="display: none;">请输入菜单名称</p>
+                            <p class="menu_name__tip" ref="menu_name__tip" style="display: none">字数不匹配或超过上限</p>
                             <p class="frm_tips js_titleNolTips">字数不超过8个汉字或16个字母</p>
                         </div>
                     </div>
@@ -57,19 +58,25 @@
                             <label class="frm_radio_label js_radio_sendMsg "
                                 :class="{'selected': send_message.send_type == 0}">
                                 <i class="icon_radio"></i>
-                                <span class="lbl_content">发送消息</span> <input type="radio" value="0" v-model="send_message.send_type"
+                                <span class="lbl_content">发送消息</span> <input type="radio"
+                                    value="0"
+                                    v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
                             <label class="frm_radio_label js_radio_url"
                                 :class="{'selected': send_message.send_type == 1}">
                                 <i class="icon_radio"></i>
-                                <span class="lbl_content">跳转网页</span> <input type="radio" value="1" v-model="send_message.send_type"
+                                <span class="lbl_content">跳转网页</span> <input type="radio"
+                                    value="1"
+                                    v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
                             <label class="frm_radio_label js_radio_weapp"
                                 :class="{'selected': send_message.send_type == 2}">
                                 <i class="icon_radio"></i>
-                                <span class="lbl_content">跳转小程序</span> <input type="radio" value="2" v-model="send_message.send_type"
+                                <span class="lbl_content">跳转小程序</span> <input type="radio"
+                                    value="2"
+                                    v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
                         </div>
@@ -79,7 +86,8 @@
                     <div v-show="isCurrentIsEmpty(menuOption)"
                         class="menu_content_container">
                         <!-- 发送消息 -->
-                        <div class="menu_content send jsMain" v-show="send_message.send_type == 0">
+                        <div class="menu_content send jsMain"
+                            v-show="send_message.send_type == 0">
                             <!-- 发送消息容器 -->
                             <div class="msg_sender">
                                 <!-- TAG切换 -->
@@ -267,11 +275,13 @@
                             </div>
                         </div>
                         <!-- 跳转网页 -->
-                        <div class="menu_content url jsMain" v-show="send_message.send_type == 1">
+                        <div class="menu_content url jsMain"
+                            v-show="send_message.send_type == 1">
 
                         </div>
                         <!-- 跳转小程序 -->
-                        <div class="menu_content weapp " v-show="send_message.send_type == 2"></div>
+                        <div class="menu_content weapp "
+                            v-show="send_message.send_type == 2"></div>
 
                         <!-- 已经存在的配置 -->
                         <div class="menu_content sended"
@@ -291,6 +301,7 @@
 </template>
 
 <script>
+import { validatByteMaxLength } from '@/utils/validate'
 import { updataWxMenuCustomItem } from '@/api/wechat'
 export default {
     // props: {
@@ -306,7 +317,7 @@ export default {
             send_message: {
                 "send_type": 0,
                 "send_context": {}
-            }
+            },
         }
     },
     created() {
@@ -321,6 +332,7 @@ export default {
                 this.$emit("update:currentMenuOption", newValue);
             },
             deep: true
+
         },
         // "send_message.send_type"(newValue, oldValue) {
         //     console.log(newValue)
@@ -330,10 +342,12 @@ export default {
                 console.log(newValue)
             },
             deep: true
-        }
-
+        },
     },
     computed: {
+    },
+    updated() {
+        this.menuOption.name = this.$refs['name'].value;
     },
     mounted() {
     },
@@ -358,7 +372,7 @@ export default {
                 title: '提示',
                 message: h('div', null, [
                     h('p', null, '删除确定 '),
-                    h('p', null, '删除后“'+this.currentMenuOption.name+'”菜单下设置的内容将被删除')
+                    h('p', null, '删除后“' + this.currentMenuOption.name + '”菜单下设置的内容将被删除')
                 ]),
                 showCancelButton: true,
                 confirmButtonText: '确定',
@@ -377,7 +391,6 @@ export default {
                     });
                 }
                 this.menuOption = [];
-
                 this.$message({
                     type: 'success',
                     message: '删除成功！'
@@ -391,17 +404,38 @@ export default {
         },
         /**
          * 更新菜单
-         * @param  change_type|String  更新数据类型
+         * @param  key|String  更新数据类型
          */
-        updataWxMenuCustomItemOption(event, change_type){
-            updataWxMenuCustomItem({
-                "change_type": change_type,
-                "options": JSON.stringify(this.menuOption)
-            }).then(response => {
-                console.log(response)
-            })
-            // this.menuOption.name = this.$refs[key].value;
+        updataWxMenuCustomItemOption(event, key) {
+            let options = {
+                    "id": this.menuOption.id,
+                    "key": key,
+                    "value": this.$refs[key].value,
+                },
+                maxLength = this.menuOption.type == 0 ? 8 : 16;
+            if(validatByteMaxLength(1, options.value, maxLength)){
+                updataWxMenuCustomItem({
+                    "wx_id": this.$route.params.id,
+                    "options": JSON.stringify(options)
+                }).then(response => {
+                    this.$nextTick(()=>{
+                        this.menuOption.name = options.value
+                        // console.log(this.$refs[key].value)
+                        // // 如果快速切换其他input radio时，发生异常。待解决..
+                        // // this.menuOption.name = this.$refs[key].value;
+                    })
+                })
+            }
         },
+        // 监听ref值
+        watchInputRefValue(key){
+            let maxLength = this.menuOption.type == 0 ? 8 : 16;
+            if(!validatByteMaxLength(1, this.$refs[key].value, maxLength)){
+                this.$refs['menu_name__tip'].style.display= "block"
+            }else {
+                this.$refs['menu_name__tip'].style.display= "none"
+            }
+        }
     },
 }
 </script>
@@ -410,7 +444,7 @@ export default {
 .menu-message__delete {
     width: 520px;
     .el-message-box__content {
-        padding: 60px 40px
+        padding: 60px 40px;
     }
     .el-message-box__status {
         font-size: 48px !important;
@@ -437,6 +471,11 @@ export default {
             padding-top: 200px;
             color: #8d8d8d;
         }
+    }
+    .menu_name__tip {
+        margin-top: 8px;
+        margin-bottom: -4px;
+        color: #e15f63;
     }
 }
 .menu_initial_tips {

@@ -44,13 +44,19 @@ class WechatMenu extends BaseModel
 
     /**
      * 更新微信配置项
-     * @param change_type|String    更新配置类型
+     * @param wx_id|Number          微信公众号id
      * @param options|Array         更新配置项
      */
-    public static function updataWxMenuOptionItem($change_type, $options)
+    public static function updataWxMenuOptionItem($options)
     {
-        
-        // return $result;
+        // var_dump($options);
+        $data[$options['key']] = $options['value'];
+        $result = new WechatMenu();
+        $result ->save($data, [
+            'id' => $options['id']
+        ]);
+        return $result;
+        // return self::getLastSql();
     }
 
     /**

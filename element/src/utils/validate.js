@@ -31,3 +31,13 @@ export function validatAlphabets(str) {
     return reg.test(str)
 }
 
+// 验证最长字节
+export function validatByteMaxLength(startlengt, str, maxlength) {
+    const strLength = str.replace(/[^\x00-\xff]/g, "aa").length,
+        is_null_str = str.length - str.replace(/^\s+/g, '').length;
+    if (is_null_str != strLength && strLength >= startlengt && strLength <= maxlength) {
+        return true;
+    }
+    return false;
+}
+
