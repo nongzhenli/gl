@@ -232,6 +232,7 @@ export default {
                     "type": 0,
                     "send_message": {
                         "send_type": 0,
+                        "send_context_tab": 0,
                         "send_context": {}
                     },
                     "sort": this.menuOptionsJson.length,
@@ -257,7 +258,8 @@ export default {
                     "name": "子菜单名称",
                     "type": 1,
                     "send_message": {
-                        "send_type": 2,
+                        "send_type": 0,
+                        "send_context_tab": 0,
                         "send_context": {}
                     },
                     "parent_sort": _idx,

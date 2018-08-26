@@ -40,8 +40,11 @@
                                     class="frm_input js_menu_name"> </span>
                             <p class="frm_msg fail js_titleEorTips dn"
                                 style="display: none;">字数超过上限</p>
-                            <p class="frm_msg fail js_titlenoTips dn" style="display: none;">请输入菜单名称</p>
-                            <p class="menu_name__tip" ref="menu_name__tip" style="display: none">字数不匹配或超过上限</p>
+                            <p class="frm_msg fail js_titlenoTips dn"
+                                style="display: none;">请输入菜单名称</p>
+                            <p class="menu_name__tip"
+                                ref="menu_name__tip"
+                                style="display: none">字数不匹配或超过上限</p>
                             <p class="frm_tips js_titleNolTips">字数不超过8个汉字或16个字母</p>
                         </div>
                     </div>
@@ -51,7 +54,8 @@
                         class="frm_control_group"
                         style="display: block;">
                         <label for=""
-                            class="frm_label">
+                            class="frm_label"
+                            style="margin-top: 0;">
                             <strong class="title js_menuContent">菜单内容</strong>
                         </label>
                         <div class="frm_controls frm_vertical_pt">
@@ -96,48 +100,14 @@
                                     <div class="tab_navs_panel">
                                         <div class="tab_navs_wrp">
                                             <ul class="tab_navs js_tab_navs">
-                                                <!-- 发送图文 tag -->
                                                 <li class="tab_nav tab_appmsg width4"
-                                                    data-type="10"
-                                                    data-tab=".js_appmsgArea"
-                                                    data-tooltip="图文消息">
-                                                    <a href="javascript:void(0);"
-                                                        onclick="return false;">
-                                                        <i class="icon_msg_sender"></i>
-                                                        <span class="msg_tab_title">图文消息</span>
-                                                    </a>
-                                                </li>
-                                                <!-- 发送图片 tag -->
-                                                <li class="tab_nav tab_img width4 selected"
-                                                    data-type="2"
-                                                    data-tab=".js_imgArea"
-                                                    data-tooltip="图片">
-                                                    <a href="javascript:void(0);"
-                                                        onclick="return false;">&nbsp;
-                                                        <i class="icon_msg_sender"></i>
-                                                        <span class="msg_tab_title">图片</span>
-                                                    </a>
-                                                </li>
-                                                <!-- 发送语音 tag -->
-                                                <li class="tab_nav tab_audio width4"
-                                                    data-type="3"
-                                                    data-tab=".js_audioArea"
-                                                    data-tooltip="语音">
-                                                    <a href="javascript:void(0);"
-                                                        onclick="return false;">&nbsp;
-                                                        <i class="icon_msg_sender"></i>
-                                                        <span class="msg_tab_title">语音</span>
-                                                    </a>
-                                                </li>
-                                                <!-- 发送视频 tag -->
-                                                <li class="tab_nav tab_video width4 no_extra"
-                                                    data-type="15"
-                                                    data-tab=".js_videoArea"
-                                                    data-tooltip="视频">
-                                                    <a href="javascript:void(0);"
-                                                        onclick="return false;">&nbsp;
-                                                        <i class="icon_msg_sender"></i>
-                                                        <span class="msg_tab_title">视频</span>
+                                                    v-for="(data, index) in send_text_message.item"
+                                                    @click.stop="sendMessageTab(index)"
+                                                    :class="{'selected': send_text_message.current == index}"
+                                                    :data-type="data.type" >
+                                                    <a href="javascript:void(0);" onclick="return false;">
+                                                        <i class="icon_msg_sender" ></i>
+                                                        <span class="msg_tab_title" >{{data.name}}</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -146,14 +116,15 @@
                                     <!-- 切换内容 -->
                                     <div class="tab_panel">
                                         <!-- 切换图文内容块 -->
-                                        <div class="tab_content">
+                                        <div class="tab_content"
+                                            v-show="send_text_message.current == 0">
                                             <div class="js_appmsgArea inner ">
-                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
                                                 <div class="tab_cont_cover create-type__list jsMsgSendTab"
                                                     data-index="0">
                                                     <!-- 从素材库选择 -->
                                                     <div class="create-type__item">
                                                         <a href="javascript:;"
+                                                            @click="dialogTableVisible = true"
                                                             class="create-type__link jsMsgSenderPopBt"
                                                             data-type="10"
                                                             data-index="0">
@@ -184,9 +155,8 @@
                                         </div>
                                         <!-- 切换图片内容块 -->
                                         <div class="tab_content"
-                                            style="display: none;">
+                                            v-show="send_text_message.current == 1">
                                             <div class="js_imgArea inner ">
-                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
                                                 <div class="tab_cont_cover create-type__list jsMsgSendTab"
                                                     data-index="1"
                                                     data-type="2">
@@ -215,10 +185,8 @@
                                         </div>
                                         <!-- 切换语音内容块 -->
                                         <div class="tab_content"
-                                            style="display: none;">
+                                            v-show="send_text_message.current == 2">
                                             <div class="js_audioArea inner ">
-                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
-
                                                 <div class="tab_cont_cover create-type__list jsMsgSendTab"
                                                     data-index="2"
                                                     data-type="3">
@@ -244,9 +212,8 @@
                                         </div>
                                         <!-- 切换跳转小程序内容块 -->
                                         <div class="tab_content"
-                                            style="display: none;">
+                                            v-show="send_text_message.current == 3">
                                             <div class="js_videoArea inner ">
-                                                <!--type 10图文 2图片  3语音 15视频 11商品消息-->
                                                 <div class="tab_cont_cover create-type__list jsMsgSendTab"
                                                     data-index="3">
                                                     <div class="create-type__item">
@@ -271,25 +238,100 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- 选择元素 -->
+                                    <el-dialog title="选择素材" custom-class="menu-sendMsg__selet-context" width="960px" :visible.sync="dialogTableVisible">
+                                        <el-row class="clearfix header">
+                                            <div class="search-row float_l">
+                                                <el-input placeholder="搜索关键词/规则名称"
+                                                    class="input-with-select">
+                                                    <el-button slot="append" icon="el-icon-search"></el-button>
+                                                </el-input>
+                                            </div>
+                                            <div class="search-row float_r">
+                                                <el-button type="success"
+                                                    size="medium"
+                                                    @click="ruleDataSet"><i class="el-icon-plus"></i> 新建图文消息</el-button>
+                                            </div>
+                                        </el-row>
+                                        <el-row>
+                                            <div class="menu-sendMsg__selet_list">
+                                                <ul>
+                                                    <li class="item">
+                                                        <div class="last-time">更新于07月22日</div>
+                                                        <div class="item-body">
+                                                            <img src="https://img.zcool.cn/community/01c1e3571b8b2632f875a399443575.jpg@2o.jpg" alt="">
+                                                        </div>
+                                                        <div class="item-title">大黑测试图文文章</div>
+                                                        <!-- 遮罩层 -->
+                                                        <span class="menu-sendMsg__item__layer"><i class="el-icon-check"></i></span>
+                                                    </li>
+                                                    <li class="item">
+                                                        <div class="last-time">更新于07月22日</div>
+                                                        <div class="item-body">
+                                                            <img src="https://img.zcool.cn/community/01c1e3571b8b2632f875a399443575.jpg@2o.jpg" alt="">
+                                                        </div>
+                                                        <div class="item-title">大黑测试图文文章</div>
+
+                                                        <span class="menu-sendMsg__item__layer"><i class="el-icon-check"></i></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </el-row>
+                                        <el-row  style="text-align: center;">
+                                            <el-button type="success" size="medium " native-type="button" @click="createMenuSubmit()">保存并发布</el-button>
+                                            <el-button type="info" plain size="medium " native-type="button">预览</el-button>
+                                        </el-row>
+                                    </el-dialog>
                                 </div>
                             </div>
                         </div>
                         <!-- 跳转网页 -->
                         <div class="menu_content url jsMain"
                             v-show="send_message.send_type == 1">
-
+                            <div class="">
+                                <p class="menu_content_tips tips_global">订阅者点击该子菜单会跳到以下链接</p>
+                                <div class="frm_control_group">
+                                    <label for=""
+                                        class="frm_label">页面地址</label>
+                                    <div class="frm_controls">
+                                        <span class="frm_input_box disabled"><input type="text" v-model="send_url_message.context"
+                                                class="frm_input"> </span>
+                                        <p class="profile_link_msg_global menu_url mini_tips warn dn js_warn"
+                                            style="display: none;"> 请勿添加其他公众号的主页链接 </p>
+                                        <p class="frm_tips"
+                                            id="js_urlTitle"
+                                            style="display: none;"> 来自
+                                            <span class="js_name"></span>
+                                            <span style="display:none;"> -《<span class="js_title"></span>》</span>
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                                <div class="frm_control_group btn_appmsg_wrap">
+                                    <div class="frm_controls">
+                                        <p class="frm_msg fail dn"
+                                            id="urlUnSelect"
+                                            style="display: none;">
+                                            <span for="urlText"
+                                                class="frm_msg_content"
+                                                style="display: inline;">请选择一篇文章</span>
+                                        </p>
+                                        <a href="javascript:;"
+                                            id="js_appmsgPop">从公众号图文消息中选择</a>
+                                        <a href="javascript:void(0);"
+                                            class="dn btn btn_default"
+                                            id="js_reChangeAppmsg"
+                                            style="display: none;">重新选择</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- 跳转小程序 -->
                         <div class="menu_content weapp "
-                            v-show="send_message.send_type == 2"></div>
-
-                        <!-- 已经存在的配置 -->
-                        <div class="menu_content sended"
-                            style="display: none;">
-
+                            v-show="send_message.send_type == 2">
+                            <div class="">跳转小程序</div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="editor_inner"
@@ -314,14 +356,48 @@ export default {
     data() {
         return {
             menuOption: this.currentMenuOption,
+            // 菜单内容
             send_message: {
                 "send_type": 0,
+                "send_context_tab": 0,
                 "send_context": {}
             },
+            // 发送消息
+            send_text_message: {
+                "current": 0,
+                "item": [{
+                    "type": 10,
+                    "name": "图文消息",
+                    "context": {}
+                },{
+                    "type": 12,
+                    "name": "图片",
+                    "context": {}
+                },{
+                    "type": 13,
+                    "name": "语音",
+                    "context": {}
+                },{
+                    "type": 14,
+                    "name": "视频",
+                    "context": {}
+                }]
+            },
+            // 跳转网址
+            send_url_message: {
+                "type": 1,
+                "context": {},
+            },
+            //跳转小程序
+            send_weapp_message: {
+                "type": 2,
+                "context": {},
+            },
+            // 选择素材
+            dialogTableVisible: false
         }
     },
     created() {
-        // console.log(this.menuOption)
     },
     filters: {
     },
@@ -332,22 +408,22 @@ export default {
                 this.$emit("update:currentMenuOption", newValue);
             },
             deep: true
-
         },
-        // "send_message.send_type"(newValue, oldValue) {
-        //     console.log(newValue)
-        // },
-        send_message: {
-            handler(newValue, oldValue) {
-                console.log(newValue)
-            },
-            deep: true
+        "send_text_message.current"(newValue, oldValue) {
+            // if(this.send_message.send_type != 0) return
+            // this.send_message.send_context_tab = this.send_text_message.item[newValue].type;
+            // this.send_message.send_context = JSON.stringify(this.send_text_message.item[newValue].context)
+        },
+        "send_message.send_type"(newValue, oldValue) {
+            console.log(newValue)
+            // console.log(newValue)
+            // if(newValue.send_type > 0){
+            //     this.send_message.send_context_tab = 0;
+            //     this.send_message.send_context = null
+            // }
         },
     },
     computed: {
-    },
-    updated() {
-        this.menuOption.name = this.$refs['name'].value;
     },
     mounted() {
     },
@@ -408,17 +484,17 @@ export default {
          */
         updataWxMenuCustomItemOption(event, key) {
             let options = {
-                    "id": this.menuOption.id,
-                    "key": key,
-                    "value": this.$refs[key].value,
-                },
+                "id": this.menuOption.id,
+                "key": key,
+                "value": this.$refs[key].value,
+            },
                 maxLength = this.menuOption.type == 0 ? 8 : 16;
-            if(validatByteMaxLength(1, options.value, maxLength)){
+            if (validatByteMaxLength(1, options.value, maxLength)) {
                 updataWxMenuCustomItem({
                     "wx_id": this.$route.params.id,
                     "options": JSON.stringify(options)
                 }).then(response => {
-                    this.$nextTick(()=>{
+                    this.$nextTick(() => {
                         this.menuOption.name = options.value
                         // console.log(this.$refs[key].value)
                         // // 如果快速切换其他input radio时，发生异常。待解决..
@@ -428,13 +504,25 @@ export default {
             }
         },
         // 监听ref值
-        watchInputRefValue(key){
+        watchInputRefValue(key) {
             let maxLength = this.menuOption.type == 0 ? 8 : 16;
-            if(!validatByteMaxLength(1, this.$refs[key].value, maxLength)){
-                this.$refs['menu_name__tip'].style.display= "block"
-            }else {
-                this.$refs['menu_name__tip'].style.display= "none"
+            if (!validatByteMaxLength(1, this.$refs[key].value, maxLength)) {
+                this.$refs['menu_name__tip'].style.display = "block"
+            } else {
+                this.$refs['menu_name__tip'].style.display = "none"
             }
+        },
+        // 消息内容_选择素材
+        sendContextSelect() {
+
+        },
+        // 切换发送消息tab
+        sendMessageTab(index){
+            this.send_text_message.current = index;
+        },
+        // 发送消息选择素材
+        sendTextMsgSelectItem(){
+
         }
     },
 }
@@ -472,11 +560,88 @@ export default {
             color: #8d8d8d;
         }
     }
+
     .menu_name__tip {
         margin-top: 8px;
         margin-bottom: -4px;
         color: #e15f63;
     }
+
+    .menu_content .frm_control_group {
+        margin-top: 0;
+    }
+    .menu_content_tips {
+        padding-bottom: 10px;
+    }
+
+    .portable_editor .frm_control_group {
+        margin-bottom: 10px;
+    }
+
+    .pre_menu_item {
+        position: relative;
+        float: left;
+        line-height: 38px;
+        text-align: center;
+    }
+
+    .pre_menu_item .icon_menu_dot {
+        background: url(/mpres/zh_CN/htmledition/comm_htmledition/style/page/menu/index_z3ff724.png)
+            0 -36px no-repeat;
+        width: 7px;
+        height: 7px;
+        vertical-align: middle;
+        display: inline-block;
+        margin-right: 2px;
+        margin-top: -2px;
+        *margin-top: 0;
+    }
+
+    .pre_menu_item a {
+        display: block;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        color: #616161;
+        text-decoration: none;
+    }
+
+    .pre_menu_link {
+        border-left: 1px solid #e7e7eb;
+    }
+
+    .btn_appmsg_wrap {
+        margin-top: -10px;
+        padding-left: 85px;
+    }
+
+    .select_list_container {
+        padding: 20px 30px;
+    }
+
+    .select_list_container .frm_input_box {
+        width: 278px;
+    }
+
+    .select_list_container .loading_area {
+        position: relative;
+    }
+
+    .select_list_container .icon_loading_small {
+        margin-left: -20px;
+        top: 185px;
+    }
+    .portable_editor .frm_control_group {
+        margin-bottom: 10px
+    }
+    .frm_control_group.btn_appmsg_wrap #js_appmsgPop {
+        text-decoration: none;
+        color: #576b95;
+    }
+    
+
 }
 .menu_initial_tips {
     text-align: center;
@@ -528,13 +693,17 @@ export default {
 .frm_label {
     float: left;
     width: 5em;
-    // margin-top: 0.3em;
+    margin-top: 0.3em;
     margin-right: 1em;
     font-size: 14px;
+    font-weight: normal;
     .title {
         font-weight: 400;
         font-style: normal;
     }
+}
+.tips_global {
+    color: #8d8d8d;
 }
 .frm_controls {
     display: table-cell;
@@ -545,8 +714,8 @@ export default {
 .frm_input_box {
     display: inline-block;
     position: relative;
-    height: 30px;
-    line-height: 30px;
+    height: 32px;
+    line-height: 32px;
     vertical-align: middle;
     width: 278px;
     font-size: 14px;
@@ -814,5 +983,63 @@ input[type="radio"] {
 .create-type__icon.video {
     background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
         0 -132px no-repeat;
+}
+
+// 选择素材
+.menu-sendMsg__selet-context {
+    .el-dialog__body .header {
+        margin: 0 -20px;
+        padding: 10px 20px;
+        border-bottom: 1px solid #e7e7eb;
+    }
+}
+.menu-sendMsg__selet_list {
+    padding: 30px 0;
+    .item {
+        display: inline-block;
+        position: relative;
+        width: 38%;
+        padding: 0 14px;
+        margin-bottom: 20px;
+        border: 1px solid #e7e7eb;
+        cursor: pointer;
+        .last-time {
+            padding: 12px 0;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #e7e7eb;
+        }
+        .item-body img {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+        }
+        .item-title {
+            padding: 15px;
+        }
+
+        .menu-sendMsg__item__layer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            display: none;
+            background-color: rgba(0, 0, 0, 0.47);
+            text-align: center;
+
+            i.el-icon-check {
+                position: relative;
+                top: 50%;
+                margin-top: -30px;
+                font-size: 60px;
+                color: #fff;
+            }
+        }
+        &:hover {
+            .menu-sendMsg__item__layer {
+                display: block;
+            }
+        }
+    }
 }
 </style>
