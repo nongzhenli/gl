@@ -124,7 +124,7 @@
                                                     <!-- 从素材库选择 -->
                                                     <div class="create-type__item">
                                                         <a href="javascript:;"
-                                                            @click="dialogTableVisible = true"
+                                                            @click="dialogImgTextVisible = true"
                                                             class="create-type__link jsMsgSenderPopBt"
                                                             data-type="10"
                                                             data-index="0">
@@ -238,50 +238,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- 选择元素 -->
-                                    <el-dialog title="选择素材" custom-class="menu-sendMsg__selet-context" width="960px" :visible.sync="dialogTableVisible">
-                                        <el-row class="clearfix header">
-                                            <div class="search-row float_l">
-                                                <el-input placeholder="搜索关键词/规则名称"
-                                                    class="input-with-select">
-                                                    <el-button slot="append" icon="el-icon-search"></el-button>
-                                                </el-input>
-                                            </div>
-                                            <div class="search-row float_r">
-                                                <el-button type="success"
-                                                    size="medium"
-                                                    @click="ruleDataSet"><i class="el-icon-plus"></i> 新建图文消息</el-button>
-                                            </div>
-                                        </el-row>
-                                        <el-row>
-                                            <div class="menu-sendMsg__selet_list">
-                                                <ul>
-                                                    <li class="item">
-                                                        <div class="last-time">更新于07月22日</div>
-                                                        <div class="item-body">
-                                                            <img src="https://img.zcool.cn/community/01c1e3571b8b2632f875a399443575.jpg@2o.jpg" alt="">
-                                                        </div>
-                                                        <div class="item-title">大黑测试图文文章</div>
-                                                        <!-- 遮罩层 -->
-                                                        <span class="menu-sendMsg__item__layer"><i class="el-icon-check"></i></span>
-                                                    </li>
-                                                    <li class="item">
-                                                        <div class="last-time">更新于07月22日</div>
-                                                        <div class="item-body">
-                                                            <img src="https://img.zcool.cn/community/01c1e3571b8b2632f875a399443575.jpg@2o.jpg" alt="">
-                                                        </div>
-                                                        <div class="item-title">大黑测试图文文章</div>
+                                    <!-- 选择图文 -->
+                                    <dialog-img-text-msg :dialog-img-text-visible.sync="dialogImgTextVisible" :img-text-data.sync="send_text_message.item[0].context"></dialog-img-text-msg>
 
-                                                        <span class="menu-sendMsg__item__layer"><i class="el-icon-check"></i></span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </el-row>
-                                        <el-row  style="text-align: center;">
-                                            <el-button type="success" size="medium " native-type="button" @click="createMenuSubmit()">保存并发布</el-button>
-                                            <el-button type="info" plain size="medium " native-type="button">预览</el-button>
-                                        </el-row>
-                                    </el-dialog>
                                 </div>
                             </div>
                         </div>
@@ -345,6 +304,7 @@
 <script>
 import { validatByteMaxLength } from '@/utils/validate'
 import { updataWxMenuCustomItem } from '@/api/wechat'
+import dialogImgTextMsg from '@/components/WxMenu/dialogImgTextMsg';
 export default {
     // props: {
     //     propName: {
@@ -393,9 +353,16 @@ export default {
                 "type": 2,
                 "context": {},
             },
-            // 选择素材
-            dialogTableVisible: false
+            // 选择图文素材
+            dialogImgTextVisible: false,
+            dialogImagseVisible: false,
+            dialogAudioVisible: false,
+            dialogVideoVisible: false,
+
         }
+    },
+    components: {
+        dialogImgTextMsg,
     },
     created() {
     },
@@ -422,6 +389,9 @@ export default {
             //     this.send_message.send_context = null
             // }
         },
+        "selectListItem.current"(newValue, oldValue) {
+            console.log(newValue)
+        }
     },
     computed: {
     },
@@ -496,9 +466,7 @@ export default {
                 }).then(response => {
                     this.$nextTick(() => {
                         this.menuOption.name = options.value
-                        // console.log(this.$refs[key].value)
-                        // // 如果快速切换其他input radio时，发生异常。待解决..
-                        // // this.menuOption.name = this.$refs[key].value;
+                        // 如果快速切换其他input radio时，发生异常。待解决..
                     })
                 })
             }
@@ -992,9 +960,16 @@ input[type="radio"] {
         padding: 10px 20px;
         border-bottom: 1px solid #e7e7eb;
     }
+    .footer_button {
+        text-align: center;
+        margin: 100px 0 10px;
+    }
 }
 .menu-sendMsg__selet_list {
     padding: 30px 0;
+    height: 425px;
+    overflow-y: auto;
+
     .item {
         display: inline-block;
         position: relative;
@@ -1002,6 +977,7 @@ input[type="radio"] {
         padding: 0 14px;
         margin-bottom: 20px;
         border: 1px solid #e7e7eb;
+        margin-left: 30px;
         cursor: pointer;
         .last-time {
             padding: 12px 0;
@@ -1040,6 +1016,10 @@ input[type="radio"] {
                 display: block;
             }
         }
+        &.current .menu-sendMsg__item__layer {
+            display: block;
+        }
     }
+    
 }
 </style>

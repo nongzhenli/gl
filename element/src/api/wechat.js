@@ -67,3 +67,11 @@ export function updataWxMenuCustomItem(params) {
         data: params
     })
 }
+// 获取菜单【发送消息】素材内容
+export function getWxMenuSendMsgContext(params) {
+    return request({
+        url: '/wechat/menu/sendmsg',
+        method: 'get',
+        params
+    })
+}

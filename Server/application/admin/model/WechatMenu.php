@@ -76,4 +76,13 @@ class WechatMenu extends BaseModel
         return $parent_menu;
         // return "未做查询";
     }
+
+    /**
+     * 获取微信公众号菜单所有配置项
+     * @param   wx_id|Number        微信公众号id
+     * @param   msg_type|String     获取微信素材类型
+     */
+    public static function getWxMenuSendMsgContext($wx_id, $msg_type)
+    {
+    }
 }
