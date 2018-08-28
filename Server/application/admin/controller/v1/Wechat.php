@@ -149,26 +149,4 @@ class Wechat
         );
         return $data;
     }
-
-
-    /**
-     * 获取公众号菜单发【发送消息】素材内容
-     * @param   wx_id|Number        微信公众号id
-     * @param   msg_type|String     获取微信素材类型
-     * @author  bigheiqin
-     */
-    public function getWxMenuSendMsgContext($wx_id, $msg_type)
-    {
-        if (empty($wx_id)) {
-            throw new Exception('公众号不存在！');
-        }
-        // 转数组
-        $result = WechatMenuService::getForeverSendMsgList($wx_id, $msg_type);
-        $data = array(
-            "code" => 20000,
-            "data" => $result,
-        );
-        return $data;
-    }
-
 }

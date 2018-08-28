@@ -68,6 +68,9 @@ Route::rule('admin/:version/wechat/menu/create', 'admin/:version.Wechat/createMe
 Route::rule('admin/:version/wechat/menu/get', 'admin/:version.Wechat/getMenuCustomAll', 'GET'); // 获取菜单
 Route::rule('admin/:version/wechat/menu/updata', 'admin/:version.Wechat/updataMenuCustomItem', 'POST'); // 更新菜单
 Route::rule('admin/:version/wechat/menu/sendmsg', 'admin/:version.Wechat/getWxMenuSendMsgContext', 'GET'); // 获取微信菜单【发送消息】素材内容
+// --素材管理 【WxMedia】
+Route::rule('admin/:version/wxmedia/getList', 'admin/:version.WxMedia/getMediaForeverList', 'GET');    // 获取永久素材列表
+Route::rule('admin/:version/wxmedia/get', 'admin/:version.WxMedia/getForeverByMedia', 'POST');        // 获取永久素材
 
 
 /**

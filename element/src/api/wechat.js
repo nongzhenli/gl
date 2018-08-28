@@ -75,3 +75,12 @@ export function getWxMenuSendMsgContext(params) {
         params
     })
 }
+
+// 获取菜单【发送消息】素材内容
+export function getWxForeverByMedia(params) {
+    return request({
+        url: '/wechat/menu/sendmsg',
+        method: 'get',
+        params
+    })
+}

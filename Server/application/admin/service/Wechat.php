@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-06-05 15:51:56
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-30 17:33:32
+ * @Last Modified time: 2018-08-28 10:44:13
  */
 namespace app\admin\service;
 
@@ -14,6 +14,7 @@ use app\api\model\FansRecord as FansRecordModel;
 use app\api\model\User as UserModel;
 use WechatSdk\Wechat as WechatSdk;
 use think\Cache;
+use think\Exception;
 
 class Wechat extends BaseWechat
 {
@@ -36,6 +37,7 @@ class Wechat extends BaseWechat
         $decrypt = self::passport_decrypt($wechatConfigArr['app_secret'], $wechatConfigArr['app_id']);
         // 重构返回数据
         $wechatConfigArr['app_secret'] = $decrypt;
+        self::$base_wx_config = $wechatConfigArr;
         return $wechatConfigArr;
     }
 

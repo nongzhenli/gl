@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getWxMenuSendMsgContext } from '@/api/wechat'
+import { get, getList } from '@/api/wxMedia'
 export default {
     props: ['dialogImgTextVisible', "imgTextData"],
     data() {
@@ -94,9 +94,10 @@ export default {
         // 请求获取图文素材
         getSendMsgImgTextItem(){
             // msg_type 素材的类型，图片（image）、视频（video）、语音 （voice）、图文（news）
-            getWxMenuSendMsgContext({
+            getList({
                 // "wx_id": this.$route.params.id,
                 "wx_id": 2,
+                // "msg_type": "image"
                 "msg_type": "news"
             }).then(response => {
                 

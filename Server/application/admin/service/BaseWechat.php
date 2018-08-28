@@ -3,7 +3,7 @@
  * @Author: big黑钦
  * @Date: 2018-05-22 12:02:38
  * @Last Modified by: big黑钦
- * @Last Modified time: 2018-07-28 14:11:11
+ * @Last Modified time: 2018-08-28 10:43:32
  */
 namespace app\admin\service;
 
@@ -22,6 +22,8 @@ class BaseWechat
     protected static $openid;
     // 类全局微信SDK
     protected static $base_wxSDKObj;
+    // 类全局公众号服务器配置
+    protected static $base_wx_config;
 
     // 加密
     public static function passport_encrypt($txt, $key = 'www.glagbn.com')

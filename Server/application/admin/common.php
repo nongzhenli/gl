@@ -174,3 +174,33 @@ function timeFormat($time, $format="Y-m-d H:i:s"){
     }
     return $time;
 }
+
+/**
+ * 从字符串中的图像流新建一图像并保存到指定路径
+ * @param   strImg|String       URL返回的图像字符
+ * @param   type|String         保存图像资源格式
+ * @param   savePath|String     图像保存路径，建议填写绝对路径
+ * @author  Bigheiqin
+ * （初始目的用于获取微信素材）
+ */
+function saveImgFile($strImg, $type, $savePath){
+    $createImg = imagecreatefromstring($strImg);
+    switch ($type) {
+        case 'jpg':
+        case 'jpeg':
+            $imagesave = 'imagejpeg';
+            break;
+        case 'png':
+            $imagesave = 'imagepng';
+            break;
+
+        case 'gif':
+            $imagesave = 'imagegif';
+            break;
+    }
+    if ($imagesave($createImg, $savePath, $quality)) {
+        imagedestroy($createImg);
+        return $savePath;
+    }
+    exit('图片保存错误');
+}
