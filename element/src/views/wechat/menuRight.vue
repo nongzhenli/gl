@@ -119,8 +119,7 @@
                                         <div class="tab_content"
                                             v-show="send_text_message.current == 0">
                                             <div class="js_appmsgArea inner ">
-                                                <div class="tab_cont_cover create-type__list jsMsgSendTab"
-                                                    data-index="0">
+                                                <div class="tab_cont_cover create-type__list jsMsgSendTab" data-index="0" v-show="!send_text_message.item[0].context.media_id">
                                                     <!-- 从素材库选择 -->
                                                     <div class="create-type__item">
                                                         <a href="javascript:;"
@@ -129,19 +128,19 @@
                                                             data-type="10"
                                                             data-index="0">
                                                             <i class="create-type__icon file"></i>
-                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                            <strong class="create-type__title">从素材库选择图文</strong>
                                                         </a>
                                                     </div>
                                                     <!-- 自建图文 -->
-                                                    <div class="create-type__item">
+                                                    <!-- <div class="create-type__item">
                                                         <a target="_blank"
                                                             class="create-type__link">
                                                             <i class="create-type__icon new"></i>
                                                             <strong class="create-type__title">自建图文</strong>
                                                         </a>
-                                                    </div>
+                                                    </div> -->
                                                     <!--  转载文章 -->
-                                                    <div class="create-type__item">
+                                                    <!-- <div class="create-type__item">
                                                         <a target="_blank"
                                                             class="create-type__link"
                                                             data-type="10"
@@ -149,6 +148,18 @@
                                                             <i class="create-type__icon share"></i>
                                                             <strong class="create-type__title">转载文章</strong>
                                                         </a>
+                                                    </div> -->
+                                                </div>
+                                                <div class="msgSender_media" v-if="send_text_message.item[0].context.media_id">
+                                                    <div class="menu-sendMsg__selet_list">
+                                                        <div class="item">
+                                                            <div class="last-time">{{send_text_message.item[0].context.update_time | formatTime}}</div>
+                                                            <div class="item-body">
+                                                                <img :src="send_text_message.item[0].context.content.news_item.new_thumb_url" alt="">
+                                                            </div>
+                                                            <div class="item-title">{{send_text_message.item[0].context.content.news_item.title}}</div>
+                                                        </div>
+                                                        <el-button type="text" class="menu-sedMsg__del" @click="send_text_message.item[0].context = {}">删除</el-button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -166,10 +177,10 @@
                                                             data-type="2"
                                                             data-index="1">
                                                             <i class="create-type__icon file"></i>
-                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                            <strong class="create-type__title">从素材库选择图片</strong>
                                                         </a>
                                                     </div>
-                                                    <div class="create-type__item">
+                                                    <!-- <div class="create-type__item">
                                                         <a href="javascript:;"
                                                             id="msgSendImgUploadBt"
                                                             class="create-type__link"
@@ -177,7 +188,7 @@
                                                             <i class="create-type__icon pic"></i>
                                                             <strong class="create-type__title">上传图片</strong>
                                                         </a>
-                                                    </div>
+                                                    </div> -->
 
                                                 </div>
 
@@ -196,21 +207,21 @@
                                                             data-type="3"
                                                             data-index="2">
                                                             <i class="create-type__icon file"></i>
-                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                            <strong class="create-type__title">从素材库选择语音</strong>
                                                         </a>
                                                     </div>
-                                                    <div class="create-type__item">
+                                                    <!-- <div class="create-type__item">
                                                         <a href="javascript:;"
                                                             id="msgSendAudioUploadBt"
                                                             class="create-type__link">
                                                             <i class="create-type__icon voice"></i>
                                                             <strong class="create-type__title">新建语音</strong>
                                                         </a>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- 切换跳转小程序内容块 -->
+                                        <!-- 切换视频内容块 -->
                                         <div class="tab_content"
                                             v-show="send_text_message.current == 3">
                                             <div class="js_videoArea inner ">
@@ -222,25 +233,23 @@
                                                             data-type="15"
                                                             data-index="3">
                                                             <i class="create-type__icon file"></i>
-                                                            <strong class="create-type__title">从素材库选择</strong>
+                                                            <strong class="create-type__title">从素材库选择视频</strong>
                                                         </a>
                                                     </div>
-                                                    <div class="create-type__item">
+                                                    <!-- <div class="create-type__item">
                                                         <a target="_blank"
                                                             href="/cgi-bin/appmsg?t=media/videomsg_edit&amp;action=video_edit&amp;type=15&amp;lang=zh_CN&amp;token=1032462349"
                                                             class="create-type__link">
                                                             <i class="create-type__icon video"></i>
                                                             <strong class="create-type__title">新建视频</strong>
                                                         </a>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
                                     <!-- 选择图文 -->
                                     <dialog-img-text-msg :dialog-img-text-visible.sync="dialogImgTextVisible" :img-text-data.sync="send_text_message.item[0].context"></dialog-img-text-msg>
-
                                 </div>
                             </div>
                         </div>
@@ -302,6 +311,7 @@
 </template>
 
 <script>
+import { formatTime } from '@/utils/index'
 import { validatByteMaxLength } from '@/utils/validate'
 import { updataWxMenuCustomItem } from '@/api/wechat'
 import dialogImgTextMsg from '@/components/WxMenu/dialogImgTextMsg';
@@ -367,11 +377,16 @@ export default {
     created() {
     },
     filters: {
+        formatTime: function(data) {
+            return formatTime(data, true, "更新于 {y}-{m}-{d} {h}:{i}");
+        }
     },
     watch: {
         currentMenuOption: {
             handler(newValue, oldValue) {
                 this.menuOption = newValue;
+                this.send_message = newValue.send_message
+                console.log(this.send_message)
                 this.$emit("update:currentMenuOption", newValue);
             },
             deep: true
@@ -488,10 +503,6 @@ export default {
         sendMessageTab(index){
             this.send_text_message.current = index;
         },
-        // 发送消息选择素材
-        sendTextMsgSelectItem(){
-
-        }
     },
 }
 </script>
@@ -893,7 +904,7 @@ input[type="radio"] {
     overflow: hidden;
 }
 .create-type__list {
-    text-align: center;
+    text-align: left;
     padding: 45px 0;
 }
 .menu_form_area .msg_sender .tab_cont_cover {
@@ -906,6 +917,7 @@ input[type="radio"] {
     vertical-align: top;
     margin: 0 10px;
     transition: all 0.3s;
+    text-align: center;
 }
 .create-type__list .create-type__item:hover {
     text-decoration: none;
@@ -953,73 +965,19 @@ input[type="radio"] {
         0 -132px no-repeat;
 }
 
-// 选择素材
-.menu-sendMsg__selet-context {
-    .el-dialog__body .header {
-        margin: 0 -20px;
-        padding: 10px 20px;
-        border-bottom: 1px solid #e7e7eb;
-    }
-    .footer_button {
-        text-align: center;
-        margin: 100px 0 10px;
-    }
-}
-.menu-sendMsg__selet_list {
-    padding: 30px 0;
-    height: 425px;
-    overflow-y: auto;
 
-    .item {
+// 已选择媒体素材
+.msgSender_media {
+    .menu-sendMsg__selet_list .item {
+        width: 320px;
+        margin-bottom: 0;
+    }
+    .menu-sedMsg__del {
         display: inline-block;
-        position: relative;
-        width: 38%;
-        padding: 0 14px;
-        margin-bottom: 20px;
-        border: 1px solid #e7e7eb;
-        margin-left: 30px;
-        cursor: pointer;
-        .last-time {
-            padding: 12px 0;
-            margin-bottom: 14px;
-            border-bottom: 1px solid #e7e7eb;
-        }
-        .item-body img {
-            display: block;
-            width: 100%;
-            max-width: 100%;
-        }
-        .item-title {
-            padding: 15px;
-        }
-
-        .menu-sendMsg__item__layer {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            display: none;
-            background-color: rgba(0, 0, 0, 0.47);
-            text-align: center;
-
-            i.el-icon-check {
-                position: relative;
-                top: 50%;
-                margin-top: -30px;
-                font-size: 60px;
-                color: #fff;
-            }
-        }
-        &:hover {
-            .menu-sendMsg__item__layer {
-                display: block;
-            }
-        }
-        &.current .menu-sendMsg__item__layer {
-            display: block;
-        }
+        overflow: hidden;
+        padding-bottom: 2px;
+        margin-left: 15px;
+        vertical-align: bottom;
     }
-    
 }
 </style>
