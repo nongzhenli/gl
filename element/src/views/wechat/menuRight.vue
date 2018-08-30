@@ -386,7 +386,7 @@ export default {
             handler(newValue, oldValue) {
                 this.menuOption = newValue;
                 this.send_message = newValue.send_message
-                console.log(this.send_message)
+                // console.log(this.send_message)
                 this.$emit("update:currentMenuOption", newValue);
             },
             deep: true

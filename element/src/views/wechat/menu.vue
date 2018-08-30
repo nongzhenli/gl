@@ -89,7 +89,7 @@
                 <div class="sort_btn_wrp"></div>
             </div>
             <!-- 右侧内容 -->
-            <menu-right :current-menu-option.sync="currentMenuOption" :del-menu-by-sort.sync="delMenuBySort"></menu-right>
+            <menu-right  :current-menu-option.sync="currentMenuOption" :del-menu-by-sort.sync="delMenuBySort"></menu-right>
         </main>
         <footer class="wechat-menu__footer clearfix">
             <div class="wechat-menu__sort">
@@ -138,6 +138,12 @@ export default {
             }
             return data;
         },
+    },
+    computed: {
+        key() {
+            console.log(this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date())
+            return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
+        }
     },
     created() {
         console.log(this.$route)
