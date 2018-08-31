@@ -89,7 +89,7 @@
                 <div class="sort_btn_wrp"></div>
             </div>
             <!-- 右侧内容 -->
-            <menu-right  :current-menu-option.sync="currentMenuOption" :del-menu-by-sort.sync="delMenuBySort"></menu-right>
+            <menu-right :key="key" :current-menu-option.sync="currentMenuOption" :del-menu-by-sort.sync="delMenuBySort"></menu-right>
         </main>
         <footer class="wechat-menu__footer clearfix">
             <div class="wechat-menu__sort">
@@ -125,7 +125,8 @@ export default {
             delMenuBySort: {
                 "parent_sort": -1,
                 "sort": -1,
-            }
+            },
+            key: +new Date()
         }
     },
     components: {
@@ -140,10 +141,6 @@ export default {
         },
     },
     computed: {
-        key() {
-            console.log(this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date())
-            return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
-        }
     },
     created() {
         console.log(this.$route)
@@ -274,12 +271,13 @@ export default {
                     "sub_button_list": []
                 }
                 this.menuOptionsJson[_idx].sub_button_list.push(sub_button_option);
-                // this.subCurrentIdx = this.menuOptionsJson[_idx].sub_button_list.length - 1
             }
 
         },
         // 菜单切换
         menuTab(typeIdx, _idx) {
+            // 重新渲染组件
+            this.key = +new Date();
             if (typeIdx == 0) {
                 this.currentIdx = _idx;
                 if(this.subCurrentIdx >= 0) {

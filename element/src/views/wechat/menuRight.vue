@@ -376,37 +376,33 @@ export default {
     },
     created() {
     },
+    mounted(){
+    },
     filters: {
         formatTime: function(data) {
             return formatTime(data, true, "更新于 {y}-{m}-{d} {h}:{i}");
         }
     },
     watch: {
-        currentMenuOption: {
+        menuOption: {
             handler(newValue, oldValue) {
-                this.menuOption = newValue;
-                this.send_message = newValue.send_message
-                // console.log(this.send_message)
+                // this.menuOption = newValue;
                 this.$emit("update:currentMenuOption", newValue);
             },
             deep: true
         },
-        "send_text_message.current"(newValue, oldValue) {
-            // if(this.send_message.send_type != 0) return
-            // this.send_message.send_context_tab = this.send_text_message.item[newValue].type;
-            // this.send_message.send_context = JSON.stringify(this.send_text_message.item[newValue].context)
+         send_text_message: {
+            handler(newValue, oldValue) {
+                let _current = newValue.current;
+                this.send_message.send_context_tab = _current
+                this.send_message.send_context = newValue.item[_current];
+                _current = null;
+            },
+            deep: true
         },
-        "send_message.send_type"(newValue, oldValue) {
-            console.log(newValue)
-            // console.log(newValue)
-            // if(newValue.send_type > 0){
-            //     this.send_message.send_context_tab = 0;
-            //     this.send_message.send_context = null
-            // }
+        "send_message.send_context"(newValue, oldValue) {
+            this.menuOption.send_message =  this.send_message
         },
-        "selectListItem.current"(newValue, oldValue) {
-            console.log(newValue)
-        }
     },
     computed: {
     },

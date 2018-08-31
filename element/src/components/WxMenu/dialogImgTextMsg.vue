@@ -71,7 +71,7 @@ export default {
         }
     },
     created() {
-        console.log(this.dialogImgTextVisible)
+        // console.log(this.dialogImgTextVisible)
     },
     watch: {
         dialogImgTextVisible(newValue, oldValue) {
