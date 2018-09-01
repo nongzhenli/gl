@@ -49,14 +49,17 @@ class WechatMenu extends BaseModel
      */
     public static function updataWxMenuOptionItem($options)
     {
-        // var_dump($options);
+        // var_dump($options['value']);
+        if($options['key'] == "jsonstr"){
+            $options['value'] = json_encode($options['value'], JSON_UNESCAPED_UNICODE);
+        }
         $data[$options['key']] = $options['value'];
+        $data['last_time'] = time();
         $result = new WechatMenu();
         $result ->save($data, [
             'id' => $options['id']
         ]);
         return $result;
-        // return self::getLastSql();
     }
 
     /**

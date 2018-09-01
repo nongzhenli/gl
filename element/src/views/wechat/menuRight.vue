@@ -249,7 +249,11 @@
                                         </div>
                                     </div>
                                     <!-- 选择图文 -->
-                                    <dialog-img-text-msg :dialog-img-text-visible.sync="dialogImgTextVisible" :img-text-data.sync="send_text_message.item[0].context"></dialog-img-text-msg>
+                                    <dialog-img-text-msg 
+                                        :data-index="menuOption.id"
+                                        :dialog-img-text-visible.sync="dialogImgTextVisible" 
+                                        :img-text-data.sync="send_text_message.item[0].context"
+                                        ref="jsonstr"></dialog-img-text-msg>
                                 </div>
                             </div>
                         </div>
@@ -375,6 +379,13 @@ export default {
         dialogImgTextMsg,
     },
     created() {
+        let _that_menuOption = this.menuOption;
+        if(Object.keys(_that_menuOption).length != 0 && Object.keys(_that_menuOption.send_message.send_context).length != 0){
+            let _current =  _that_menuOption.send_message.send_context_tab;
+            this.send_text_message.current = _current
+            this.send_text_message.item[_current].context = _that_menuOption.send_message.send_context
+            _current= null;
+        }
     },
     mounted(){
     },
@@ -389,9 +400,11 @@ export default {
                 // this.menuOption = newValue;
                 this.$emit("update:currentMenuOption", newValue);
             },
-            deep: true
+            // 代表在watch里声明了menuOption这个方法之后立即先去执行handler方法
+            // immediate: true,
+            deep: true,
         },
-         send_text_message: {
+        send_text_message: {
             handler(newValue, oldValue) {
                 let _current = newValue.current;
                 this.send_message.send_context_tab = _current
@@ -400,8 +413,19 @@ export default {
             },
             deep: true
         },
-        "send_message.send_context"(newValue, oldValue) {
-            this.menuOption.send_message =  this.send_message
+        send_message: {
+            handler(newValue, oldValue) {
+                // 防止每次渲染组件，无限的嵌套了context，首选判断所选内容是否一致（条件media_id）
+                retur
+                if(this.menuOption.send_message.send_context.media_id == newValue.send_context.context.media_id) return false
+                let _send_message = {
+                    "send_type": newValue.send_type,
+                    "send_context_tab": newValue.send_context_tab,
+                    "send_context": newValue.send_context.context,
+                }
+                this.menuOption.send_message = _send_message
+            },
+            deep: true
         },
     },
     computed: {

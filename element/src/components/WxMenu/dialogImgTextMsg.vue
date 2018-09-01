@@ -57,6 +57,7 @@
 
 <script>
 import { formatTime } from '@/utils/index'
+import { updataWxMenuCustomItem } from '@/api/wechat'
 import { get, getList } from '@/api/wxMedia'
 export default {
     props: ['dialogImgTextVisible', "imgTextData"],
@@ -72,6 +73,7 @@ export default {
     },
     created() {
         // console.log(this.dialogImgTextVisible)
+        
     },
     watch: {
         dialogImgTextVisible(newValue, oldValue) {
@@ -101,12 +103,32 @@ export default {
                     this.loading = false;
                 })
             })
+            console.log(this.$parent)
         },
         retrunItemData() {
             if(Object.keys(this.selectListItem.current).length == 0){
                 this.$message.error('错误，至少选择一个素材！');
                 return false;
             }
+
+            // 更新数据
+            let options = {
+                "id": this.$attrs['data-index'],
+                "key": "jsonstr",
+                // "value": this.selectListItem.current,
+                "value": {
+                    "send_type": this.$parent.send_message.send_type,
+                    "send_context_tab": this.$parent.send_message.send_context_tab,
+                    "send_context": this.selectListItem.current,
+                }
+            }
+            updataWxMenuCustomItem({
+                "wx_id": this.$route.params.id,
+                "options": JSON.stringify(options)
+            }).then(response => {
+                console.log(response)
+            })
+
             this.$emit("update:dialogImgTextVisible", false);
             this.$emit("update:imgTextData", this.selectListItem.current);
             this.selectListItem.items = []
@@ -116,7 +138,7 @@ export default {
             this.$emit("update:dialogImgTextVisible", false);
             this.selectListItem.items = []
             this.selectListItem.current = {}
-        }
+        },
     },
 }
 </script>
