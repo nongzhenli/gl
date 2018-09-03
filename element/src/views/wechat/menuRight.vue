@@ -159,7 +159,7 @@
                                                             </div>
                                                             <div class="item-title">{{send_text_message.item[0].context.content.news_item.title}}</div>
                                                         </div>
-                                                        <el-button type="text" class="menu-sedMsg__del" @click="send_text_message.item[0].context = {}">删除</el-button>
+                                                        <el-button type="text" class="menu-sedMsg__del" @click="delSendMsgContent(0)">删除</el-button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -266,15 +266,12 @@
                                     <label for=""
                                         class="frm_label">页面地址</label>
                                     <div class="frm_controls">
-                                        <span class="frm_input_box disabled"><input type="text" v-model="send_url_message.context"
+                                        <span class="frm_input_box disabled"><input type="text" v-model="send_url_message.context.url"
                                                 class="frm_input"> </span>
                                         <p class="profile_link_msg_global menu_url mini_tips warn dn js_warn"
                                             style="display: none;"> 请勿添加其他公众号的主页链接 </p>
-                                        <p class="frm_tips"
-                                            id="js_urlTitle"
-                                            style="display: none;"> 来自
-                                            <span class="js_name"></span>
-                                            <span style="display:none;"> -《<span class="js_title"></span>》</span>
+                                        <p class="frm_tips" v-show="send_url_message.context.url != ''" > 来自
+                                            <span class="js_name"></span>素材库 -《<span class="js_title">{{ send_url_message.context.title }}</span>》</span>
                                         </p>
                                     </div>
                                     
@@ -289,14 +286,17 @@
                                                 style="display: inline;">请选择一篇文章</span>
                                         </p>
                                         <a href="javascript:;"
-                                            id="js_appmsgPop">从公众号图文消息中选择</a>
-                                        <a href="javascript:void(0);"
-                                            class="dn btn btn_default"
-                                            id="js_reChangeAppmsg"
-                                            style="display: none;">重新选择</a>
+                                            id="js_appmsgPop" @click="dialogUrlVisible = true" v-show="send_url_message.context.url == ''">从公众号图文消息中选择</a>
+                                        <el-button native-type="button" size="small" @click="dialogUrlVisible = true" v-show="send_url_message.context.url != ''">重新选择</el-button>
                                     </div>
                                 </div>
                             </div>
+                            <!-- 从素材库选择跳转链接 -->
+                            <dialog-url-msg 
+                                :data-index="menuOption.id"
+                                :dialog-url-visible.sync="dialogUrlVisible" 
+                                :url-data.sync="send_url_message.context"
+                                ref="jsonstr"></dialog-url-msg>
                         </div>
                         <!-- 跳转小程序 -->
                         <div class="menu_content weapp "
@@ -319,6 +319,7 @@ import { formatTime } from '@/utils/index'
 import { validatByteMaxLength } from '@/utils/validate'
 import { updataWxMenuCustomItem } from '@/api/wechat'
 import dialogImgTextMsg from '@/components/WxMenu/dialogImgTextMsg';
+import dialogUrlMsg from '@/components/WxMenu/dialogUrlMsg';
 export default {
     // props: {
     //     propName: {
@@ -360,7 +361,12 @@ export default {
             // 跳转网址
             send_url_message: {
                 "type": 1,
-                "context": {},
+                "context": {
+                    "title": "",
+                    "url": "",
+                    "media_id": "",
+                    "time": 0,
+                },
             },
             //跳转小程序
             send_weapp_message: {
@@ -372,15 +378,21 @@ export default {
             dialogImagseVisible: false,
             dialogAudioVisible: false,
             dialogVideoVisible: false,
+            // 选择跳转网页url
+            dialogUrlVisible: false,
+            // 选择跳转小程序
+            dialogWebAppVisible: false,
 
         }
     },
     components: {
         dialogImgTextMsg,
+        dialogUrlMsg
     },
     created() {
         let _that_menuOption = this.menuOption;
-        if(Object.keys(_that_menuOption).length != 0 && Object.keys(_that_menuOption.send_message.send_context).length != 0){
+        //  Object.keys(_that_menuOption.send_message.send_context).length != 0
+        if(Object.keys(_that_menuOption).length != 0 && _that_menuOption.send_message.send_context.hasOwnProperty('media_id')){
             let _current =  _that_menuOption.send_message.send_context_tab;
             this.send_text_message.current = _current
             this.send_text_message.item[_current].context = _that_menuOption.send_message.send_context
@@ -397,7 +409,6 @@ export default {
     watch: {
         menuOption: {
             handler(newValue, oldValue) {
-                // this.menuOption = newValue;
                 this.$emit("update:currentMenuOption", newValue);
             },
             // 代表在watch里声明了menuOption这个方法之后立即先去执行handler方法
@@ -415,8 +426,9 @@ export default {
         },
         send_message: {
             handler(newValue, oldValue) {
+                // 先判断当前变动配置是否已选择素材（存在media_id）
+                if(!newValue.send_context.context.hasOwnProperty('media_id')) return false
                 // 防止每次渲染组件，无限的嵌套了context，首选判断所选内容是否一致（条件media_id）
-                retur
                 if(this.menuOption.send_message.send_context.media_id == newValue.send_context.context.media_id) return false
                 let _send_message = {
                     "send_type": newValue.send_type,
@@ -523,6 +535,18 @@ export default {
         sendMessageTab(index){
             this.send_text_message.current = index;
         },
+        /** 删除消息内容
+         * @param index|Number  删除内容索引
+         */
+        delSendMsgContent(index){
+            this.send_text_message.item[index].context = {};
+            let _send_message = {
+                "send_type": this.send_message.send_type,
+                "send_context_tab": this.send_message.send_context_tab,
+                "send_context": this.send_message.send_context.context,
+            }
+            this.menuOption.send_message = _send_message
+        }
     },
 }
 </script>
@@ -916,6 +940,7 @@ input[type="radio"] {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     padding: 14px 20px;
+    padding-top: 0;
 }
 .msg_sender .tab_content .inner {
     border-width: 0;
