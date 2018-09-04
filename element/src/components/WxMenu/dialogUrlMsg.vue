@@ -8,14 +8,14 @@
             :visible.sync="dialogUrlVisible">
             <el-tabs v-model="activeName"
                 @tab-click="handleClick">
-                <el-tab-pane label="素材库"name="first" >
+                <el-tab-pane class="news_msg" label="素材库" name="first" >
                     <el-table
+                        v-loading="loading"
                         class="news_tab__table"
                         header-row-class-name="news_tab__table_header"
                         row-class-name="news_tab__table_tr"
                         tooltip-effect="dark"
-                        style="width: 96%"
-                        :data="tableData3">
+                        :data="news_data.item">
                         <el-table-column
                         label="标题"
                         show-overflow-tooltip>
@@ -23,26 +23,35 @@
                                 <el-radio 
                                 v-model="radio" 
                                 :label="scope.$index"
-                                @change="changeRadioValue"
-                                >{{ scope.row.title }}</el-radio>
+                                >{{ scope.row.content.news_item.title }}</el-radio>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            label="日期"
+                            label="发布日期"
                             width="200">
-                            <template slot-scope="scope">{{ scope.row.time|formatTime }}</template>
+                            <template slot-scope="scope">{{ scope.row.content.update_time|formatTime }}</template>
                         </el-table-column>
                     </el-table>
                 </el-tab-pane>
-                <el-tab-pane label="历史消息"
-                    name="second">历史消息</el-tab-pane>
+                <el-tab-pane class="history_msg" label="历史消息"
+                    name="second" >
+                    <div class="preview_area">
+                        <p class="desc">公众帐号历史消息列表示例</p>
+                    </div>
+                    <div class="form_area">
+                        <el-checkbox v-model="isCheckboxHistoryMsg" @change="checkboxHistoryMsg">跳转到历史消息列表</el-checkbox>
+                    </div>
+                    
+                    
+                </el-tab-pane>
             </el-tabs>
             <el-row style="text-align: center;"
                 class="footer_button">
                 <el-button type="success"
+                    :disabled="radio|isRadioBool"
                     size="medium "
                     native-type="button"
-                    @click="retrunItemData()">确定</el-button>
+                    @click="submitItemData()">确定</el-button>
                 <el-button type="info"
                     plain
                     size="medium "
@@ -64,33 +73,17 @@ export default {
             activeName: 'first',
             loading: true,
             radio: null,
+            isCheckboxHistoryMsg: false,
             selectItem: {
                 "title": "",
                 "url": "",
-                "media_id": "",
-                "time": 0,
+                "update_time": 0,
             },
-            tableData3: [{
-                title: "阿萨德",
-                url: "www.baidu.com__1",
-                media_id: "123345566_1",
-                time: "1535959451",
-            }, {
-                title: "大黑测试图文文章222",
-                url: "www.baidu.com__2",
-                media_id: "123345565_2",
-                time: "1535959451",
-            }, {
-                title: "分享图片",
-                url: "www.baidu.com__3",
-                media_id: "123345566_3",
-                time: "1535959451",
-            }, {
-                title: "大黑测试图文文章",
-                url: "www.baidu.com__4",
-                media_id: "123345566_4",
-                time: "1535959451",
-            }],
+            news_data: {
+                "item": [],
+                "item_count": 0,
+                "total_count": 0
+            }
         }
     },
     created() {
@@ -102,11 +95,32 @@ export default {
             if (newValue == true) {
                 this.getSendMsgImgTextItem()
             }
+        },
+        radio(newValue, oldValue){
+            if(newValue != null && newValue >= 0) {
+                // 历史消息
+                if(newValue == 1000) return this.selectItem = {
+                    "title": "历史消息",
+                    "url": "www.baidu.com/history",
+                    "update_time": +new Date()
+                }
+                // 图文素材
+                let _that_news_data = this.news_data
+                this.selectItem = {
+                    "title": _that_news_data.item[newValue].content.news_item.title,
+                    "url": _that_news_data.item[newValue].content.news_item.url,
+                    "update_time": _that_news_data.item[newValue].content.update_time
+                }
+            }
         }
     },
     filters: {
         formatTime: function (data) {
-            return formatTime(data, true, "{y}年{m}月{d}日 {h}:{i}");
+            return formatTime(data, true, "{y}年{m}月{d}日{h}:{i}");
+        },
+        isRadioBool(data){
+            if(data !== null) return false
+            return true
         }
     },
     computed: {
@@ -120,55 +134,54 @@ export default {
                 "wx_id": 2,
                 "msg_type": "news"
             }).then(response => {
-                this.selectListItem.items = response.data
+                this.news_data = response.data
                 this.$nextTick(() => {
                     this.loading = false;
                 })
             })
-            console.log(this.$parent)
         },
-        retrunItemData() {
+        submitItemData() {
             if (this.radio === null) {
                 this.$message.error('错误，至少选择一个素材！');
                 return false;
             }
-
             // 更新数据
             let options = {
                 "id": this.$attrs['data-index'],
                 "key": "jsonstr",
-                // "value": this.selectListItem.current,
                 "value": {
                     "send_type": this.$parent.send_message.send_type,
                     "send_context_tab": this.$parent.send_message.send_context_tab,
                     "send_context": this.selectItem,
                 }
             }
-            console.log(options)
-            // updataWxMenuCustomItem({
-            //     "wx_id": this.$route.params.id,
-            //     "options": JSON.stringify(options)
-            // }).then(response => {
-            //     console.log(response)
-            // })
-
-            this.$emit("update:dialogUrlVisible", false);
-            this.$emit("update:urlData", this.selectItem);
-            this.selectItem = {}
-            this.radio = null
+            updataWxMenuCustomItem({
+                "wx_id": this.$route.params.id,
+                "options": JSON.stringify(options)
+            }).then(response => {
+                this.$emit("update:dialogUrlVisible", false);
+                this.$emit("update:urlData", this.selectItem);
+                this.selectItem = {}
+                this.radio = null
+                this.isCheckboxHistoryMsg = false
+            })
         },
         closeDialog() {
             this.$emit("update:dialogUrlVisible", false);
             this.selectItem = {}
             this.radio = null
+            this.isCheckboxHistoryMsg = false
         },
         // tab切换
-        handleClick(tab, event) {
-            console.log(tab, event);
+        handleClick(event) {
+            // 【待解决】如果点击当前tab且已有被选中值，则radio也会被清空
+            this.radio = null
+            this.isCheckboxHistoryMsg = false
         },
-        // 单选内容
-        changeRadioValue(radio){
-            this.selectItem= this.tableData3[radio];
+        // 复选框
+        checkboxHistoryMsg(bool){
+            if(bool) return this.radio = 1000 
+            this.radio = null
         }
     },
 }
@@ -187,16 +200,53 @@ export default {
     .el-tabs__nav-wrap::after {
         height: 1px;
     }
-    .news_tab__table {
-        border: 1px solid #E4E7ED;
+
+    // 图文素材库
+    .news_msg {
+        padding: 20px 20px 0;
+        .news_tab__table {
+            width: auto;
+            border: 1px solid #E4E7ED;
+            .el-radio__inner {
+                border-color: #c3c5cc;
+            }
+        }
+        .news_tab__table_header th {
+            padding: 10px 15px;
+            background-color: #f4f5f9;
+        }
+        .news_tab__table_tr td {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
     }
-    .news_tab__table_header th {
-        padding: 10px 15px;
-        background-color: #f4f5f9;
-    }
-    .news_tab__table_tr td {
-        padding-left: 15px;
-        padding-right: 15px;
+    
+
+    // 素材库
+    .history_msg {
+        padding-top: 40px;
+        .preview_area {
+            width: 240px;
+            height: 348px;
+            float: left;
+            margin-right: 50px;
+            background: transparent url(https://res.wx.qq.com/mpres/htmledition/images/advanced/history_msg3a7b38.png) no-repeat 0 0;
+            position: relative;
+            margin-left: 80px;
+            border: 1px solid #e7e7eb;
+            .desc {
+                position: absolute;
+                top: 100%;
+                margin-top: 10px;
+                width: 100%;
+                text-align: center;
+            }
+        }
+        .form_area {
+            overflow: hidden;
+            padding: 180px 0;
+            text-align: center;
+        }
     }
 }
 </style>

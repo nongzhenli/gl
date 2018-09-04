@@ -44,13 +44,14 @@ class WechatMedia extends Wechat
     {
         // 初始化微信公众号开发配置
         $result = self::$base_wxSDKObj->getForeverList($type, $offset, $count);
+        $reg = '/(http):\/\/([^\/]+)/i';
+        $new_url_ = "http://mpt.135editor.com";
         foreach ($result['item'] as $key => $value) {
             $news_item['title'] = $value['content']['news_item'][0]['title'];
             $news_item['thumb_url'] = $value['content']['news_item'][0]['thumb_url'];
+            $news_item['url'] = $value['content']['news_item'][0]['url'];
 
             //正则替换图片资源头文件，更改为http://mpt.135editor.com，成功解决微信图片防盗链。（#猜测：可能不是使用135编辑器的素材资源不能正常获取）
-            $reg = '/(http):\/\/([^\/]+)/i';
-            $new_url_ = "http://mpt.135editor.com";
             $news_item['new_thumb_url'] = preg_replace($reg, $new_url_, $news_item['thumb_url']);
 
             $result['item'][$key]['content']['news_item'] = $news_item;

@@ -45,7 +45,7 @@
                             <p class="menu_name__tip"
                                 ref="menu_name__tip"
                                 style="display: none">字数不匹配或超过上限</p>
-                            <p class="frm_tips js_titleNolTips">字数不超过8个汉字或16个字母</p>
+                            <p class="frm_tips js_titleNolTips">字数不超过{{menuNameTypeSize}}个汉字或{{menuNameTypeSize*2}}个字母</p>
                         </div>
                     </div>
 
@@ -75,13 +75,14 @@
                                     v-model="send_message.send_type"
                                     name="hello"
                                     class="frm_radio"> </label>
-                            <label class="frm_radio_label js_radio_weapp"
+                            <label class="frm_radio_label js_radio_weapp radio_disabled" 
                                 :class="{'selected': send_message.send_type == 2}">
                                 <i class="icon_radio"></i>
                                 <span class="lbl_content">跳转小程序</span> <input type="radio"
                                     value="2"
                                     v-model="send_message.send_type"
                                     name="hello"
+                                    disabled
                                     class="frm_radio"> </label>
                         </div>
                     </div>
@@ -266,7 +267,7 @@
                                     <label for=""
                                         class="frm_label">页面地址</label>
                                     <div class="frm_controls">
-                                        <span class="frm_input_box disabled"><input type="text" v-model="send_url_message.context.url"
+                                        <span class="frm_input_box disabled"><input type="text" v-model="send_url_message.context.url" placeholder="填写URL地址"
                                                 class="frm_input"> </span>
                                         <p class="profile_link_msg_global menu_url mini_tips warn dn js_warn"
                                             style="display: none;"> 请勿添加其他公众号的主页链接 </p>
@@ -301,7 +302,7 @@
                         <!-- 跳转小程序 -->
                         <div class="menu_content weapp "
                             v-show="send_message.send_type == 2">
-                            <div class="">跳转小程序</div>
+                            <div class="">此接口暂时未开放</div>
                         </div>
                     </div>
                 </div>
@@ -333,9 +334,9 @@ export default {
             menuOption: this.currentMenuOption,
             // 菜单内容
             send_message: {
-                "send_type": 0,
-                "send_context_tab": 0,
-                "send_context": {}
+                "send_type":0,
+                "send_context_tab":0,
+                "send_context":{}
             },
             // 发送消息
             send_text_message: {
@@ -364,8 +365,7 @@ export default {
                 "context": {
                     "title": "",
                     "url": "",
-                    "media_id": "",
-                    "time": 0,
+                    "update_time": 0,
                 },
             },
             //跳转小程序
@@ -392,11 +392,19 @@ export default {
     created() {
         let _that_menuOption = this.menuOption;
         //  Object.keys(_that_menuOption.send_message.send_context).length != 0
-        if(Object.keys(_that_menuOption).length != 0 && _that_menuOption.send_message.send_context.hasOwnProperty('media_id')){
+        if(Object.keys(_that_menuOption).length != 0){
             let _current =  _that_menuOption.send_message.send_context_tab;
-            this.send_text_message.current = _current
-            this.send_text_message.item[_current].context = _that_menuOption.send_message.send_context
-            _current= null;
+            // 发送内容消息数据初始化
+            if(_that_menuOption.send_message.send_context.hasOwnProperty('media_id')){
+                this.send_text_message.current = _current
+                this.send_text_message.item[_current].context = _that_menuOption.send_message.send_context
+                _current= null;
+            }
+            // 跳转网页数据初始化
+            if(_that_menuOption.send_message.send_context.hasOwnProperty('url')){
+                this.send_url_message.context =_that_menuOption.send_message.send_context
+                _current= null;
+            }
         }
     },
     mounted(){
@@ -415,6 +423,7 @@ export default {
             // immediate: true,
             deep: true,
         },
+        // 监听发送消息内容变化
         send_text_message: {
             handler(newValue, oldValue) {
                 let _current = newValue.current;
@@ -424,16 +433,33 @@ export default {
             },
             deep: true
         },
+        // 监听跳转网页内容变化
+        send_url_message: {
+            handler(newValue, oldValue) {
+                this.send_message.send_type = newValue.type;
+                this.send_message.send_context = newValue.context;
+            },
+            deep: true
+        },
         send_message: {
             handler(newValue, oldValue) {
-                // 先判断当前变动配置是否已选择素材（存在media_id）
-                if(!newValue.send_context.context.hasOwnProperty('media_id')) return false
-                // 防止每次渲染组件，无限的嵌套了context，首选判断所选内容是否一致（条件media_id）
-                if(this.menuOption.send_message.send_context.media_id == newValue.send_context.context.media_id) return false
+                // 公共返回内容对象
+                let _comm_send_context = "";
+                if(newValue.send_type == 0){
+                    // 先判断当前变动配置是否已选择素材（存在media_id）【待解决】两个if做了一个对象的两层判断，似乎不妥当
+                    if(!newValue.send_context.hasOwnProperty('context')) return false
+                    if(!newValue.send_context.context.hasOwnProperty('media_id')) return false
+                    // 防止每次渲染组件，无限的嵌套了context，首选判断所选内容是否一致（条件media_id）
+                    if(this.menuOption.send_message.send_context.media_id == newValue.send_context.context.media_id) return false
+                    _comm_send_context = newValue.send_context.context
+                }else if(newValue.send_type == 1){
+                    if(!newValue.send_context.hasOwnProperty('url')) return false
+                    _comm_send_context = newValue.send_context
+                }
                 let _send_message = {
                     "send_type": newValue.send_type,
                     "send_context_tab": newValue.send_context_tab,
-                    "send_context": newValue.send_context.context,
+                    "send_context": _comm_send_context
                 }
                 this.menuOption.send_message = _send_message
             },
@@ -441,6 +467,11 @@ export default {
         },
     },
     computed: {
+        menuNameTypeSize(){
+            let $byte = 4;
+            if(this.$parent.subCurrentIdx >= 0) return $byte*2;
+            return $byte
+        }
     },
     mounted() {
     },
@@ -526,10 +557,6 @@ export default {
             } else {
                 this.$refs['menu_name__tip'].style.display = "none"
             }
-        },
-        // 消息内容_选择素材
-        sendContextSelect() {
-
         },
         // 切换发送消息tab
         sendMessageTab(index){
@@ -821,6 +848,14 @@ input[type="radio"] {
     font-weight: 400;
     color: #353535;
 }
+.frm_radio_label.radio_disabled {
+    cursor: not-allowed;
+    & > span {
+        color: #bbbaba;
+        text-decoration: line-through;
+    }
+}
+
 
 // 菜单内容
 .menu_content {
