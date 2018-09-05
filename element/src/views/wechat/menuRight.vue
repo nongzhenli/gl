@@ -300,7 +300,7 @@
                                 ref="jsonstr"></dialog-url-msg>
                         </div>
                         <!-- 跳转小程序 -->
-                        <div class="menu_content weapp "
+                        <div class="menu_content weapp"
                             v-show="send_message.send_type == 2">
                             <div class="">此接口暂时未开放</div>
                         </div>
@@ -331,7 +331,8 @@ export default {
     props: ['currentMenuOption', 'delMenuBySort'],
     data() {
         return {
-            menuOption: this.currentMenuOption,
+            // 使用计算属性同步 menuOption/currentMenuOption
+            // menuOption: this.currentMenuOption,
             // 菜单内容
             send_message: {
                 "send_type":0,
@@ -471,6 +472,15 @@ export default {
             let $byte = 4;
             if(this.$parent.subCurrentIdx >= 0) return $byte*2;
             return $byte
+        },
+        menuOption: {
+            get: function(){
+                return this.currentMenuOption
+            },
+            set: function(newValue){
+                return newValue
+            }
+
         }
     },
     mounted() {
@@ -504,17 +514,30 @@ export default {
                 type: 'warning',
                 customClass: 'menu-message__delete',
             }).then(() => {
-                if (this.menuOption.parent_sort >= 0) {
+                let _that_menuOption = this.menuOption;
+                if(_that_menuOption.type == 0){
                     this.$emit("update:delMenuBySort", {
-                        "parent_sort": this.menuOption.parent_sort,
-                        "sort": this.menuOption.sort
+                        "sort": _that_menuOption.sort
                     });
-                } else if (this.menuOption.sort >= 0) { // 父菜单删除
+                }else if(_that_menuOption.type == 1){
                     this.$emit("update:delMenuBySort", {
-                        "sort": this.menuOption.sort
+                        "parent_sort": this.$parent.currentIdx,
+                        "sort": _that_menuOption.sort
                     });
                 }
+                // if (_that_menuOption.hasOwnProperty('parent_sort') && _that_menuOption.parent_sort >= 0) {
+                //     this.$emit("update:delMenuBySort", {
+                //         "parent_sort": _that_menuOption.parent_sort,
+                //         "sort": _that_menuOption.sort
+                //     });
+                // } else if (_that_menuOption.hasOwnProperty('sort') && _that_menuOption.sort >= 0) { // 父菜单删除
+                //     this.$emit("update:delMenuBySort", {
+                //         "sort": _that_menuOption.sort
+                //     });
+                // }
                 this.menuOption = [];
+                // 重新渲染组件
+                this.$parent.key = +new Date();
                 this.$message({
                     type: 'success',
                     message: '删除成功！'
@@ -936,7 +959,7 @@ input[type="radio"] {
     height: 20px;
 }
 .tab_appmsg .icon_msg_sender {
-    // background-image: url('https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png');
+    // background-image: url('../../../static/icon/msg_sender_z_@all40479b.png');
     // background-size: cover;
 }
 .tab_appmsg .icon_msg_sender {
@@ -1012,7 +1035,7 @@ input[type="radio"] {
     box-sizing: border-box;
 }
 .create-type__icon.file {
-    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
+    background: url("../../../static/icon/msg_sender_z_@all40479b.png")
         0 -44px no-repeat;
 }
 .create-type__list .create-type__item .create-type__icon {
@@ -1025,23 +1048,23 @@ input[type="radio"] {
     display: block;
 }
 .create-type__icon.new {
-    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
+    background: url("../../../static/icon/msg_sender_z_@all40479b.png")
         0 0 no-repeat;
 }
 .create-type__icon.share {
-    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
+    background: url("../../../static/icon/msg_sender_z_@all40479b.png")
         0 -88px no-repeat;
 }
 .create-type__icon.pic {
-    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
+    background: url("../../../static/icon/msg_sender_z_@all40479b.png")
         0 -220px no-repeat;
 }
 .create-type__icon.voice {
-    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
+    background: url("../../../static/icon/msg_sender_z_@all40479b.png")
         0 -176px no-repeat;
 }
 .create-type__icon.video {
-    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/widget/msg_sender_z_@all3d1796.png")
+    background: url("../../../static/icon/msg_sender_z_@all40479b.png")
         0 -132px no-repeat;
 }
 

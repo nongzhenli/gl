@@ -31,14 +31,21 @@ class WechatMenu extends BaseModel
      */
     public static function insertWxMenuOptionItem($wx_id, $options)
     {
+        // 子菜单添加存在 $parent_id
+        $parent_id = 0;
+        if(isset($options['parent_id'])){
+            $parent_id = $options['parent_id'];
+        };
         $result = self::create([
             'wechat_id' => $wx_id,
             'name' => $options['name'],
             'type' => $options['type'],
             'sort' => $options['sort'],
+            'parent_id' => $parent_id,
             'jsonstr' => json_encode($options['send_message'], JSON_UNESCAPED_UNICODE),
             'create_time' => time(),
         ]);
+        unset($parent_id);
         return $result;
     }
 
@@ -69,15 +76,28 @@ class WechatMenu extends BaseModel
     public static function getWxMenuOptionAll($wx_id)
     {
         $parent_menu = WechatMenu::where("wechat_id=$wx_id AND type=0")
-            ->field('id, name, type, jsonstr AS send_message, sort, last_time, create_time')
+            ->field('id, name, type, jsonstr AS send_message, parent_id, sort, last_time, create_time')
             ->select()
             ->toArray();
         foreach ($parent_menu as $key => $value) {
             $parent_menu[$key]['send_message'] = json_decode($value['send_message'], true);
-            $parent_menu[$key]['sub_button_list'] = [];
+
+            // 查询子菜单
+            $sub_button_list = WechatMenu::where("wechat_id=$wx_id AND type=1 AND parent_id=".$value['id'])
+            ->field('id, name, type, jsonstr AS send_message, parent_id, sort, last_time, create_time')
+            ->select()
+            ->toArray();
+
+            if(count($sub_button_list) == 0){
+                $parent_menu[$key]['sub_button_list'] = [];
+            }elseif(count($sub_button_list) > 0){
+                foreach ($sub_button_list as $sub_key => $sub_value) {
+                    $sub_button_list[$sub_key]['send_message'] = json_decode($sub_value['send_message'], true);
+                }
+                $parent_menu[$key]['sub_button_list'] = $sub_button_list;
+            }
         }
         return $parent_menu;
-        // return "未做查询";
     }
 
     /**

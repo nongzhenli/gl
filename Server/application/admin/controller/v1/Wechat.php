@@ -101,7 +101,7 @@ class Wechat
         }
         // 转数组
         $options = json_decode($options, true);
-        $result = (new WechatMenuService())->wxCreateMenuCustom($wx_id, $type, $options);
+        $result = (new WechatMenuService($wx_id))->wxCreateMenuCustom($type, $options);
         $data = array(
             "code" => 20000,
             "data" => $result,

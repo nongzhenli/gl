@@ -161,8 +161,8 @@ export default {
         },
         subCurrentIdx(newValue, oldValue) {
             if(newValue < 0 ) {
-                let parent_sort = this.currentMenuOption.parent_sort;
-                if(parent_sort == this.menuOptionsJson[this.currentIdx]['sort']){
+                let sort = this.currentMenuOption.sort;
+                if(sort == this.menuOptionsJson[this.currentIdx]['sort']){
                     this.currentMenuOption = this.menuOptionsJson[this.currentIdx];
                 }
                 // this.currentMenuOption.sub_button_list = [];
@@ -172,31 +172,34 @@ export default {
             this.currentMenuOption = this.menuOptionsJson[this.currentIdx].sub_button_list[newValue];
         },
         // 删除菜单通过sort排序
-        delMenuBySort(newValue, oldValue){
-            // 子菜单删除
-            if(newValue.parent_sort >= 0){
-                this.menuOptionsJson[newValue.parent_sort].sub_button_list.splice((newValue.sort), 1);
-                this.menuOptionsJson[newValue.parent_sort].sub_button_list.forEach(function(item, index, array){
-                    // 大于被删除数组元素索引的其它元素进行sort重构
-                    if(index >= newValue.sort){
-                        array[index].sort = index;
-                    }
-                });
-                this.subCurrentIdx = -1
-            }else if(newValue.sort >= 0){ // 父菜单删除
-                this.menuOptionsJson.splice((newValue.sort), 1)
-                this.menuOptionsJson.forEach(function(item, index, array){
-                    if(index >= newValue.sort){
-                        array[index].sort = index;
-                        // 子菜单parent_sort重构
-                        item.sub_button_list.forEach(function(sub_item, sub_index, sub_array){
-                            sub_array[sub_index].parent_sort = index;
-                        });
-                    }
-                });
-                this.currentIdx = -1
-                this.subCurrentIdx = -1
-            }
+        delMenuBySort: {
+            handler(newValue, oldValue) {
+                // 子菜单删除
+                if(newValue.parent_sort >= 0){
+                    this.menuOptionsJson[newValue.parent_sort].sub_button_list.splice((newValue.sort), 1);
+                    this.menuOptionsJson[newValue.parent_sort].sub_button_list.forEach(function(item, index, array){
+                        // 大于被删除数组元素索引的其它元素进行sort重构
+                        if(index >= newValue.sort){
+                            array[index].sort = index;
+                        }
+                    });
+                    this.subCurrentIdx = -1
+                }else if(newValue.sort >= 0){ // 父菜单删除
+                    this.menuOptionsJson.splice((newValue.sort), 1)
+                    this.menuOptionsJson.forEach(function(item, index, array){
+                        if(index >= newValue.sort){
+                            array[index].sort = index;
+                            // 子菜单parent_sort重构
+                            item.sub_button_list.forEach(function(sub_item, sub_index, sub_array){
+                                sub_array[sub_index].parent_sort = index;
+                            });
+                        }
+                    });
+                    this.currentIdx = -1
+                    this.subCurrentIdx = -1
+                }
+            },
+            deep: true
         },
     },
     methods: {
@@ -247,16 +250,20 @@ export default {
                     "type": 0,
                     "options": JSON.stringify(addOption)
                 }).then(response => {
-                    this.currentIdx = addOption.sort;
-                    this.menuOptionsJson.push(addOption);
+                    if(response.data.id) {
+                        addOption.id = response.data.id
+                        this.currentIdx = addOption.sort;
+                        this.menuOptionsJson.push(addOption);
+                        // 重新渲染组件
+                        this.key = +new Date();
+                    }
                 })
-
                 // this.currentIdx = this.menuOptionsJson.length - 1;
 
             } else if (_type === 1) {
                 // 子菜单添加
                 // 直接先赋值了（不先经过push略有些不妥..原本写法见作用域底部注释）
-                this.subCurrentIdx = this.menuOptionsJson[_idx].sub_button_list.length;
+                let _sort = this.menuOptionsJson[_idx].sub_button_list.length;
                 let sub_button_option = {
                     "name": "子菜单名称",
                     "type": 1,
@@ -265,14 +272,27 @@ export default {
                         "send_context_tab": 0,
                         "send_context": {}
                     },
+                    "parent_id": this.menuOptionsJson[_idx].id,
                     "parent_sort": _idx,
-                    "sort": this.subCurrentIdx,
+                    "sort": _sort,
                     "act_list": [],
                     "sub_button_list": []
                 }
-                this.menuOptionsJson[_idx].sub_button_list.push(sub_button_option);
-            }
 
+                createWxMenuCustomItem({
+                    "wx_id": this.$route.params.id,
+                    "type": 1,
+                    "options": JSON.stringify(sub_button_option)
+                }).then(response => {
+                    if(response.data.id){
+                        sub_button_option.id = response.data.id;
+                        this.menuOptionsJson[_idx].sub_button_list.push(sub_button_option);
+                        this.subCurrentIdx = _sort
+                        // 重新渲染组件
+                        this.key = +new Date();
+                    }
+                })
+            }
         },
         // 菜单切换
         menuTab(typeIdx, _idx) {
@@ -287,7 +307,7 @@ export default {
                 this.subCurrentIdx = _idx;
             }
         },
-        // 创建菜单
+        // 保存并发布菜单配置
         createMenuSubmit(){
             createWxMenuCustomItem({
                 "wx_id": this.$route.params.id,
@@ -424,7 +444,7 @@ export default {
                     border-left-width: 0;
                 }
                 .icon_menu_dot {
-                    background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/page/menu/index_z3c4bd4.png")
+                    background: url("../../../static/icon/index_z40479b.png")
                         0 -36px no-repeat;
                     width: 7px;
                     height: 7px;
@@ -502,7 +522,7 @@ export default {
         }
     }
     .icon14_menu_add {
-        background: url("https://res.wx.qq.com/mpres/zh_CN/htmledition/comm_htmledition/style/page/menu/index_z3c4bd4.png")
+        background: url("../../../static/icon/index_z40479b.png")
             0 0 no-repeat;
         width: 14px;
         height: 14px;
